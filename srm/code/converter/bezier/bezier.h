@@ -36,7 +36,7 @@ namespace srm {
      * Sampling by N line segments
      * @param[in] N number of line segments
      * @return Bezier point vector with N+1 length
-     * @watning N mustn't be 0
+     * @warning N mustn't be 0
      */
     std::vector<vec_t> Sampling(unsigned N) const;
   };

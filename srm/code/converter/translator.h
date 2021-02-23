@@ -17,7 +17,7 @@
 /* Project namespace */
 namespace srm {
   /**
-   * @brief main converter class
+   * @brief Main converter class
    *
    * Contains method to parse svg file and create code
    */

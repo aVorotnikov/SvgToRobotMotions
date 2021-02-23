@@ -38,6 +38,7 @@ srm::vec_t srm::build_bezier_t::EvaluatePoint(double t) const {
  * Sampling by N line segments
  * @param[in] N number of line segments
  * @return Bezier point vector with N+1 length
+ * @warning N mustn't be 0
  */
 std::vector<srm::vec_t> srm::build_bezier_t::Sampling(unsigned N) const {
   if (N == 0)
