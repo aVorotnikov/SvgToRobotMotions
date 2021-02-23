@@ -19,6 +19,9 @@
     <Filter Include="Исходные файлы\Converter">
       <UniqueIdentifier>{fb8ebd1e-fcab-4e3f-bfd1-c054995ea501}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Converter\Bezier">
+      <UniqueIdentifier>{fde617f0-aba2-4bc1-80eb-dbc0d0522a1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -26,6 +29,9 @@
     </ClCompile>
     <ClCompile Include="code\converter\translator.cpp">
       <Filter>Исходные файлы\Converter</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\bezier\bezier.cpp">
+      <Filter>Исходные файлы\Converter\Bezier</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -40,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="code\converter\defs.h">
       <Filter>Исходные файлы\Converter</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\bezier\bezier.h">
+      <Filter>Исходные файлы\Converter\Bezier</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

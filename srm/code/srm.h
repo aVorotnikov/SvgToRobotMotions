@@ -13,7 +13,9 @@
 #define __SRM_H_INCLUDED
 
 #include "math/vector.h"
+
 #include "converter/defs.h"
 #include "converter/translator.h"
+#include "converter/bezier/bezier.h"
 
 #endif /* __SRM_H_INCLUDED */
