@@ -10,10 +10,10 @@
 #include <srm.h>
 
 /**
- * Get svg image function function. Check file abd create tag tree
+ * Set svg image to convert function function. Check file abd create tag tree
  * @param[in] svgFileName svg image file name
  */
-void srm::translator_t::GetSvg(const std::string &svgFileName) {
+void srm::translator_t::SetSvg(const std::string &svgFileName) {
 }
 
 /**

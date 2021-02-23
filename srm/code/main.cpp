@@ -14,6 +14,7 @@
  * Converter from svg image fornat to Kawasaki robot motions for robowizard.
  */
 
+#include <iostream>
 #include <srm.h>
 
 /**
@@ -23,5 +24,23 @@
  * @return system code (0 if success)
  */
 int main(int argC, char *argV[]) {
+  if (argC != 3) {
+    std::cout << "Error: wrong params" << std::endl;
+    return 0;
+  }
+
+  try {
+    srm::translator_t trans;
+
+    trans.SetSvg(argV[1]);
+    trans.GenCode(argV[2]);
+  }
+  catch (std::exception &e) {
+    std::cout << "Error: " << e.what() << std::endl;
+    return 0;
+  }
+
+  std::cout << "Success" << std::endl;
+
   return 0;
 }
