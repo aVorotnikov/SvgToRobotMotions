@@ -24,8 +24,8 @@ namespace srm {
    */
   class translator_t {
   private:
-    rapidxml::xml_document<> xmlTree; // the root of xml DOM
-    char* xmlString; // rapidxml needs this char string for its work
+    rapidxml::xml_document<> xmlTree;  ///< the root of xml DOM
+    char *xmlString;                   ///< rapidxml needs this char string for its work
 
   public:
     /**
@@ -44,7 +44,7 @@ namespace srm {
     /**
      * Gen robot code from created tag tree
      * @param[in] codeFileName code file name
-     * @see GetSvg
+     * @see SetSvg
      */
     void GenCode(const std::string &codeFileName) const;
 

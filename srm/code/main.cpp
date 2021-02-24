@@ -2,7 +2,7 @@
  * @file
  * @brief Main program source file
  * @authors Vorotnikov Andrey
- * @date 23.02.2021
+ * @date 24.02.2021
  *
  * Contains main function to start program
  */
@@ -11,7 +11,7 @@
  * @mainpage Introduction
  * @author Baev Daniil, Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
  *
- * Converter from svg image fornat to Kawasaki robot motions for robowizard.
+ * Converter from svg image format to Kawasaki robot motions for robowizard.
  */
 
 #include <iostream>

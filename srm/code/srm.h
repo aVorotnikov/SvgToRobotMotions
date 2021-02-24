@@ -2,7 +2,7 @@
  * @file
  * @brief Precompiled header
  * @authors Vorotnikov Andrey
- * @date 23.02.2021
+ * @date 24.02.2021
  *
  * Contains includes of header file to accelerate compilation
  */
@@ -16,6 +16,7 @@
 
 #include "converter/defs.h"
 #include "converter/translator.h"
+#include "converter/rapidxml.hpp"
 #include "converter/bezier/bezier.h"
 
 #endif /* __SRM_H_INCLUDED */

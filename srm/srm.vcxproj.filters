@@ -22,6 +22,9 @@
     <Filter Include="Исходные файлы\Converter\Bezier">
       <UniqueIdentifier>{fde617f0-aba2-4bc1-80eb-dbc0d0522a1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Converter\Rapidxml realization">
+      <UniqueIdentifier>{eb0d3639-fa55-40e0-9657-c8e3720542a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -51,7 +54,7 @@
       <Filter>Исходные файлы\Converter\Bezier</Filter>
     </ClInclude>
     <ClInclude Include="code\converter\rapidxml.hpp">
-      <Filter>Исходные файлы\Converter</Filter>
+      <Filter>Исходные файлы\Converter\Rapidxml realization</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
