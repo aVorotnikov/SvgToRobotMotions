@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief Translator class header file
- * @authors Vorotnikov Andrey
- * @date 23.02.2021
+ * @authors Vorotnikov Andrey Pavlov Ilya
+ * @date 24.02.2021
  *
  * Contains main converter class description
  */
@@ -13,6 +13,7 @@
 #define __TRANSLATOR_H_INCLUDED
 
 #include <string>
+#include "rapidxml.hpp"
 
 /* Project namespace */
 namespace srm {
@@ -23,6 +24,9 @@ namespace srm {
    */
   class translator_t {
   private:
+    rapidxml::xml_document<> xmlTree; // the root of xml DOM
+    char* xmlString; // rapidxml needs this char string for its work
+
   public:
     /**
      * @defgroup converterFuncs Main functions to convert
@@ -49,7 +53,7 @@ namespace srm {
     /**
      * Translator class destructor
      */
-    ~translator_t(void);
+    ~translator_t(void) noexcept;
   };
 }
 

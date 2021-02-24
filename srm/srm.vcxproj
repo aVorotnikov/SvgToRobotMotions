@@ -26,6 +26,7 @@
   <ItemGroup>
     <ClInclude Include="code\converter\bezier\bezier.h" />
     <ClInclude Include="code\converter\defs.h" />
+    <ClInclude Include="code\converter\rapidxml.hpp" />
     <ClInclude Include="code\converter\translator.h" />
     <ClInclude Include="code\math\vector.h" />
     <ClInclude Include="code\srm.h" />

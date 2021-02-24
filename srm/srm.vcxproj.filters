@@ -50,5 +50,8 @@
     <ClInclude Include="code\converter\bezier\bezier.h">
       <Filter>Исходные файлы\Converter\Bezier</Filter>
     </ClInclude>
+    <ClInclude Include="code\converter\rapidxml.hpp">
+      <Filter>Исходные файлы\Converter</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
