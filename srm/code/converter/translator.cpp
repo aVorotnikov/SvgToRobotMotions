@@ -17,7 +17,7 @@
 void srm::translator_t::SetSvg(const std::string &svgFileName) {
   std::ifstream fin(svgFileName);
   if (!fin.is_open()) {
-    throw 1;
+    throw std::exception("Open file error");
   }
 
   std::string buf;
@@ -35,7 +35,7 @@ void srm::translator_t::SetSvg(const std::string &svgFileName) {
     xmlTree.parse<rapidxml::parse_full>(xmlString);
   }
   catch (rapidxml::parse_error err) {
-    throw 2;
+    throw std::exception("Error in the svg file");
   }
 }
 
