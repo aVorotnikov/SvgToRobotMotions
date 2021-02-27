@@ -2,7 +2,7 @@
  * @file
  * @brief Bezier building class source file
  * @authors Vorotnikov Andrey
- * @date 23.02.2021
+ * @date 27.02.2021
  *
  * Contains class to build Bezier spline realisation
  */
@@ -50,5 +50,44 @@ std::vector<srm::vec_t> srm::build_bezier_t::Sampling(unsigned N) const {
   for (unsigned i = 0; i <= N; i++)
     res.push_back(EvaluatePoint((double)i / N));
 
+  return res;
+}
+
+/**
+ * Sampling by accuracy by line segments
+ * @param[in] accuracy length of elementary line segment
+ * @return Bezier point vector
+ * @warning accuracy must be greater than 0
+ */
+std::vector<srm::vec_t> srm::build_bezier_t::Sampling(double accuracy) const {
+  const double defaultDelta = 0.1;
+
+  if (accuracy <= 0)
+    throw std::exception("Incorrect accuracy for sampling");
+
+  // choose initial params: delta, t param
+  double delta = defaultDelta, accuracy2 = accuracy * accuracy;
+  double tCur = delta, tPrev = 0;
+  std::vector<vec_t> res;
+
+  // add first point
+  vec_t prevPos = EvaluatePoint(tPrev);
+  res.push_back(prevPos);
+  while (tPrev < 1) {
+    if (tCur > 1)
+      tCur = 1;
+    // calculate new point
+    vec_t curPos = EvaluatePoint(tCur);
+    // case when point is suitable : add point
+    if ((curPos - prevPos).Len2() <= accuracy2) {
+      res.push_back(curPos);
+      prevPos = curPos;
+      tPrev = tCur;
+    }
+    // case when point is unsuitable : decrease delta
+    else
+      delta /= 2;
+    tCur = tPrev + delta;
+  }
   return res;
 }

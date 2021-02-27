@@ -1,7 +1,7 @@
 /**
  * @file
  * @brief Translator class header file
- * @authors Vorotnikov Andrey Pavlov Ilya
+ * @authors Vorotnikov Andrey, Pavlov Ilya
  * @date 24.02.2021
  *
  * Contains main converter class description
