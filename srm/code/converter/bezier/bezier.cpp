@@ -9,6 +9,8 @@
 
 #include <srm.h>
 
+#include <list>
+
 /**
  * Evaluate point with parameter
  * @param[in] t parameter from 0 to 1 to evaluate point of Bezier spline
@@ -59,35 +61,67 @@ std::vector<srm::vec_t> srm::build_bezier_t::Sampling(unsigned N) const {
  * @return Bezier point vector
  * @warning accuracy must be greater than 0
  */
-std::vector<srm::vec_t> srm::build_bezier_t::Sampling(double accuracy) const {
-  const double defaultDelta = 0.1;
-
+std::vector<srm::vec_t> srm::build_bezier_t::Sampling(double accuracy, double startDelta) const {
   if (accuracy <= 0)
     throw std::exception("Incorrect accuracy for sampling");
 
   // choose initial params: delta, t param
-  double delta = defaultDelta, accuracy2 = accuracy * accuracy;
-  double tCur = delta, tPrev = 0;
-  std::vector<vec_t> res;
+  double delta = startDelta, accuracy2 = accuracy * accuracy;
+  double tCur1 = 0, tPrev1 = 0, tCur2 = 1, tPrev2 = 1;
+  std::list<vec_t> resList1, resList2;
 
   // add first point
-  vec_t prevPos = EvaluatePoint(tPrev);
-  res.push_back(prevPos);
-  while (tPrev < 1) {
-    if (tCur > 1)
-      tCur = 1;
-    // calculate new point
-    vec_t curPos = EvaluatePoint(tCur);
-    // case when point is suitable : add point
-    if ((curPos - prevPos).Len2() <= accuracy2) {
-      res.push_back(curPos);
-      prevPos = curPos;
-      tPrev = tCur;
+  vec_t
+    prevPos1 = EvaluatePoint(tPrev1),
+    prevPos2 = EvaluatePoint(tPrev2);
+  resList1.push_back(prevPos1);
+  resList2.push_front(prevPos2);
+
+  bool toFirst = 1;
+  while (tCur1 < tCur2) {
+    // case to use first list
+    if (toFirst) {
+      tCur1 = tPrev1 + delta;
+      // calculate new point
+      vec_t curPos = EvaluatePoint(tCur1);
+      // case when point is suitable : add point
+      if ((curPos - prevPos1).Len2() <= accuracy2) {
+        resList1.push_back(curPos);
+        prevPos1 = curPos;
+        tPrev1 = tCur1;
+        toFirst = 0;
+      }
+      // case when point is unsuitable : decrease delta
+      else {
+        delta /= 2;
+        tCur1 = tPrev1;
+      }
     }
-    // case when point is unsuitable : decrease delta
-    else
-      delta /= 2;
-    tCur = tPrev + delta;
+    // case to use second list
+    else {
+      tCur2 = tPrev2 - delta;
+      // calculate new point
+      vec_t curPos = EvaluatePoint(tCur2);
+      // case when point is suitable : add point
+      if ((curPos - prevPos2).Len2() <= accuracy2) {
+        resList2.push_front(curPos);
+        prevPos2 = curPos;
+        tPrev2 = tCur2;
+        toFirst = 1;
+      }
+      // case when point is unsuitable : decrease delta
+      else {
+        delta /= 2;
+        tCur2 = tPrev2;
+      }
+    }
   }
+  // create res vector from 2 lists
+  std::vector<vec_t> res;
+  res.reserve(resList1.size() + resList2.size());
+  for (auto &point : resList1)
+    res.push_back(point);
+  for (auto &point : resList2)
+    res.push_back(point);
   return res;
 }

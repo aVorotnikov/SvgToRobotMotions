@@ -43,10 +43,11 @@ namespace srm {
     /**
      * Sampling by accuracy by line segments
      * @param[in] accuracy length of elementary line segment
+     * @param[in] startDelta delta to evaluate first point (default value - 1)
      * @return Bezier point vector
      * @warning accuracy must be greater than 0
      */
-    std::vector<vec_t> Sampling(double accuracy) const;
+    std::vector<vec_t> Sampling(double accuracy, double startDelta = 1) const;
   };
 }
 
