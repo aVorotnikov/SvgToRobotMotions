@@ -2,7 +2,7 @@
  * @file
  * @brief Bezier building class source file
  * @authors Vorotnikov Andrey
- * @date 27.02.2021
+ * @date 28.02.2021
  *
  * Contains class to build Bezier spline realisation
  */
@@ -58,6 +58,7 @@ std::vector<srm::vec_t> srm::build_bezier_t::Sampling(unsigned N) const {
 /**
  * Sampling by accuracy by line segments
  * @param[in] accuracy length of elementary line segment
+ * @param[in] startDelta delta to evaluate first point (default value - 1)
  * @return Bezier point vector
  * @warning accuracy must be greater than 0
  */

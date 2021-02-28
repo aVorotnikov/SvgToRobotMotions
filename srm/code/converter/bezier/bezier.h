@@ -19,7 +19,7 @@
 namespace srm {
   /**
    * @brief Class to build bezier spline
-   * @see vector_2
+   * @see math::vector2_t
    *
    * Bezier building class based on std::vector
    */

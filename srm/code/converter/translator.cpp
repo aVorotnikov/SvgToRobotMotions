@@ -2,13 +2,14 @@
  * @file
  * @brief Translator class source file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 24.02.2021
+ * @date 28.02.2021
  *
  * Contains main converter class realisatiion
  */
 
 #include <srm.h>
 #include <fstream>
+#include <list>
 
 /**
  * Set svg image to convert function function. Check file abd create tag tree
@@ -45,6 +46,7 @@ void srm::translator_t::SetSvg(const std::string &svgFileName) {
  * @see SetSvg
  */
 void srm::translator_t::GenCode(const std::string &codeFileName) const {
+  std::list<primitive_t> primitives;
 }
 
 /**

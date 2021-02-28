@@ -25,6 +25,9 @@
     <Filter Include="Исходные файлы\Converter\Rapidxml realization">
       <UniqueIdentifier>{eb0d3639-fa55-40e0-9657-c8e3720542a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Converter\Primitives">
+      <UniqueIdentifier>{2aa4d77a-3b5e-4c65-bb9b-36cd098d8bfc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -35,6 +38,9 @@
     </ClCompile>
     <ClCompile Include="code\converter\bezier\bezier.cpp">
       <Filter>Исходные файлы\Converter\Bezier</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\primitive\primitive.cpp">
+      <Filter>Исходные файлы\Converter\Primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +61,9 @@
     </ClInclude>
     <ClInclude Include="code\converter\rapidxml.hpp">
       <Filter>Исходные файлы\Converter\Rapidxml realization</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\primitive\primitive.h">
+      <Filter>Исходные файлы\Converter\Primitives</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
