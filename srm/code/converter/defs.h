@@ -14,7 +14,7 @@
 
 #include "../math/vector.h"
 
-/* Project namespace */
+/** Project namespace */
 namespace srm {
   /** 2 dimensional vector class for converter */
   using vec_t = math::vector2_t<>;

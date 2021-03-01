@@ -15,7 +15,7 @@
 #include <string>
 #include "rapidxml.hpp"
 
-/* Project namespace */
+/** \brief Project namespace */
 namespace srm {
   /**
    * @brief Main converter class

@@ -14,7 +14,7 @@
 
 #include <cmath>
 
-/* Math module namespace */
+/** \brief Math module namespace */
 namespace math {
   /**
    * @brief 2 dimensional vector template class

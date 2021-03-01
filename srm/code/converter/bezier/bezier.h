@@ -15,7 +15,7 @@
 #include <vector>
 #include "../defs.h"
 
-/* Project namespace */
+/** \brief Project namespace */
 namespace srm {
   /**
    * @brief Class to build bezier spline
