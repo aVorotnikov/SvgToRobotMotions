@@ -15,9 +15,9 @@
 #include <vector>
 #include "../defs.h"
 
-/* Project namespace */
+/** \brief Project namespace */
 namespace srm {
-  /* Motion types namespace */
+  /** \brief Motion types namespace */
   namespace motion {
     /**
      * @brief Basic robot motion class
