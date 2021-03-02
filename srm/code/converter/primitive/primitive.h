@@ -2,7 +2,7 @@
  * @file
  * @brief Primitives and support classes header file
  * @authors Vorotnikov Andrey
- * @date 28.02.2021
+ * @date 02.03.2021
  *
  * Contains declaration motions class (motion_t, segment_t, arc_t) and primitive class
  */
@@ -14,6 +14,7 @@
 
 #include <vector>
 #include "../defs.h"
+#include "cs/cs.h"
 
 /** \brief Project namespace */
 namespace srm {
@@ -29,9 +30,10 @@ namespace srm {
       /**
        * Generate code from to start by motion type
        * @param[in] start point to create code
+       * @param[in] coordSys class to morph cs
        * @return string with code
        */
-      virtual std::string GenCode(vec_t start) const = 0;
+      virtual std::string GenCode(vec_t start, cs_t coordSys) const = 0;
     };
 
     /**
@@ -44,9 +46,10 @@ namespace srm {
       /**
        * Generate code from to start by motion type
        * @param[in] start point to create code
+       * @param[in] coordSys class to morph cs
        * @return string with code
        */
-      std::string GenCode(vec_t start) const override;
+      std::string GenCode(vec_t start, cs_t coordSys) const override;
     };
 
     /**
@@ -59,9 +62,10 @@ namespace srm {
       /**
        * Generate code from to start by motion type
        * @param[in] start point to create code
+       * @param[in] coordSys class to morph cs
        * @return string with code
        */
-      std::string GenCode(vec_t start) const override;
+      std::string GenCode(vec_t start, cs_t coordSys) const override;
     };
   }
 

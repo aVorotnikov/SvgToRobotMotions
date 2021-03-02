@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\converter\bezier\bezier.cpp" />
+    <ClCompile Include="code\converter\cs\cs.cpp" />
     <ClCompile Include="code\converter\primitive\primitive.cpp" />
     <ClCompile Include="code\converter\translator.cpp" />
     <ClCompile Include="code\main.cpp" />
@@ -27,6 +28,7 @@
   <ItemGroup>
     <ClInclude Include="code\converter\bezier\bezier.h" />
     <ClInclude Include="code\converter\defs.h" />
+    <ClInclude Include="code\converter\primitive\cs\cs.h" />
     <ClInclude Include="code\converter\primitive\primitive.h" />
     <ClInclude Include="code\converter\rapidxml.hpp" />
     <ClInclude Include="code\converter\translator.h" />
