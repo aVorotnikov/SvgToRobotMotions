@@ -41,7 +41,7 @@ void srm::translator_t::SetSvg(const std::string &svgFileName) {
 }
 
 /**
- * Gen robot code from created tag tree
+ * Collect all tags from DOM to list
  * @param[in] node starting node in the xml DOM
  * @param[out] tags pointer to list of pointers to tags
  * @see GenCode
