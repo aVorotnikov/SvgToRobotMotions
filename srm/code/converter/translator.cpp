@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class source file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 28.02.2021
+ * @date 02.03.2021
  *
  * Contains main converter class realisatiion
  */
@@ -41,12 +41,70 @@ void srm::translator_t::SetSvg(const std::string &svgFileName) {
 }
 
 /**
+ * Collect all tags from DOM to list
+ * @param[in] node starting node in the xml DOM
+ * @param[out] tags pointer to list of pointers to tags
+ * @see GenCode
+ */
+static void _getTags(rapidxml::xml_node<> *node, std::list<rapidxml::xml_node<> *> *tags) noexcept {
+  while (node) {
+    _getTags(node->first_node(), tags);
+    tags->push_back(node);
+    node = node->next_sibling();
+  }
+}
+
+/**
  * Gen robot code from created tag tree
  * @param[in] codeFileName code file name
- * @see SetSvg
+ * @see SetSvg, _getTags
  */
 void srm::translator_t::GenCode(const std::string &codeFileName) const {
   std::list<primitive_t> primitives;
+  
+  std::list<rapidxml::xml_node<> *> tags;
+  std::string tagName;
+  _getTags(xmlTree.first_node(), &tags);
+
+ 
+  for (auto tag : tags) {
+    tagName.assign(tag->name(), tag->name_size());
+    if (tagName == "svg") {
+      // TODO: get width and height for coordinate system
+    }
+    if (tagName == "path") {
+      // TODO: realise path parsing
+    }
+    else if (tagName == "rect") {
+      // (x, y) is left top point
+      int x = atoi(tag->last_attribute("x")->value());
+      int y = atoi(tag->last_attribute("y")->value());
+      int height = atoi(tag->last_attribute("height")->value());
+      int width = atoi(tag->last_attribute("width")->value());
+      // TODO: realise rx and ry processing
+    }
+    else if (tagName == "circle") {
+      // TODO: realise circle parsing
+    }
+    else if (tagName == "ellipse") {
+      // TODO: realise ellipse parsing
+    }
+    else if (tagName == "line") {
+      // TODO: realise line parsing
+    }
+    else if (tagName == "polyline") {
+      // TODO: realise polyline parsing
+    }
+    else if (tagName == "polygon") {
+      // TODO: realise polygon parsing
+    }
+    else if (tagName == "text") {
+      // TODO: realise text processing
+    }
+    else {
+      continue;
+    }
+  }
 }
 
 /**
