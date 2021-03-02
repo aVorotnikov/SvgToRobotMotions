@@ -2,7 +2,7 @@
  * @file
  * @brief Bezier building class header file
  * @authors Vorotnikov Andrey
- * @date 27.02.2021
+ * @date 02.03.2021
  *
  * Contains description of class to build Bezier spline
  */
@@ -47,7 +47,7 @@ namespace srm {
      * @return Bezier point vector
      * @warning accuracy must be greater than 0
      */
-    std::vector<vec_t> Sampling(double accuracy, double startDelta = 1) const;
+    std::vector<vec_t> Sampling(double accuracy, double startDelta = 0.5) const;
   };
 }
 

@@ -2,7 +2,7 @@
  * @file
  * @brief Bezier building class source file
  * @authors Vorotnikov Andrey
- * @date 28.02.2021
+ * @date 02.03.2021
  *
  * Contains class to build Bezier spline realisation
  */
@@ -71,15 +71,18 @@ std::vector<srm::vec_t> srm::build_bezier_t::Sampling(double accuracy, double st
   double tCur[] = {0, 1}, tPrev[] = {0, 1};
   std::list<vec_t> resList[2];
 
-  // add first point
+  // add first points
   vec_t prevPos[] = {EvaluatePoint(tPrev[0]), EvaluatePoint(tPrev[1])};
   resList[0].push_back(prevPos[0]);
   resList[1].push_back(prevPos[1]);
 
-  bool toFirst = 0;
+  // first step decreasing
   if (startDelta >= 1 && (prevPos[0] - prevPos[1]).Len2() > accuracy2)
     delta = 0.5;
-  while (tCur[0] < tCur[1] - delta) {
+
+  bool toFirst = 0;
+  while (tCur[0] < tCur[1]) {
+    // evaluate current param value
     if (toFirst)
       tCur[toFirst] = tPrev[toFirst] - delta;
     else
@@ -99,6 +102,9 @@ std::vector<srm::vec_t> srm::build_bezier_t::Sampling(double accuracy, double st
       tCur[toFirst] = tPrev[toFirst];
     }
   }
+  // delete unordered point
+  resList[!toFirst].pop_back();
+
   // create res vector from 2 lists
   std::vector<vec_t> res;
   res.reserve(resList[0].size() + resList[1].size());
