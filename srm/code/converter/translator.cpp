@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class source file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 02.03.2021
+ * @date 03.03.2021
  *
  * Contains main converter class realisatiion
  */
@@ -10,6 +10,7 @@
 #include <srm.h>
 #include <fstream>
 #include <list>
+#include <iostream>
 
 /**
  * Set svg image to convert function function. Check file abd create tag tree
@@ -18,7 +19,7 @@
 void srm::translator_t::SetSvg(const std::string &svgFileName) {
   std::ifstream fin(svgFileName);
   if (!fin.is_open()) {
-    throw std::exception("Open file error");
+    throw std::exception("Failed to open intput file");
   }
 
   std::string buf;
@@ -28,7 +29,7 @@ void srm::translator_t::SetSvg(const std::string &svgFileName) {
   }
 
   // this char string have to be in the heap during rapidxml works
-  char *xmlString = new char[buf.length() + 1];
+  xmlString = new char[buf.length() + 1];
 
   strcpy_s(xmlString, (buf.length() + 1) * sizeof(char), buf.c_str());
 
@@ -55,18 +56,48 @@ static void _getTags(rapidxml::xml_node<> *node, std::list<rapidxml::xml_node<> 
 }
 
 /**
- * Gen robot code from created tag tree
- * @param[in] codeFileName code file name
- * @see SetSvg, _getTags
+ * Transform svg rectangle to primitive
+ * @param[in] tag pointer to rectangle node in xml DOM
+ * @param[out] rectanglePrimitive the primitive representations of rectangle
  */
-void srm::translator_t::GenCode(const std::string &codeFileName) const {
-  std::list<primitive_t> primitives;
-  
-  std::list<rapidxml::xml_node<> *> tags;
-  std::string tagName;
-  _getTags(xmlTree.first_node(), &tags);
+static void _rectToPrimitive(const rapidxml::xml_node<>* tag, srm::primitive_t *rectanglePrimitive) noexcept {
+  // Get attributes
+      // (x, y) is left top point
+  int x = atoi(tag->last_attribute("x")->value());
+  int y = atoi(tag->last_attribute("y")->value());
+  int height = atoi(tag->last_attribute("height")->value());
+  int width = atoi(tag->last_attribute("width")->value());
+  int rx = 0;
+  int ry = 0;
 
- 
+  if (tag->last_attribute("rx")) {
+    rx = atoi(tag->last_attribute("rx")->value());
+  }
+  if (tag->last_attribute("ry")) {
+    rx = atoi(tag->last_attribute("ry")->value());
+  }
+
+  // Transform to primitive
+  srm::motion::segment_t *p1 = new srm::motion::segment_t(x + width, y);
+  srm::motion::segment_t *p2 = new srm::motion::segment_t(x + width, y + height);
+  srm::motion::segment_t *p3 = new srm::motion::segment_t(x, y + height);
+  srm::motion::segment_t *p4 = new srm::motion::segment_t(x, y);
+  rectanglePrimitive->start.x = x;
+  rectanglePrimitive->start.y = y;
+  rectanglePrimitive->push_back(p1);
+  rectanglePrimitive->push_back(p2);
+  rectanglePrimitive->push_back(p3);
+  rectanglePrimitive->push_back(p4);
+
+}
+
+/**
+ * Transform svg tags to primitives
+ * @param[in] tags the list of tags in DOM
+ * @param[out] primitives the list of primitive representations of tags
+ */
+static void _tagsToPrimitives(const std::list<rapidxml::xml_node<> *> &tags, std::list<srm::primitive_t *> *primitives) noexcept {
+  std::string tagName;
   for (auto tag : tags) {
     tagName.assign(tag->name(), tag->name_size());
     if (tagName == "svg") {
@@ -76,12 +107,9 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
       // TODO: realise path parsing
     }
     else if (tagName == "rect") {
-      // (x, y) is left top point
-      int x = atoi(tag->last_attribute("x")->value());
-      int y = atoi(tag->last_attribute("y")->value());
-      int height = atoi(tag->last_attribute("height")->value());
-      int width = atoi(tag->last_attribute("width")->value());
-      // TODO: realise rx and ry processing
+      srm::primitive_t *rectanglePrimitive = new srm::primitive_t;
+      _rectToPrimitive(tag, rectanglePrimitive);
+      primitives->push_back(rectanglePrimitive);
     }
     else if (tagName == "circle") {
       // TODO: realise circle parsing
@@ -104,6 +132,50 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
     else {
       continue;
     }
+  }
+}
+
+/**
+ * Gen robot code from created tag tree
+ * @param[in] codeFileName code file name
+ * @see SetSvg
+ */
+void srm::translator_t::GenCode(const std::string &codeFileName) const {
+  if (!xmlTree.first_node()) {
+    throw std::exception("Svg file is not set or empty");
+  }
+  std::list<rapidxml::xml_node<> *> tags;
+  _getTags(xmlTree.first_node(), &tags);
+  
+  std::list<srm::primitive_t *> primitives;
+  _tagsToPrimitives(tags, &primitives);
+  
+  vec_t i, j; // ! only for check base_t.GenCode !
+  cs_t cs(i, j); // ! only for check base_t.GenCode !
+
+  std::ofstream fout(codeFileName);
+  if (!fout.is_open()) {
+    for (auto primitive : primitives) {
+      delete primitive;
+    }
+    throw std::exception("Failed to open or create output file");
+  }
+
+  // NOT REAL PROGRAM, JUST TEST
+  fout << ".PROGRAM " << codeFileName  << "()" <<std::endl;
+  for (auto primitive : primitives) {
+    fout << "\tJAPPRO " << " " << primitive->start.x  << " " << primitive->start.y
+         <<", 500" << std::endl;
+    fout << "\tLMOVE " << " " << primitive->start.x << " " << primitive->start.y << std::endl;
+    for (auto base : *primitive) {
+      fout << "\t" << base->GenCode(cs);
+    }
+    fout << "\tDRAW ,,500 " << std::endl;
+  }
+  fout << ".END";
+
+  for (auto primitive : primitives) {
+    delete primitive;
   }
 }
 
