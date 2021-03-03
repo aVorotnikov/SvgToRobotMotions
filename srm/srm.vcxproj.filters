@@ -45,7 +45,7 @@
     <ClCompile Include="code\converter\primitive\primitive.cpp">
       <Filter>Исходные файлы\Converter\Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="code\converter\cs\cs.cpp">
+    <ClCompile Include="code\converter\primitive\cs\cs.cpp">
       <Filter>Исходные файлы\Converter\Primitives\Coordinate system</Filter>
     </ClCompile>
   </ItemGroup>
