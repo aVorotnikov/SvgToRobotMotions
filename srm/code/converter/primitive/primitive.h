@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief Primitives and support classes header file
- * @authors Vorotnikov Andrey
- * @date 02.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya
+ * @date 03.03.2021
  *
  * Contains declaration motions class (motion_t, segment_t, arc_t) and primitive class
  */
@@ -28,12 +28,11 @@ namespace srm {
     class base_t {
     public:
       /**
-       * Generate code from to start by motion type
-       * @param[in] start point to create code
+       * Generate code for motion type
        * @param[in] coordSys class to morph cs
        * @return string with code
        */
-      virtual std::string GenCode(vec_t start, cs_t coordSys) const = 0;
+      virtual std::string GenCode(cs_t coordSys) const = 0;
     };
 
     /**
@@ -43,13 +42,21 @@ namespace srm {
      */
     class segment_t : public base_t {
     public:
+      vec_t point;  ///< point to which robot moves in a straight line
+
       /**
-       * Generate code from to start by motion type
-       * @param[in] start point to create code
+       * Constructor for segment_t
+       * @param[in] x x coordinate of point to which robot moves in a straight line
+       * @param[in] y y coordinate of point to which robot moves in a straight line
+       */
+      segment_t(const int x, const int y);
+
+      /**
+       * Generate code for motion type
        * @param[in] coordSys class to morph cs
        * @return string with code
        */
-      std::string GenCode(vec_t start, cs_t coordSys) const override;
+      std::string GenCode(cs_t coordSys) const override;
     };
 
     /**
@@ -59,13 +66,15 @@ namespace srm {
      */
     class arc_t : public base_t {
     public:
+      vec_t point1; ///< the first point to building arc
+      vec_t point2; ///< the second point to building arc
+
       /**
-       * Generate code from to start by motion type
-       * @param[in] start point to create code
+       * Generate code for motion type
        * @param[in] coordSys class to morph cs
        * @return string with code
        */
-      std::string GenCode(vec_t start, cs_t coordSys) const override;
+      std::string GenCode(cs_t coordSys) const override;
     };
   }
 
