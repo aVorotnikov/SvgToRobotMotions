@@ -66,8 +66,9 @@ namespace srm {
      */
     class arc_t : public base_t {
     public:
-      vec_t point1; ///< the first point to building arc
-      vec_t point2; ///< the second point to building arc
+      vec_t
+        point1,  ///< the first point to building arc
+        point2;  ///< the second point to building arc
 
       /**
        * Generate code for motion type
