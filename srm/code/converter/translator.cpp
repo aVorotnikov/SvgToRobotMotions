@@ -88,7 +88,6 @@ static void _rectToPrimitive(const rapidxml::xml_node<>* tag, srm::primitive_t *
   rectanglePrimitive->push_back(p2);
   rectanglePrimitive->push_back(p3);
   rectanglePrimitive->push_back(p4);
-
 }
 
 /**

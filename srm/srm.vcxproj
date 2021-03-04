@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\converter\bezier\bezier.cpp" />
-    <ClCompile Include="code\converter\cs\cs.cpp" />
+    <ClCompile Include="code\converter\primitive\cs\cs.cpp" />
     <ClCompile Include="code\converter\primitive\primitive.cpp" />
     <ClCompile Include="code\converter\translator.cpp" />
     <ClCompile Include="code\main.cpp" />

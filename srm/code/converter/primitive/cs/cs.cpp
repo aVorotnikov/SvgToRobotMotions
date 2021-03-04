@@ -2,7 +2,7 @@
  * @file
  * @brief Coordinate system source file
  * @authors Vorotnikov Andrey
- * @date 02.03.2021
+ * @date 03.03.2021
  *
  * Contains cs_t class realisation to morph svg coordinate system to robor coordinate system
  */
@@ -23,7 +23,7 @@ srm::cs_t::cs_t(vec_t roboI, vec_t roboJ) noexcept : robotI(roboI), robotJ(roboJ
  * @return string with code
  */
 srm::vec_t srm::cs_t::SvgToRobot(vec_t point) const noexcept {
-  return vec_t();
+  return point;
 }
 
 /**
@@ -32,5 +32,5 @@ srm::vec_t srm::cs_t::SvgToRobot(vec_t point) const noexcept {
  * @return string with code
  */
 srm::vec_t srm::cs_t::RobotToSvg(vec_t point) const noexcept {
-  return vec_t();
+  return point;
 }
