@@ -103,6 +103,9 @@ namespace srm {
      */
     ~primitive_t(void);
   };
+
+  std::ostream& operator<<(std::ostream& out, const primitive_t& primitive);
+
 }
 
 #endif /* __PRIMITIVE_H_INCLUDED */
