@@ -41,9 +41,12 @@ std::string srm::motion::arc_t::GenCode(cs_t coordSys) const {
   return command;
 }
 
- /**
-  *
-  */
+/**
+ * Generate code and write it to output stream
+ * @param[in] output variable
+ * @param[in] primitive
+ * @return ostream variable
+ */
 std::ostream & srm::operator<<(std::ostream &out, const primitive_t &primitive) {
   out << "\tJAPPRO " << std::to_string(primitive.start.x) << " " << std::to_string(primitive.start.y) << ", 500\n";
   out << "\tDRAW ,,-500\n";
