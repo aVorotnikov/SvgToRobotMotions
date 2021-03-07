@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class source file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 03.03.2021
+ * @date 07.03.2021
  *
  * Contains main converter class realisatiion
  */
@@ -162,14 +162,9 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
 
   // NOT REAL PROGRAM, JUST TEST
   fout << ".PROGRAM " << codeFileName  << "()" <<std::endl;
+  
   for (auto primitive : primitives) {
-    fout << "\tJAPPRO " << " " << primitive->start.x  << " " << primitive->start.y
-         <<", 500" << std::endl;
-    fout << "\tLMOVE " << " " << primitive->start.x << " " << primitive->start.y << std::endl;
-    for (auto base : *primitive) {
-      fout << "\t" << base->GenCode(cs);
-    }
-    fout << "\tDRAW ,,500 " << std::endl;
+    fout << *primitive << ";\n";
   }
   fout << ".END";
 
