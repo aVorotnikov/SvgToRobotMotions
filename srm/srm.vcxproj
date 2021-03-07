@@ -32,7 +32,8 @@
     <ClInclude Include="code\converter\primitive\primitive.h" />
     <ClInclude Include="code\converter\rapidxml.hpp" />
     <ClInclude Include="code\converter\translator.h" />
-    <ClInclude Include="code\math\vector.h" />
+    <ClInclude Include="code\math\vector2.h" />
+    <ClInclude Include="code\math\vector3.h" />
     <ClInclude Include="code\srm.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
