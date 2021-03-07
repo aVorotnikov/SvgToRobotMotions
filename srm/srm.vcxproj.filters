@@ -53,7 +53,7 @@
     <ClInclude Include="code\srm.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="code\math\vector.h">
+    <ClInclude Include="code\math\vector2.h">
       <Filter>Исходные файлы\Math</Filter>
     </ClInclude>
     <ClInclude Include="code\converter\defs.h">
@@ -73,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="code\converter\primitive\cs\cs.h">
       <Filter>Исходные файлы\Converter\Primitives\Coordinate system</Filter>
+    </ClInclude>
+    <ClInclude Include="code\math\vector3.h">
+      <Filter>Исходные файлы\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

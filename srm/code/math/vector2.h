@@ -1,16 +1,16 @@
 /**
  * @file
- * @brief Vector class header file
+ * @brief 2d vector class header file
  * @authors Vorotnikov Andrey
- * @date 23.02.2021
+ * @date 07.03.2021
  *
  * Contains template 2 dimensional vector mathematician class
  */
 
 #pragma once
 
-#ifndef __VECTOR_H_INCLUDED
-#define __VECTOR_H_INCLUDED
+#ifndef __VECTOR2_H_INCLUDED
+#define __VECTOR2_H_INCLUDED
 
 #include <cmath>
 
@@ -28,7 +28,7 @@ namespace math {
         y;  ///< y vector coordinate
 
       /**
-       * @defgroup vecConstructors Constructors of vector class
+       * @defgroup vec2Constructors Constructors of 2d vector class
        * @brief 2 dimensional vector class constructors module
        *
        * @{
@@ -58,7 +58,7 @@ namespace math {
       /**@}*/
 
       /**
-       * @defgroup vecMath Math operation on vector
+       * @defgroup vec2Math Math operation on 2d vector
        * @brief 2 dimensional vector class operations module
        *
        * @{
@@ -234,4 +234,4 @@ namespace math {
     };
 }
 
-#endif /* __VECTOR_H_INCLUDED */
+#endif /* __VECTOR2_H_INCLUDED */
