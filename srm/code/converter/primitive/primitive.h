@@ -2,7 +2,7 @@
  * @file
  * @brief Primitives and support classes header file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 03.03.2021
+ * @date 07.03.2021
  *
  * Contains declaration motions class (motion_t, segment_t, arc_t) and primitive class
  */
@@ -88,6 +88,15 @@ namespace srm {
   class primitive_t : public std::vector<motion::base_t *> {
   public:
     vec_t start;  ///< start point of primitive
+    cs_t coordSys; ///< for transforming coordinates from svg system to robot system
+
+    /**
+     * Generate code and write it to output stream 
+     * @param[in] output variable
+     * @param[in] primitive
+     * @return ostream variable
+     */
+    friend std::ostream & operator<<(std::ostream &out, const primitive_t &primitive);
 
     /**
      * Primitive destructor
