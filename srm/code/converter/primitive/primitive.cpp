@@ -26,8 +26,11 @@ srm::motion::segment_t::segment_t(const int x, const int y) {
  * @return string with code
  */
 std::string srm::motion::segment_t::GenCode(cs_t coordSys) const {
-  std::string command = "LMOVE " + std::to_string(point.x) + ", " + std::to_string(point.y) + "\n";
-  return command;
+  vec3_t delta = coordSys.SvgToRobotDelta(point);
+  return "LMOVE SHIFT (p1 BY "+
+    std::to_string(delta.x) + ", " +
+    std::to_string(delta.y) + ", " +
+    std::to_string(delta.z) + ")\n";
 }
 
 /**
@@ -36,9 +39,17 @@ std::string srm::motion::segment_t::GenCode(cs_t coordSys) const {
  * @return string with code
  */
 std::string srm::motion::arc_t::GenCode(cs_t coordSys) const {
-  std::string command = "C1MOVE " + std::to_string(point1.x) + ", " + std::to_string(point1.y) + "\n" +
-    "C2MOVE " + std::to_string(point1.x) + ", " + std::to_string(point1.y) + "\n";
-  return command;
+  vec3_t
+    delta1 = coordSys.SvgToRobotDelta(point1),
+    delta2 = coordSys.SvgToRobotDelta(point2);
+  return "C1MOVE SHIFT (p1 BY " +
+    std::to_string(delta1.x) + ", " +
+    std::to_string(delta1.y) + ", " +
+    std::to_string(delta1.z) + ")\n" +
+    "C2MOVE SHIFT (p1 BY " +
+    std::to_string(delta2.x) + ", " +
+    std::to_string(delta2.y) + ", " +
+    std::to_string(delta2.z) + ")\n";
 }
 
 /**
@@ -48,13 +59,23 @@ std::string srm::motion::arc_t::GenCode(cs_t coordSys) const {
  * @return ostream variable
  */
 std::ostream & srm::operator<<(std::ostream &out, const primitive_t &primitive) {
-  out << "\tJAPPRO " << std::to_string(primitive.start.x) << " " << std::to_string(primitive.start.y) << ", 500\n";
-  out << "\tDRAW ,,-500\n";
+  vec3_t delta = primitive.coordSys.SvgToRobotDelta(primitive.start);
+  out << "\tLAPPRO SHIFT (p1 BY " +
+    std::to_string(delta.x) + ", " +
+    std::to_string(delta.y) + ", " +
+    std::to_string(delta.z) + "), 500\n";
+  out << "LMOVE SHIFT (p1 BY " +
+    std::to_string(delta.x) + ", " +
+    std::to_string(delta.y) + ", " +
+    std::to_string(delta.z) + ")\n";;
 
-  for (auto base : primitive) {
+  for (auto base : primitive)
     out << "\t" << base->GenCode(primitive.coordSys);
-  }
-  out << "\tDRAW ,,500\n";
+
+  out << "LDERAPT SHIFT (p1 BY " +
+    std::to_string(delta.x) + ", " +
+    std::to_string(delta.y) + ", " +
+    std::to_string(delta.z) + "), 500\n";
 
   return out;
 }
