@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief Coordinate system header file
- * @authors Vorotnikov Andrey
- * @date 02.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya
+ * @date 07.03.2021
  *
  * Contains cs_t class definition to morph svg coordinate system to robor coordinate system
  */
@@ -24,12 +24,17 @@ namespace srm {
   class cs_t {
   private:
     vec_t
-      svgI,    ///< svg i ort in robot cs
-      svgJ,    ///< svg j ort in robot cs
-      robotI,  ///< robot i ort in svg cs
-      robotJ;  ///< robot j ort in svg cs
+      svgI = { 1,0 },    ///< svg i ort in robot cs
+      svgJ = { 0, 1 },    ///< svg j ort in robot cs
+      robotI = { 1, 0 },  ///< robot i ort in svg cs
+      robotJ = { 0, 1 };  ///< robot j ort in svg cs
 
   public:
+    /**
+     * Class standart constructor
+     */
+    cs_t() {};
+
     /**
      * Class constructor
      * @param[in] roboI robot i ort in svg cs

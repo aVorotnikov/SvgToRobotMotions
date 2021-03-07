@@ -2,12 +2,13 @@
  * @file
  * @brief Primitives and support classes source file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 03.03.2021
+ * @date 07.03.2021
  *
  * Contains definition motions class (motion_t, segment_t, arc_t) and primitive class
  */
 
 #include <srm.h>
+#include <sstream>
 
  /**
   * Constructor for segment_t
@@ -29,7 +30,7 @@ std::string srm::motion::segment_t::GenCode(cs_t coordSys) const {
   return command;
 }
 
- /**
+/**
   * Generate code for motion type
   * @param[in] coordSys class to morph cs
   * @return string with code
@@ -38,6 +39,21 @@ std::string srm::motion::arc_t::GenCode(cs_t coordSys) const {
   std::string command = "C1MOVE " + std::to_string(point1.x) + ", " + std::to_string(point1.y) + "\n" +
     "C2MOVE " + std::to_string(point1.x) + ", " + std::to_string(point1.y) + "\n";
   return command;
+}
+
+ /**
+  *
+  */
+std::ostream & srm::operator<<(std::ostream &out, const primitive_t &primitive) {
+  out << "\tJAPPRO " << std::to_string(primitive.start.x) << " " << std::to_string(primitive.start.y) << ", 500\n";
+  out << "\tDRAW ,,-500\n";
+
+  for (auto base : primitive) {
+    out << "\t" << base->GenCode(primitive.coordSys);
+  }
+  out << "\tDRAW ,,500\n";
+
+  return out;
 }
 
 /**
