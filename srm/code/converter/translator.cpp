@@ -106,7 +106,7 @@ static void _tagsToPrimitives(const std::list<rapidxml::xml_node<> *> &tags, std
       // TODO: realise path parsing
     }
     else if (tagName == "rect") {
-      srm::primitive_t *rectanglePrimitive = new srm::primitive_t;
+      srm::primitive_t *rectanglePrimitive = new srm::primitive_t();
       _rectToPrimitive(tag, rectanglePrimitive);
       primitives->push_back(rectanglePrimitive);
     }
@@ -149,8 +149,8 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
   std::list<srm::primitive_t *> primitives;
   _tagsToPrimitives(tags, &primitives);
   
-  vec_t i, j; // ! only for check base_t.GenCode !
-  cs_t cs(i, j); // ! only for check base_t.GenCode !
+  vec3_t p1(0, 0, 1), p2(1, 0, 1), p3(0, 0, 0); // ! only for check base_t.GenCode !
+  cs_t cs(100, 100, p1, p2, p3); // ! only for check base_t.GenCode !
 
   std::ofstream fout(codeFileName);
   if (!fout.is_open()) {
