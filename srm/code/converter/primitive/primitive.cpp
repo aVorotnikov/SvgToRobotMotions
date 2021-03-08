@@ -2,7 +2,7 @@
  * @file
  * @brief Primitives and support classes source file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 07.03.2021
+ * @date 08.03.2021
  *
  * Contains definition motions class (motion_t, segment_t, arc_t) and primitive class
  */
@@ -54,8 +54,8 @@ std::string srm::motion::arc_t::GenCode(cs_t coordSys) const {
 
 /**
  * Generate code and write it to output stream
- * @param[in] output variable
- * @param[in] primitive
+ * @param[in] out output variable
+ * @param[in] primitive primitive to output
  * @return ostream variable
  */
 std::ostream & srm::operator<<(std::ostream &out, const primitive_t &primitive) {
