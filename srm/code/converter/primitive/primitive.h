@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief Primitives and support classes header file
- * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 08.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
+ * @date 10.03.2021
  *
  * Contains declaration motions class (motion_t, segment_t, arc_t) and primitive class
  */
@@ -49,7 +49,7 @@ namespace srm {
        * @param[in] x x coordinate of point to which robot moves in a straight line
        * @param[in] y y coordinate of point to which robot moves in a straight line
        */
-      segment_t(const int x, const int y);
+      segment_t(const double x, const double y);
 
       /**
        * Generate code for motion type

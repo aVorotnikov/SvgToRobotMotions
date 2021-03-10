@@ -31,6 +31,9 @@
     <Filter Include="Исходные файлы\Converter\Primitives\Coordinate system">
       <UniqueIdentifier>{181af5df-b273-444f-9c73-ffc9dcbccf91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Converter\Path">
+      <UniqueIdentifier>{847be94b-4446-4e6f-9512-15973bfeb6b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -47,6 +50,9 @@
     </ClCompile>
     <ClCompile Include="code\converter\primitive\cs\cs.cpp">
       <Filter>Исходные файлы\Converter\Primitives\Coordinate system</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\path\path.cpp">
+      <Filter>Исходные файлы\Converter\Path</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="code\math\vector3.h">
       <Filter>Исходные файлы\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\path\path.h">
+      <Filter>Исходные файлы\Converter\Path</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

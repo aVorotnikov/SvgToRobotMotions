@@ -21,5 +21,6 @@
 #include "converter/bezier/bezier.h"
 #include "converter/primitive/primitive.h"
 #include "converter/primitive/cs/cs.h"
+#include "converter/path/path.h"
 
 #endif /* __SRM_H_INCLUDED */
