@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief Primitives and support classes source file
- * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 08.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
+ * @date 10.03.2021
  *
  * Contains definition motions class (motion_t, segment_t, arc_t) and primitive class
  */
@@ -15,7 +15,7 @@
  * @param[in] x x coordinate of point to which robot moves in a straight line
  * @param[in] y y coordinate of point to which robot moves in a straight line
  */
-srm::motion::segment_t::segment_t(const int x, const int y) {
+srm::motion::segment_t::segment_t(const double x, const double y) {
   point.x = x;
   point.y = y;
 }
