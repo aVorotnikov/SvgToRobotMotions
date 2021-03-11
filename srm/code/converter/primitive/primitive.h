@@ -18,32 +18,29 @@
 
 /** \brief Project namespace */
 namespace srm {
-  /** \brief Motion types namespace */
-  namespace motion {
+  /**
+    * @brief Line segment motion class
+    *
+    * Line segment representation type to build code
+    */
+  class segment_t {
+  public:
+    vec_t point;  ///< point to which robot moves in a straight line
+
     /**
-     * @brief Line segment motion class
-     *
-     * Line segment representation type to build code
-     */
-    class segment_t {
-    public:
-      vec_t point;  ///< point to which robot moves in a straight line
+      * Constructor for segment_t
+      * @param[in] x x coordinate of point to which robot moves in a straight line
+      * @param[in] y y coordinate of point to which robot moves in a straight line
+      */
+    segment_t(const double x, const double y);
 
-      /**
-       * Constructor for segment_t
-       * @param[in] x x coordinate of point to which robot moves in a straight line
-       * @param[in] y y coordinate of point to which robot moves in a straight line
-       */
-      segment_t(const double x, const double y);
-
-      /**
-       * Generate code for motion type
-       * @param[in] coordSys class to morph cs
-       * @return string with code
-       */
-      std::string GenCode(cs_t coordSys) const;
-    };
-  }
+    /**
+      * Generate code for motion type
+      * @param[in] coordSys class to morph cs
+      * @return string with code
+      */
+    std::string GenCode(cs_t coordSys) const;
+  };
 
   /**
    * @brief Primitive representation class
@@ -51,7 +48,7 @@ namespace srm {
    *
    * Sequence of simple lines to build code
    */
-  class primitive_t : public std::vector<motion::segment_t> {
+  class primitive_t : public std::vector<segment_t> {
   public:
     vec_t start;    ///< start point of primitive
 
