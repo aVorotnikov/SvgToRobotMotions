@@ -2,7 +2,7 @@
  * @file
  * @brief Main program source file
  * @authors Vorotnikov Andrey
- * @date 24.02.2021
+ * @date 11.03.2021
  *
  * Contains main function to start program
  */
@@ -30,10 +30,10 @@ int main(int argC, char *argV[]) {
   }
 
   try {
-    srm::translator_t trans;
+    srm::translator_t *trans = srm::translator_t::GetPtr();
 
-    trans.SetSvg(argV[1]);
-    trans.GenCode(argV[2]);
+    trans->SetSvg(argV[1]);
+    trans->GenCode(argV[2]);
   }
   catch (std::exception &e) {
     std::cout << "Error: " << e.what() << std::endl;

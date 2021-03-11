@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class header file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 24.02.2021
+ * @date 11.03.2021
  *
  * Contains main converter class description
  */
@@ -24,10 +24,23 @@ namespace srm {
    */
   class translator_t {
   private:
-    rapidxml::xml_document<> xmlTree;  ///< the root of xml DOM
-    char *xmlString;                   ///< rapidxml needs this char string for its work
+    static translator_t singleToneVar;  ///< tranlator singletone variable
+
+    rapidxml::xml_document<> xmlTree;   ///< the root of xml DOM
+    char *xmlString;                    ///< rapidxml needs this char string for its work
+
+    /**
+     * Private constructor for single tone
+     */
+    translator_t(void) noexcept;
 
   public:
+    /**
+     * Get 'translator_t' class single tone variable
+     * @return pointer to single tone variable
+     */
+    static translator_t * GetPtr(void) noexcept;
+
     /**
      * @defgroup converterFuncs Main functions to convert
      * @brief Tranlator functions to set functions to convert
