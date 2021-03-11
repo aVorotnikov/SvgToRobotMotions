@@ -9,23 +9,109 @@
 
 #include <srm.h>
 
+#include <cmath>
+
+/**
+ * Transform primitive by attribute transform
+ *
+ */
+static void _transformPrimitive(srm::primitive_t *primitive) {
+  // TODO: add required parametres and realise _transformPrimitive
+}
+
+/**
+ * Transform svg polyline to primitive
+ * @param[in] tag pointer to polyline node in xml DOM
+ * @param[out] polylinePrimitive the primitive representations of polyline
+ */
+static void _polylineToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *polylinePrimitive) {
+  // TODO: realise _polylineToPrimitive
+}
+
+/**
+ * Transform svg polygon to primitive
+ * @param[in] tag pointer to polygon node in xml DOM
+ * @param[out] polygonPrimitive the primitive representations of polygon
+ */
+static void _polygonToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *polygonPrimitive) {
+  // TODO: realise _polygonToPrimitive
+}
+
+ /**
+  * Transform svg ellipse to primitive
+  * @param[in] tag pointer to ellipse node in xml DOM
+  * @param[out] ellipsePrimitive the primitive representations of ellipse
+  */
+static void _ellipseToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *ellipsePrimitive) {
+  double cx, cy, rx, ry;
+  try {
+    if (tag->last_attribute("cx"))
+      cx = std::stod(tag->last_attribute("cx")->value(), NULL);
+    else
+      throw std::exception("No required attribute in tag \"ellipse\"");
+    if(tag->last_attribute("cx"))
+      cy = std::stod(tag->last_attribute("cy")->value(), NULL);
+    else
+      throw std::exception("No required attribute in tag \"ellipse\"");
+    if(tag->last_attribute("cx"))
+      rx = std::stod(tag->last_attribute("rx")->value(), NULL);
+    else
+      throw std::exception("No required attribute in tag \"ellipse\"");
+    if(tag->last_attribute("cx"))
+      ry = std::stod(tag->last_attribute("ry")->value(), NULL);
+    else
+      throw std::exception("No required attribute in tag \"ellipse\"");
+  }
+  catch (std::exception error) {
+    throw std::exception("Invalid attribute value in tag \"ellipse\"");
+  }
+
+  ellipsePrimitive->start.x = cx + rx;
+  ellipsePrimitive->start.y = cy;
+
+  const double PI = 3.14159265358979323846;
+  double delta = PI / 20;
+  double t = delta;
+  double x, y;
+  while (t < 2 * PI) {
+    x = cx + rx * cos(t);
+    y = cy + ry * sin(t);
+    // TODO: check accuracy
+    srm::motion::segment_t p(x, y);
+    ellipsePrimitive->push_back(p);
+    t += delta;
+  }
+}
+
 /**
  * Transform svg line to primitive
  * @param[in] tag pointer to line node in xml DOM
  * @param[out] linePrimitive the primitive representations of line
  */
-static void _lineToPrimitive(const rapidxml::xml_node<>* tag, srm::primitive_t* linePrimitive) {
+static void _lineToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *linePrimitive) {
   double x1, y1, x2, y2;
   try {
-    x1 = std::stod(tag->last_attribute("x1")->value(), NULL);
-    y1 = std::stod(tag->last_attribute("y1")->value(), NULL);
-    x2 = std::stod(tag->last_attribute("x2")->value(), NULL);
-    y2 = std::stod(tag->last_attribute("y2")->value(), NULL);
+    if (tag->last_attribute("x1"))
+      x1 = std::stod(tag->last_attribute("x1")->value(), NULL);
+    else
+      throw std::exception("No required attribute in tag \"line\"");
+    if (tag->last_attribute("y1"))
+      y1 = std::stod(tag->last_attribute("y1")->value(), NULL);
+    else
+      throw std::exception("No required attribute in tag \"line\"");
+    if (tag->last_attribute("x2"))
+      x2 = std::stod(tag->last_attribute("x2")->value(), NULL);
+    else
+      throw std::exception("No required attribute in tag \"line\"");
+    if (tag->last_attribute("y2"))
+      y2 = std::stod(tag->last_attribute("y2")->value(), NULL);
+    else
+      throw std::exception("No required attribute in tag \"line\"");
   }
   catch (std::exception error) {
     throw std::exception("Invalid attribute value in tag \"line\"");
   }
-  srm::motion::segment_t* p = new srm::motion::segment_t(x2, y2);
+  srm::motion::segment_t p(x2, y2);
   linePrimitive->start.x = x1;
   linePrimitive->start.y = y1;
   linePrimitive->push_back(p);
@@ -36,21 +122,32 @@ static void _lineToPrimitive(const rapidxml::xml_node<>* tag, srm::primitive_t* 
  * @param[in] tag pointer to circle node in xml DOM
  * @param[out] circlePrimitive the primitive representations of circle
  */
-static void _circleToPrimitive(const rapidxml::xml_node<>* tag, srm::primitive_t* circlePrimitive) {
+static void _circleToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *circlePrimitive) {
   double cx, cy, r;
   try {
-    cx = std::stod(tag->last_attribute("cx")->value(), NULL);
-    cy = std::stod(tag->last_attribute("cy")->value(), NULL);
-    r = std::stod(tag->last_attribute("r")->value(), NULL);
+    if (tag->last_attribute("cx"))
+      cx = std::stod(tag->last_attribute("cx")->value(), NULL);
+    else
+      throw std::exception("No required attribute in tag \"circle\"");
+    if(tag->last_attribute("cy"))
+      cy = std::stod(tag->last_attribute("cy")->value(), NULL);
+    else
+      throw std::exception("No required attribute in tag \"circle\"");
+    if(tag->last_attribute("r"))
+      r = std::stod(tag->last_attribute("r")->value(), NULL);
+    else
+      throw std::exception("No required attribute in tag \"circle\"");
   }
   catch (std::exception error) {
     throw std::exception("Invalid attribute value in tag \"circle\"");
   }
-
+  /*
   srm::motion::arc_t* arc = new srm::motion::arc_t(cx, cy + r, cx, cy - r);
   circlePrimitive->start.x = cx;
   circlePrimitive->start.y = cy - r;
-  circlePrimitive->push_back(arc);
+  circlePrimitive->push_back(arc);*/
+
+  // TODO: Fix circle translating with segment_t 
 }
 
 /**
@@ -58,7 +155,7 @@ static void _circleToPrimitive(const rapidxml::xml_node<>* tag, srm::primitive_t
  * @param[in] tag pointer to rectangle node in xml DOM
  * @param[out] rectanglePrimitive the primitive representations of rectangle
  */
-static void _rectToPrimitive(const rapidxml::xml_node<>* tag, srm::primitive_t* rectanglePrimitive) {
+static void _rectToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *rectanglePrimitive) {
   double x, y, height, width;
   try {
     if (tag->last_attribute("x"))
@@ -92,12 +189,13 @@ static void _rectToPrimitive(const rapidxml::xml_node<>* tag, srm::primitive_t* 
   }
 
   // Transform to primitive
-  srm::motion::segment_t* p1 = new srm::motion::segment_t(x + width, y);
-  srm::motion::segment_t* p2 = new srm::motion::segment_t(x + width, y + height);
-  srm::motion::segment_t* p3 = new srm::motion::segment_t(x, y + height);
-  srm::motion::segment_t* p4 = new srm::motion::segment_t(x, y);
   rectanglePrimitive->start.x = x;
   rectanglePrimitive->start.y = y;
+
+  srm::motion::segment_t p1(x + width, y);
+  srm::motion::segment_t p2(x + width, y + height);
+  srm::motion::segment_t p3(x, y + height);
+  srm::motion::segment_t p4(x, y);
   rectanglePrimitive->push_back(p1);
   rectanglePrimitive->push_back(p2);
   rectanglePrimitive->push_back(p3);
@@ -109,54 +207,59 @@ static void _rectToPrimitive(const rapidxml::xml_node<>* tag, srm::primitive_t* 
  * @param[in] tags the list of tags in DOM
  * @param[out] primitives the list of primitive representations of tags
  */
-void TagsToPrimitives(const std::list<rapidxml::xml_node<>*>& tags, std::list<srm::primitive_t*>* primitives) {
+void TagsToPrimitives(const std::list<rapidxml::xml_node<>*> &tags, std::list<srm::primitive_t*> *primitives) {
   std::string tagName;
   for (auto tag : tags) {
-    tagName.assign(tag->name(), tag->name_size());
-    if (tagName == "svg") {
-      // TODO: get width and height for coordinate system
-    }
-    if (tagName == "path") {
-      srm::path_t path(primitives);
-      path.ParsePath(tag);
-    }
-    else if (tagName == "rect") {
-      srm::primitive_t* rectanglePrimitive = new srm::primitive_t();
-      try {
+    try {
+      tagName.assign(tag->name(), tag->name_size());
+
+      if (tagName == "svg") {
+        srm::translator_t::GetPtr();
+        // TODO: Set width and height for cs
+      }
+      if (tagName == "path") {
+        srm::path_t path(primitives);
+        path.ParsePath(tag);
+      }
+      else if (tagName == "rect") {
+        srm::primitive_t* rectanglePrimitive = new srm::primitive_t();
         _rectToPrimitive(tag, rectanglePrimitive);
+        primitives->push_back(rectanglePrimitive);
       }
-      catch (std::exception e) {
-        throw e;
-      }
-      primitives->push_back(rectanglePrimitive);
-    }
-    else if (tagName == "circle") {
-      srm::primitive_t* circlePrimitive = new srm::primitive_t();
-      try {
+      else if (tagName == "circle") {
+        srm::primitive_t* circlePrimitive = new srm::primitive_t();
         _circleToPrimitive(tag, circlePrimitive);
+        primitives->push_back(circlePrimitive);
       }
-      catch (std::exception e) {
-        throw e;
+      else if (tagName == "ellipse") {
+        srm::primitive_t* ellipsePrimitive = new srm::primitive_t();
+        _ellipseToPrimitive(tag, ellipsePrimitive);
+        primitives->push_back(ellipsePrimitive);
       }
-      primitives->push_back(circlePrimitive);
+      else if (tagName == "line") {
+        srm::primitive_t* linePrimitive = new srm::primitive_t();
+        _lineToPrimitive(tag, linePrimitive);
+        primitives->push_back(linePrimitive);
+      }
+      else if (tagName == "polyline") {
+        srm::primitive_t* polylinePrimitive = new srm::primitive_t();
+        _polylineToPrimitive(tag, polylinePrimitive);
+        primitives->push_back(polylinePrimitive);
+      }
+      else if (tagName == "polygon") {
+        srm::primitive_t* polygonPrimitive = new srm::primitive_t();
+        _polygonToPrimitive(tag, polygonPrimitive);
+        primitives->push_back(polygonPrimitive);
+      }
+      else if (tagName == "text") {
+        // TODO: realise text processing
+      }
+      else {
+        continue;
+      }
     }
-    else if (tagName == "ellipse") {
-      // TODO: realise ellipse parsing
-    }
-    else if (tagName == "line") {
-      // TODO: realise line parsing
-    }
-    else if (tagName == "polyline") {
-      // TODO: realise polyline parsing
-    }
-    else if (tagName == "polygon") {
-      // TODO: realise polygon parsing
-    }
-    else if (tagName == "text") {
-      // TODO: realise text processing
-    }
-    else {
-      continue;
+    catch(std::exception error) {
+      throw error;
     }
   }
 }

@@ -27,7 +27,7 @@ namespace srm {
     static translator_t singleToneVar;  ///< tranlator singletone variable
 
     rapidxml::xml_document<> xmlTree;   ///< the root of xml DOM
-    char *xmlString;                    ///< rapidxml needs this char string for its work
+    char* xmlString;                    ///< rapidxml needs this char string for its work
 
     /**
      * Private constructor for single tone
@@ -39,7 +39,7 @@ namespace srm {
      * Get 'translator_t' class single tone variable
      * @return pointer to single tone variable
      */
-    static translator_t * GetPtr(void) noexcept;
+    static translator_t* GetPtr(void) noexcept;
 
     /**
      * @defgroup converterFuncs Main functions to convert
@@ -48,18 +48,18 @@ namespace srm {
      * @{
      */
 
-    /**
-     * Set svg image to convert function function. Check file abd create tag tree
-     * @param[in] svgFileName svg image file name
-     */
-    void SetSvg(const std::string &svgFileName);
+     /**
+      * Set svg image to convert function function. Check file abd create tag tree
+      * @param[in] svgFileName svg image file name
+      */
+    void SetSvg(const std::string& svgFileName);
 
     /**
      * Gen robot code from created tag tree
      * @param[in] codeFileName code file name
      * @see SetSvg
      */
-    void GenCode(const std::string &codeFileName) const;
+    void GenCode(const std::string& codeFileName) const;
 
     /**@}*/
 
