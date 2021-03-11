@@ -37,6 +37,9 @@
     <Filter Include="Исходные файлы\Converter\Coordinate system">
       <UniqueIdentifier>{181af5df-b273-444f-9c73-ffc9dcbccf91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Converter\Robot configuration">
+      <UniqueIdentifier>{b271bc0d-f777-48f3-bd70-2ac7010161ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -59,6 +62,9 @@
     </ClCompile>
     <ClCompile Include="code\converter\cs\cs.cpp">
       <Filter>Исходные файлы\Converter\Coordinate system</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\robot_conf\robot_conf.cpp">
+      <Filter>Исходные файлы\Converter\Robot configuration</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="code\converter\cs\cs.h">
       <Filter>Исходные файлы\Converter\Coordinate system</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\robot_conf\robot_conf.h">
+      <Filter>Исходные файлы\Converter\Robot configuration</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

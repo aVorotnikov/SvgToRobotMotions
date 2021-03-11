@@ -23,5 +23,6 @@
 #include "converter/tags_translator/tags_translator.h"
 #include "converter/tags_translator/path/path.h"
 #include "converter/tags_translator/path/bezier/bezier.h"
+#include "converter/robot_conf/robot_conf.h"
 
 #endif /* __SRM_H_INCLUDED */

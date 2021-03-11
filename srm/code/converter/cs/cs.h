@@ -14,7 +14,7 @@
 
 #include "../defs.h"
 
- /** \brief Project namespace */
+/** \brief Project namespace */
 namespace srm {
   /**
    * @brief Coordinate system representation class

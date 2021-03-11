@@ -97,7 +97,6 @@ namespace srm {
   class primitive_t : public std::vector<motion::base_t *> {
   public:
     vec_t start;    ///< start point of primitive
-    cs_t coordSys;  ///< for transforming coordinates from svg system to robot system
 
     /**
      * Generate code and write it to output stream

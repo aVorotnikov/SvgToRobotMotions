@@ -73,7 +73,7 @@ std::string srm::motion::arc_t::GenCode(cs_t coordSys) const {
  * @return ostream variable
  */
 std::ostream & srm::operator<<(std::ostream &out, const primitive_t &primitive) {
-  vec3_t delta = primitive.coordSys.SvgToRobotDelta(primitive.start);
+  vec3_t delta = translator_t::GetPtr()->roboConf.SvgToRobotDelta(primitive.start);
   out << "\tLAPPRO SHIFT (p1 BY " +
     std::to_string(delta.x) + ", " +
     std::to_string(delta.y) + ", " +
@@ -84,7 +84,7 @@ std::ostream & srm::operator<<(std::ostream &out, const primitive_t &primitive) 
     std::to_string(delta.z) + ")\n";;
 
   for (auto base : primitive)
-    out << "\t" << base->GenCode(primitive.coordSys);
+    out << "\t" << base->GenCode(translator_t::GetPtr()->roboConf);
 
   out << "\tLDERAPT SHIFT (p1 BY " +
     std::to_string(delta.x) + ", " +
