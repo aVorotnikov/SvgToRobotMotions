@@ -51,10 +51,10 @@ namespace srm {
      * @{
      */
 
-    /**
-     * Set svg image to convert function function. Check file abd create tag tree
-     * @param[in] svgFileName svg image file name
-     */
+     /**
+      * Set svg image to convert function function. Check file abd create tag tree
+      * @param[in] svgFileName svg image file name
+      */
     void SetSvg(const std::string &svgFileName);
 
     /**
