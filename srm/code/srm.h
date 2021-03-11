@@ -19,10 +19,10 @@
 #include "converter/translator.h"
 #include "converter/rapidxml.hpp"
 #include "converter/primitive/primitive.h"
-#include "converter/cs/cs.h"
 #include "converter/tags_translator/tags_translator.h"
 #include "converter/tags_translator/path/path.h"
 #include "converter/tags_translator/path/bezier/bezier.h"
 #include "converter/robot_conf/robot_conf.h"
+#include "converter/robot_conf/cs/cs.h"
 
 #endif /* __SRM_H_INCLUDED */

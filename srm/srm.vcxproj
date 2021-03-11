@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\converter\cs\cs.cpp" />
+    <ClCompile Include="code\converter\robot_conf\cs\cs.cpp" />
     <ClCompile Include="code\converter\robot_conf\robot_conf.cpp" />
     <ClCompile Include="code\converter\tags_translator\path\bezier\bezier.cpp" />
     <ClCompile Include="code\converter\tags_translator\path\path.cpp" />
@@ -29,7 +29,7 @@
     <ClCompile Include="code\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="code\converter\cs\cs.h" />
+    <ClInclude Include="code\converter\robot_conf\cs\cs.h" />
     <ClInclude Include="code\converter\robot_conf\robot_conf.h" />
     <ClInclude Include="code\converter\tags_translator\path\bezier\bezier.h" />
     <ClInclude Include="code\converter\defs.h" />

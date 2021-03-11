@@ -34,11 +34,11 @@
     <Filter Include="Исходные файлы\Converter\Tags translator\Path\Bezier">
       <UniqueIdentifier>{fde617f0-aba2-4bc1-80eb-dbc0d0522a1b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\Converter\Coordinate system">
-      <UniqueIdentifier>{181af5df-b273-444f-9c73-ffc9dcbccf91}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Исходные файлы\Converter\Robot configuration">
       <UniqueIdentifier>{b271bc0d-f777-48f3-bd70-2ac7010161ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Converter\Robot configuration\Coordinate system">
+      <UniqueIdentifier>{181af5df-b273-444f-9c73-ffc9dcbccf91}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -60,11 +60,11 @@
     <ClCompile Include="code\converter\tags_translator\tags_translator.cpp">
       <Filter>Исходные файлы\Converter\Tags translator</Filter>
     </ClCompile>
-    <ClCompile Include="code\converter\cs\cs.cpp">
-      <Filter>Исходные файлы\Converter\Coordinate system</Filter>
-    </ClCompile>
     <ClCompile Include="code\converter\robot_conf\robot_conf.cpp">
       <Filter>Исходные файлы\Converter\Robot configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\robot_conf\cs\cs.cpp">
+      <Filter>Исходные файлы\Converter\Robot configuration\Coordinate system</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,11 +98,11 @@
     <ClInclude Include="code\converter\translator.h">
       <Filter>Исходные файлы\Converter</Filter>
     </ClInclude>
-    <ClInclude Include="code\converter\cs\cs.h">
-      <Filter>Исходные файлы\Converter\Coordinate system</Filter>
-    </ClInclude>
     <ClInclude Include="code\converter\robot_conf\robot_conf.h">
       <Filter>Исходные файлы\Converter\Robot configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\robot_conf\cs\cs.h">
+      <Filter>Исходные файлы\Converter\Robot configuration\Coordinate system</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
