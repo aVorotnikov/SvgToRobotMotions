@@ -2,7 +2,7 @@
  * @file
  * @brief Primitives and support classes source file
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 10.03.2021
+ * @date 11.03.2021
  *
  * Contains definition motions class (motion_t, segment_t, arc_t) and primitive class
  */
@@ -31,6 +31,20 @@ std::string srm::motion::segment_t::GenCode(cs_t coordSys) const {
     std::to_string(delta.x) + ", " +
     std::to_string(delta.y) + ", " +
     std::to_string(delta.z) + ")\n";
+}
+
+/**
+ * Constructor for arc_t
+ * @param[in] c1x x coordinate of the first point
+ * @param[in] c1y y coordinate of the first point
+ * @param[in] c2x x coordinate of the second point
+ * @param[in] c2y y coordinate of the second point
+ */
+srm::motion::arc_t::arc_t(const double c1x, const double c1y, const double c2x, const double c2y) {
+  point1.x = c1x;
+  point1.y = c1y;
+  point2.x = c2x;
+  point2.y = c2y;
 }
 
 /**
@@ -64,7 +78,7 @@ std::ostream & srm::operator<<(std::ostream &out, const primitive_t &primitive) 
     std::to_string(delta.x) + ", " +
     std::to_string(delta.y) + ", " +
     std::to_string(delta.z) + "), 500\n";
-  out << "LMOVE SHIFT (p1 BY " +
+  out << "\tLMOVE SHIFT (p1 BY " +
     std::to_string(delta.x) + ", " +
     std::to_string(delta.y) + ", " +
     std::to_string(delta.z) + ")\n";;
@@ -72,7 +86,7 @@ std::ostream & srm::operator<<(std::ostream &out, const primitive_t &primitive) 
   for (auto base : primitive)
     out << "\t" << base->GenCode(primitive.coordSys);
 
-  out << "LDERAPT SHIFT (p1 BY " +
+  out << "\tLDERAPT SHIFT (p1 BY " +
     std::to_string(delta.x) + ", " +
     std::to_string(delta.y) + ", " +
     std::to_string(delta.z) + "), 500\n";

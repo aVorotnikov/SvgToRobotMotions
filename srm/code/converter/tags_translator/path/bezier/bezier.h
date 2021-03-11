@@ -13,7 +13,7 @@
 #define __BEZIER_H_INCLUDED
 
 #include <vector>
-#include "../defs.h"
+#include "../../../defs.h"
 
 /** \brief Project namespace */
 namespace srm {

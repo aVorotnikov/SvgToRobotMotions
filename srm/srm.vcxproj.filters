@@ -19,9 +19,6 @@
     <Filter Include="Исходные файлы\Converter">
       <UniqueIdentifier>{fb8ebd1e-fcab-4e3f-bfd1-c054995ea501}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\Converter\Bezier">
-      <UniqueIdentifier>{fde617f0-aba2-4bc1-80eb-dbc0d0522a1b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Исходные файлы\Converter\Rapidxml realization">
       <UniqueIdentifier>{eb0d3639-fa55-40e0-9657-c8e3720542a6}</UniqueIdentifier>
     </Filter>
@@ -31,8 +28,14 @@
     <Filter Include="Исходные файлы\Converter\Primitives\Coordinate system">
       <UniqueIdentifier>{181af5df-b273-444f-9c73-ffc9dcbccf91}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\Converter\Path">
+    <Filter Include="Исходные файлы\Converter\Tags translator">
+      <UniqueIdentifier>{946bc76f-b601-44ed-a5d8-78d4d0600073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Converter\Tags translator\Path">
       <UniqueIdentifier>{847be94b-4446-4e6f-9512-15973bfeb6b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Converter\Tags translator\Path\Bezier">
+      <UniqueIdentifier>{fde617f0-aba2-4bc1-80eb-dbc0d0522a1b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,17 +45,20 @@
     <ClCompile Include="code\converter\translator.cpp">
       <Filter>Исходные файлы\Converter</Filter>
     </ClCompile>
-    <ClCompile Include="code\converter\bezier\bezier.cpp">
-      <Filter>Исходные файлы\Converter\Bezier</Filter>
-    </ClCompile>
     <ClCompile Include="code\converter\primitive\primitive.cpp">
       <Filter>Исходные файлы\Converter\Primitives</Filter>
     </ClCompile>
     <ClCompile Include="code\converter\primitive\cs\cs.cpp">
       <Filter>Исходные файлы\Converter\Primitives\Coordinate system</Filter>
     </ClCompile>
-    <ClCompile Include="code\converter\path\path.cpp">
-      <Filter>Исходные файлы\Converter\Path</Filter>
+    <ClCompile Include="code\converter\tags_translator\path\bezier\bezier.cpp">
+      <Filter>Исходные файлы\Converter\Tags translator\Path\Bezier</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\tags_translator\path\path.cpp">
+      <Filter>Исходные файлы\Converter\Tags translator\Path</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\tags_translator\tags_translator.cpp">
+      <Filter>Исходные файлы\Converter\Tags translator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,17 +71,11 @@
     <ClInclude Include="code\converter\defs.h">
       <Filter>Исходные файлы\Converter</Filter>
     </ClInclude>
-    <ClInclude Include="code\converter\bezier\bezier.h">
-      <Filter>Исходные файлы\Converter\Bezier</Filter>
-    </ClInclude>
     <ClInclude Include="code\converter\rapidxml.hpp">
       <Filter>Исходные файлы\Converter\Rapidxml realization</Filter>
     </ClInclude>
     <ClInclude Include="code\converter\primitive\primitive.h">
       <Filter>Исходные файлы\Converter\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="code\converter\translator.h">
-      <Filter>Исходные файлы\Converter</Filter>
     </ClInclude>
     <ClInclude Include="code\converter\primitive\cs\cs.h">
       <Filter>Исходные файлы\Converter\Primitives\Coordinate system</Filter>
@@ -83,8 +83,17 @@
     <ClInclude Include="code\math\vector3.h">
       <Filter>Исходные файлы\Math</Filter>
     </ClInclude>
-    <ClInclude Include="code\converter\path\path.h">
-      <Filter>Исходные файлы\Converter\Path</Filter>
+    <ClInclude Include="code\converter\tags_translator\path\bezier\bezier.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\tags_translator\path\path.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\tags_translator\tags_translator.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\translator.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
