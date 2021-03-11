@@ -77,7 +77,7 @@ static void _ellipseToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_
     x = cx + rx * cos(t);
     y = cy + ry * sin(t);
     // TODO: check accuracy
-    srm::motion::segment_t p(x, y);
+    srm::segment_t p(x, y);
     ellipsePrimitive->push_back(p);
     t += delta;
   }
@@ -111,7 +111,7 @@ static void _lineToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *
   catch (std::exception error) {
     throw std::exception("Invalid attribute value in tag \"line\"");
   }
-  srm::motion::segment_t p(x2, y2);
+  srm::segment_t p(x2, y2);
   linePrimitive->start.x = x1;
   linePrimitive->start.y = y1;
   linePrimitive->push_back(p);
@@ -192,10 +192,10 @@ static void _rectToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *
   rectanglePrimitive->start.x = x;
   rectanglePrimitive->start.y = y;
 
-  srm::motion::segment_t p1(x + width, y);
-  srm::motion::segment_t p2(x + width, y + height);
-  srm::motion::segment_t p3(x, y + height);
-  srm::motion::segment_t p4(x, y);
+  srm::segment_t p1(x + width, y);
+  srm::segment_t p2(x + width, y + height);
+  srm::segment_t p3(x, y + height);
+  srm::segment_t p4(x, y);
   rectanglePrimitive->push_back(p1);
   rectanglePrimitive->push_back(p2);
   rectanglePrimitive->push_back(p3);

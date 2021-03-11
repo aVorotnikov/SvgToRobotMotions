@@ -122,7 +122,7 @@ void srm::path_t::PathMAbs(const std::vector<double> &nums) noexcept {
     srm::vec_t cur(nums[counter], nums[counter + 1]);
     if ((cur - last).Len2() != 0) {
       last = cur;
-      srm::motion::segment_t p(last.x, last.y);
+      srm::segment_t p(last.x, last.y);
       primitive->push_back(p);
     }
   }
@@ -167,7 +167,7 @@ void srm::path_t::PathMRel(const std::vector<double> &nums) noexcept {
     srm::vec_t delta(nums[counter], nums[counter + 1]);
     if (delta.Len2() != 0) {
       last += delta;
-      srm::motion::segment_t p(last.x, last.y);
+      srm::segment_t p(last.x, last.y);
       primitive->push_back(p);
     }
   }
@@ -192,7 +192,7 @@ void srm::path_t::PathLAbs(const std::vector<double> &nums) noexcept {
     srm::vec_t cur(nums[counter], nums[counter + 1]);
     if ((cur - last).Len2() != 0) {
       last = cur;
-      srm::motion::segment_t p(last.x, last.y);
+      srm::segment_t p(last.x, last.y);
       primitive->push_back(p);
     }
   }
@@ -217,7 +217,7 @@ void srm::path_t::PathLRel(const std::vector<double> &nums) noexcept {
     srm::vec_t delta(nums[counter], nums[counter + 1]);
     if (delta.Len2() != 0) {
       last += delta;
-      srm::motion::segment_t p(last.x, last.y);
+      srm::segment_t p(last.x, last.y);
       primitive->push_back(p);
     }
   }
@@ -247,7 +247,7 @@ void srm::path_t::PathHAbs(const std::vector<double> &nums) noexcept {
   for (; size > counter; counter++) {
     if (nums[counter] != last.x) {
       last.x = nums[counter];
-      srm::motion::segment_t p(last.x, last.y);
+      srm::segment_t p(last.x, last.y);
       primitive->push_back(p);
     }
   }
@@ -271,7 +271,7 @@ void srm::path_t::PathHRel(const std::vector<double> &nums) noexcept {
   for (; size > counter; counter++) {
     if (nums[counter] != 0) {
       last.x += nums[counter];
-      srm::motion::segment_t p(last.x, last.y);
+      srm::segment_t p(last.x, last.y);
       primitive->push_back(p);
     }
   }
@@ -295,7 +295,7 @@ void srm::path_t::PathVAbs(const std::vector<double> &nums) noexcept {
   for (; size > counter; counter++) {
     if (nums[counter] != last.y) {
       last.y = nums[counter];
-      srm::motion::segment_t p(last.x, last.y);
+      srm::segment_t p(last.x, last.y);
       primitive->push_back(p);
     }
   }
@@ -319,7 +319,7 @@ void srm::path_t::PathVRel(const std::vector<double> &nums) noexcept {
   for (; size > counter; counter++) {
     if (nums[counter] != 0) {
       last.y += nums[counter];
-      srm::motion::segment_t p(last.x, last.y);
+      srm::segment_t p(last.x, last.y);
       primitive->push_back(p);
     }
   }
@@ -334,7 +334,7 @@ void srm::path_t::PathZ(const std::vector<double> &nums) noexcept {
   // add the subpath close line segments to a primitive
   if ((last - primitive->start).Len2() != 0) {
     last = primitive->start;
-    srm::motion::segment_t p(last.x, last.y);
+    srm::segment_t p(last.x, last.y);
     primitive->push_back(p);
   }
 
@@ -371,7 +371,7 @@ void srm::path_t::PathCAbs(const std::vector<double> &nums) noexcept {
       res = bezier.Sampling(accuracy);
       // add a sequence of line segments to a primitive
       for (auto& r : res) {
-        srm::motion::segment_t p(r.x, r.y);
+        srm::segment_t p(r.x, r.y);
         primitive->push_back(p);
       }
     }
@@ -410,7 +410,7 @@ void srm::path_t::PathCRel(const std::vector<double> &nums) noexcept {
       res = bezier.Sampling(accuracy);
       // add a sequence of line segments to a primitive
       for (auto& r : res) {
-        srm::motion::segment_t p(r.x, r.y);
+        srm::segment_t p(r.x, r.y);
         primitive->push_back(p);
       }
     }
@@ -446,7 +446,7 @@ void srm::path_t::PathQAbs(const std::vector<double> &nums) noexcept {
       res = bezier.Sampling(accuracy);
       // add a sequence of line segments to a primitive
       for (auto& r : res) {
-        srm::motion::segment_t p(r.x, r.y);
+        srm::segment_t p(r.x, r.y);
         primitive->push_back(p);
       }
     }
@@ -482,7 +482,7 @@ void srm::path_t::PathQRel(const std::vector<double> &nums) noexcept {
       res = bezier.Sampling(accuracy);
       // add a sequence of line segments to a primitive
       for (auto& r : res) {
-        srm::motion::segment_t p(r.x, r.y);
+        srm::segment_t p(r.x, r.y);
         primitive->push_back(p);
       }
     }
@@ -526,7 +526,7 @@ void srm::path_t::PathSAbs(const std::vector<double> &nums) noexcept {
       res = bezier.Sampling(accuracy);
       // add a sequence of line segments to a primitive
       for (auto& r : res) {
-        srm::motion::segment_t p(r.x, r.y);
+        srm::segment_t p(r.x, r.y);
         primitive->push_back(p);
       }
     }
@@ -570,7 +570,7 @@ void srm::path_t::PathSRel(const std::vector<double> &nums) noexcept {
       res = bezier.Sampling(accuracy);
       // add a sequence of line segments to a primitive
       for (auto& r : res) {
-        srm::motion::segment_t p(r.x, r.y);
+        srm::segment_t p(r.x, r.y);
         primitive->push_back(p);
       }
     }
@@ -611,7 +611,7 @@ void srm::path_t::PathTAbs(const std::vector<double> &nums) noexcept {
       res = bezier.Sampling(accuracy);
       // add a sequence of line segments to a primitive
       for (auto& r : res) {
-        srm::motion::segment_t p(r.x, r.y);
+        srm::segment_t p(r.x, r.y);
         primitive->push_back(p);
       }
     }
@@ -652,7 +652,7 @@ void srm::path_t::PathTRel(const std::vector<double> &nums) noexcept {
       res = bezier.Sampling(accuracy);
       // add a sequence of line segments to a primitive
       for (auto& r : res) {
-        srm::motion::segment_t p(r.x, r.y);
+        srm::segment_t p(r.x, r.y);
         primitive->push_back(p);
       }
     }
