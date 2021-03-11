@@ -14,6 +14,7 @@
 
 #include <string>
 #include "rapidxml.hpp"
+#include "robot_conf/robot_conf.h"
 
 /** \brief Project namespace */
 namespace srm {
@@ -35,6 +36,8 @@ namespace srm {
     translator_t(void) noexcept;
 
   public:
+    robot_conf_t roboConf;              ///< robot configuration
+
     /**
      * Get 'translator_t' class single tone variable
      * @return pointer to single tone variable

@@ -14,7 +14,7 @@
 
 #include <vector>
 #include "../defs.h"
-#include "cs/cs.h"
+#include "../robot_conf/cs/cs.h"
 
 /** \brief Project namespace */
 namespace srm {
@@ -54,7 +54,6 @@ namespace srm {
   class primitive_t : public std::vector<motion::segment_t> {
   public:
     vec_t start;    ///< start point of primitive
-    cs_t coordSys;  ///< for transforming coordinates from svg system to robot system
 
     /**
      * Generate code and write it to output stream
