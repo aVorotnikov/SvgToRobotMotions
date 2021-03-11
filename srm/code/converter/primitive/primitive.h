@@ -2,7 +2,7 @@
  * @file
  * @brief Primitives and support classes header file
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 10.03.2021
+ * @date 11.03.2021
  *
  * Contains declaration motions class (motion_t, segment_t, arc_t) and primitive class
  */
@@ -69,6 +69,15 @@ namespace srm {
       vec_t
         point1,  ///< the first point to building arc
         point2;  ///< the second point to building arc
+      
+      /**
+       * Constructor for arc_t
+       * @param[in] c1x x coordinate of the first point
+       * @param[in] c1y y coordinate of the first point
+       * @param[in] c2x x coordinate of the second point
+       * @param[in] c2y y coordinate of the second point
+       */
+      arc_t(const double c1x, const double c1y, const double c2x, const double c2y);
 
       /**
        * Generate code for motion type
