@@ -14,6 +14,22 @@
 #include <string>
 #include <iostream>
 
+srm::translator_t srm::translator_t::singleToneVar;  ///< tranlator singletone variable
+
+/**
+ * Private constructor for single tone
+ */
+srm::translator_t::translator_t(void) noexcept {
+}
+
+/**
+ * Get 'translator_t' class single tone variable
+ * @return pointer to single tone variable
+ */
+srm::translator_t * srm::translator_t::GetPtr(void) noexcept {
+  return &singleToneVar;
+}
+
 /**
  * Set svg image to convert function function. Check file abd create tag tree
  * @param[in] svgFileName svg image file name
