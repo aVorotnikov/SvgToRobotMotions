@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief Translator class source file
- * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 07.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
+ * @date 10.03.2021
  *
  * Contains main converter class realisatiion
  */
@@ -63,18 +63,18 @@ static void _getTags(rapidxml::xml_node<> *node, std::list<rapidxml::xml_node<> 
 static void _rectToPrimitive(const rapidxml::xml_node<>* tag, srm::primitive_t *rectanglePrimitive) noexcept {
   // Get attributes
       // (x, y) is left top point
-  int x = atoi(tag->last_attribute("x")->value());
-  int y = atoi(tag->last_attribute("y")->value());
-  int height = atoi(tag->last_attribute("height")->value());
-  int width = atoi(tag->last_attribute("width")->value());
-  int rx = 0;
-  int ry = 0;
+  double x = strtod(tag->last_attribute("x")->value(), NULL);
+  double y = strtod(tag->last_attribute("y")->value(), NULL);
+  double height = strtod(tag->last_attribute("height")->value(), NULL);
+  double width = strtod(tag->last_attribute("width")->value(), NULL);
+  double rx = 0;
+  double ry = 0;
 
   if (tag->last_attribute("rx")) {
-    rx = atoi(tag->last_attribute("rx")->value());
+    rx = strtod(tag->last_attribute("rx")->value(), NULL);
   }
   if (tag->last_attribute("ry")) {
-    rx = atoi(tag->last_attribute("ry")->value());
+    ry = strtod(tag->last_attribute("ry")->value(), NULL);
   }
 
   // Transform to primitive
@@ -103,10 +103,11 @@ static void _tagsToPrimitives(const std::list<rapidxml::xml_node<> *> &tags, std
       // TODO: get width and height for coordinate system
     }
     if (tagName == "path") {
-      // TODO: realise path parsing
+      srm::path_t path(primitives);
+      path.ParsePath(tag);
     }
     else if (tagName == "rect") {
-      srm::primitive_t *rectanglePrimitive = new srm::primitive_t;
+      srm::primitive_t *rectanglePrimitive = new srm::primitive_t();
       _rectToPrimitive(tag, rectanglePrimitive);
       primitives->push_back(rectanglePrimitive);
     }
@@ -149,8 +150,8 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
   std::list<srm::primitive_t *> primitives;
   _tagsToPrimitives(tags, &primitives);
   
-  vec_t i, j; // ! only for check base_t.GenCode !
-  cs_t cs(i, j); // ! only for check base_t.GenCode !
+  vec3_t p1(0, 0, 1), p2(1, 0, 1), p3(0, 0, 0); // ! only for check base_t.GenCode !
+  cs_t cs(100, 100, p1, p2, p3); // ! only for check base_t.GenCode !
 
   std::ofstream fout(codeFileName);
   if (!fout.is_open()) {

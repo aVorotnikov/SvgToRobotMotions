@@ -23,38 +23,65 @@ namespace srm {
    */
   class cs_t {
   private:
-    vec_t
-      svgI = { 1,0 },    ///< svg i ort in robot cs
-      svgJ = { 0, 1 },    ///< svg j ort in robot cs
-      robotI = { 1, 0 },  ///< robot i ort in svg cs
-      robotJ = { 0, 1 };  ///< robot j ort in svg cs
+    double
+      width,       ///< image width
+      height;      ///< image height
+    vec3_t
+      boardStart,  ///< board angle point
+      boardI,      ///< ort i of board (bottom from robot)
+      boardJ;      ///< ort j of board (left from robot)
 
   public:
+
     /**
-     * Class standart constructor
+     * Default constructor
      */
-    cs_t() {};
+    cs_t(void) noexcept;
 
     /**
      * Class constructor
-     * @param[in] roboI robot i ort in svg cs
-     * @param[in] roboJ robot j ort in svg cs
+     * @param[in] w image width
+     * @param[in] h image height
+     * @param[in] p1 first board angle
+     * @param[in] p2 second board angle
+     * @param[in] p3 third board angle
      */
-    cs_t(vec_t roboI, vec_t roboJ) noexcept;
+    cs_t(double w, double h, vec3_t p1, vec3_t p2, vec3_t p3) noexcept;
 
     /**
-     * Point translation from svg cs to robot cs function
+     * Set svg image width and height function
+     * @param[in] w image width
+     * @param[in] h image height
+     */
+    void SetWH(double w, double h) noexcept;
+
+    /**
+     * Set board plane function
+     * @param[in] p1 first board angle
+     * @param[in] p2 second board angle
+     * @param[in] p3 third board angle
+     */
+    void SetPlane(vec3_t p1, vec3_t p2, vec3_t p3) noexcept;
+
+    /**
+     * Get board plane normal function
+     * @return normal
+     */
+    vec3_t GetNormal(void) const noexcept;
+
+    /**
+     * Point translation from svg cs to robot cs relatively to main board angle function
      * @param[in] point point in svg cs to translate
-     * @return string with code
+     * @return point in robot cs
      */
-    vec_t SvgToRobot(vec_t point) const noexcept;
+    vec3_t SvgToRobotDelta(vec_t point) const noexcept;
 
     /**
-     * Point translation from robot cs to svg cs function
-     * @param[in] point point in robot cs to translate
-     * @return string with code
+     * Point translation from svg cs to global robot cs function
+     * @param[in] point point in svg cs to translate
+     * @return point in robot cs
      */
-    vec_t RobotToSvg(vec_t point) const noexcept;
+    vec3_t SvgToRobot(vec_t point) const noexcept;
   };
 }
 

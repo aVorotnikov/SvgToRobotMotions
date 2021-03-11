@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief Primitives and support classes header file
- * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 07.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
+ * @date 10.03.2021
  *
  * Contains declaration motions class (motion_t, segment_t, arc_t) and primitive class
  */
@@ -49,7 +49,7 @@ namespace srm {
        * @param[in] x x coordinate of point to which robot moves in a straight line
        * @param[in] y y coordinate of point to which robot moves in a straight line
        */
-      segment_t(const int x, const int y);
+      segment_t(const double x, const double y);
 
       /**
        * Generate code for motion type
@@ -87,13 +87,13 @@ namespace srm {
    */
   class primitive_t : public std::vector<motion::base_t *> {
   public:
-    vec_t start;  ///< start point of primitive
-    cs_t coordSys; ///< for transforming coordinates from svg system to robot system
+    vec_t start;    ///< start point of primitive
+    cs_t coordSys;  ///< for transforming coordinates from svg system to robot system
 
     /**
-     * Generate code and write it to output stream 
-     * @param[in] output variable
-     * @param[in] primitive
+     * Generate code and write it to output stream
+     * @param[in] out output variable
+     * @param[in] primitive primitive to output
      * @return ostream variable
      */
     friend std::ostream & operator<<(std::ostream &out, const primitive_t &primitive);
@@ -104,7 +104,13 @@ namespace srm {
     ~primitive_t(void);
   };
 
-  std::ostream& operator<<(std::ostream& out, const primitive_t& primitive);
+  /**
+   * Generate code and write it to output stream
+   * @param[in] out output variable
+   * @param[in] primitive primitive to output
+   * @return ostream variable
+   */
+  std::ostream & operator<<(std::ostream& out, const primitive_t& primitive);
 
 }
 
