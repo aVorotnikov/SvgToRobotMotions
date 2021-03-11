@@ -84,16 +84,16 @@
       <Filter>Исходные файлы\Math</Filter>
     </ClInclude>
     <ClInclude Include="code\converter\tags_translator\path\bezier\bezier.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Исходные файлы\Converter\Tags translator\Path\Bezier</Filter>
     </ClInclude>
     <ClInclude Include="code\converter\tags_translator\path\path.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Исходные файлы\Converter\Tags translator\Path</Filter>
     </ClInclude>
     <ClInclude Include="code\converter\tags_translator\tags_translator.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Исходные файлы\Converter\Tags translator</Filter>
     </ClInclude>
     <ClInclude Include="code\converter\translator.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Исходные файлы\Converter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
