@@ -25,9 +25,6 @@
     <Filter Include="Исходные файлы\Converter\Primitives">
       <UniqueIdentifier>{2aa4d77a-3b5e-4c65-bb9b-36cd098d8bfc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\Converter\Primitives\Coordinate system">
-      <UniqueIdentifier>{181af5df-b273-444f-9c73-ffc9dcbccf91}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Исходные файлы\Converter\Tags translator">
       <UniqueIdentifier>{946bc76f-b601-44ed-a5d8-78d4d0600073}</UniqueIdentifier>
     </Filter>
@@ -36,6 +33,9 @@
     </Filter>
     <Filter Include="Исходные файлы\Converter\Tags translator\Path\Bezier">
       <UniqueIdentifier>{fde617f0-aba2-4bc1-80eb-dbc0d0522a1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Converter\Coordinate system">
+      <UniqueIdentifier>{181af5df-b273-444f-9c73-ffc9dcbccf91}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,9 +48,6 @@
     <ClCompile Include="code\converter\primitive\primitive.cpp">
       <Filter>Исходные файлы\Converter\Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="code\converter\primitive\cs\cs.cpp">
-      <Filter>Исходные файлы\Converter\Primitives\Coordinate system</Filter>
-    </ClCompile>
     <ClCompile Include="code\converter\tags_translator\path\bezier\bezier.cpp">
       <Filter>Исходные файлы\Converter\Tags translator\Path\Bezier</Filter>
     </ClCompile>
@@ -59,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="code\converter\tags_translator\tags_translator.cpp">
       <Filter>Исходные файлы\Converter\Tags translator</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\cs\cs.cpp">
+      <Filter>Исходные файлы\Converter\Coordinate system</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,9 +77,6 @@
     <ClInclude Include="code\converter\primitive\primitive.h">
       <Filter>Исходные файлы\Converter\Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="code\converter\primitive\cs\cs.h">
-      <Filter>Исходные файлы\Converter\Primitives\Coordinate system</Filter>
-    </ClInclude>
     <ClInclude Include="code\math\vector3.h">
       <Filter>Исходные файлы\Math</Filter>
     </ClInclude>
@@ -94,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="code\converter\translator.h">
       <Filter>Исходные файлы\Converter</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\cs\cs.h">
+      <Filter>Исходные файлы\Converter\Coordinate system</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

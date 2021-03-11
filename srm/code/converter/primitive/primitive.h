@@ -14,7 +14,7 @@
 
 #include <vector>
 #include "../defs.h"
-#include "cs/cs.h"
+#include "../cs/cs.h"
 
 /** \brief Project namespace */
 namespace srm {

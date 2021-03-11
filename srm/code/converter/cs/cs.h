@@ -2,7 +2,7 @@
  * @file
  * @brief Coordinate system header file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 07.03.2021
+ * @date 11.03.2021
  *
  * Contains cs_t class definition to morph svg coordinate system to robor coordinate system
  */
@@ -12,7 +12,7 @@
 #ifndef __CS_H_INCLUDED
 #define __CS_H_INCLUDED
 
-#include "../../defs.h"
+#include "../defs.h"
 
  /** \brief Project namespace */
 namespace srm {
@@ -64,10 +64,29 @@ namespace srm {
     void SetPlane(vec3_t p1, vec3_t p2, vec3_t p3) noexcept;
 
     /**
+     * Get svg image width function
+     * @return svg width
+     */
+    double GetW(void) const noexcept;
+
+    /**
+     * Get svg image height function
+     * @return svg height
+     */
+    double GetH(void) const noexcept;
+
+    /**
      * Get board plane normal function
      * @return normal
      */
     vec3_t GetNormal(void) const noexcept;
+
+    /**
+     * Translate accuracy from robot cs to svg cs function
+     * @param[in] roboAcc accuracy in robot coordinate system to coordinate
+     * @return accuracy in svg coordinate system
+     */
+    double SvgToRobotAcc(double roboAcc) const noexcept;
 
     /**
      * Point translation from svg cs to robot cs relatively to main board angle function
