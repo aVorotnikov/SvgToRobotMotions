@@ -53,10 +53,10 @@ namespace math {
    */
   template <typename scalar_t = double>
     vector2_t<scalar_t> eigVec(scalar_t a, scalar_t b, scalar_t lambda) {
-      double aLambda = lambda - a;
+      double deltaLA = lambda - a;
       if (abs(b) < abs(aLambda))
-        return vector2_t<scalar_t>(b / aLambda, 1);
-      return vector2_t<scalar_t>(1, aLambda / b).Norm();
+        return vector2_t<scalar_t>(b / deltaLA, 1).Norm();
+      return vector2_t<scalar_t>(1, deltaLA / b).Norm();
     }
 }
 
