@@ -172,6 +172,14 @@ double srm::robot_conf_t::GetRoboAcc(void) {
 }
 
 /**
+ * Get accuracy in svg cs function.
+ * @return svg accuracy
+ */
+double srm::robot_conf_t::GetSvgAcc(void) {
+  return SvgToRobotAcc(accuracy);
+}
+
+/**
  * Get pouring step value function.
  * @return pouring step
  */

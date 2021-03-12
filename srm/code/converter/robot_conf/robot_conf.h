@@ -2,7 +2,7 @@
  * @file
  * @brief Robot configuration header file
  * @authors Vorotnikov Andrey
- * @date 11.03.2021
+ * @date 12.03.2021
  *
  * Contains robot_conf_t class definition to load and save robot configuration
  */
@@ -43,10 +43,16 @@ namespace srm {
     double GetDepDist(void);
 
     /**
-     * Get robot accuracy function.
+     * Get accuracy in robot cs function.
      * @return robot accuracy
      */
     double GetRoboAcc(void);
+
+    /**
+     * Get accuracy in svg cs function.
+     * @return svg accuracy
+     */
+    double GetSvgAcc(void);
 
     /**
      * Get pouring step value function.
