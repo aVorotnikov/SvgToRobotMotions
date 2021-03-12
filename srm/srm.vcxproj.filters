@@ -104,5 +104,8 @@
     <ClInclude Include="code\converter\robot_conf\cs\cs.h">
       <Filter>Исходные файлы\Converter\Robot configuration\Coordinate system</Filter>
     </ClInclude>
+    <ClInclude Include="code\math\matr2.h">
+      <Filter>Исходные файлы\Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
