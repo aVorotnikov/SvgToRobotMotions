@@ -67,8 +67,8 @@ void srm::translator_t::SetSvg(const std::string &svgFileName) {
  */
 static void _getTags(rapidxml::xml_node<> *node, std::list<rapidxml::xml_node<> *> *tags) noexcept {
   while (node) {
-    _getTags(node->first_node(), tags);
     tags->push_back(node);
+    _getTags(node->first_node(), tags);
     node = node->next_sibling();
   }
 }
