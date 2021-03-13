@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief Robot configuration source file
- * @authors Vorotnikov Andrey
- * @date 12.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya
+ * @date 13.03.2021
  *
  * Contains robot_conf_t class realisation to load and save robot configuration
  */
