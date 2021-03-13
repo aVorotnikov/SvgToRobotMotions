@@ -52,17 +52,74 @@ std::vector<srm::vec_t> srm::EllipseSampling(vec_t center, vec_t radiuses, doubl
 
 /**
  * Ellipse arc from 'path' tag sampling function
- * @param[in] x1 first arc point
- * @param[in] x2 second arc point
+ * @param[in] p1 first arc point
+ * @param[in] p2 second arc point
  * @param[in] radiuses 2 ellipse radiuses by x and y
  * @param[in] fA flag for arc angle size
  * @param[in] fS flag for angle delta
+ * @param[in] phi angle
  * @param[in] accuracy sampling accuracy
  * @return point vector with sampling
  */
-std::vector<srm::vec_t> srm::EllipseArcSampling(vec_t x1, vec_t x2, vec_t radiuses, bool fA, bool fS, double accuracy) {
-  std::vector<vec_t> res(2);
-  res[0] = x1;
-  res[1] = x2;
+std::vector<srm::vec_t> srm::EllipseArcSampling(vec_t p1, vec_t p2, vec_t radiuses, bool fA, bool fS, double phi, double accuracy) {
+  // evaluate center
+  vec_t delta2 = (p1 - p2) / 2;
+  double si = sin(phi), co = cos(phi);
+  vec_t p1s = vec_t(co * delta2.x + si * delta2.y, -si * delta2.x + co * delta2.y);
+  double
+    tmp = radiuses.x * radiuses.x * p1s.y * p1s.y + radiuses.y * radiuses.y * p1s.x * p1s.x,
+    muler = sqrt((radiuses.x * radiuses.x * radiuses.y * radiuses.y - tmp) / tmp);
+  if (fA == fS)
+    muler = -muler;
+  vec_t cs = vec_t(muler * radiuses.x * p1s.y / radiuses.y, muler * radiuses.y * p1s.x / radiuses.x);
+  vec_t center = vec_t(co * cs.x - si * cs.y + (p1.x + p2.x) / 2, si * cs.x + co * cs.y + (p1.y + p2.y) / 2);
+
+  // evaluate angles (parametres)
+  vec_t
+    u = vec_t(1, 0),
+    v = vec_t((p1s.x - cs.x) / radiuses.x, (p1s.y - cs.y) / radiuses.y);
+  double param1 = acos(u.Dot(v) / u.Len() / v.Len());
+  if (u.Cross(v) < 0)
+    param1 = -param1;
+  u = v;
+  v = vec_t(-(p1s.x + cs.x) / radiuses.x, -(p1s.y + cs.y) / radiuses.y);
+  double paramDelta = acos(u.Dot(v) / u.Len() / v.Len()), param2 = param1;
+  if (u.Cross(v) < 0)
+    paramDelta = 2 * pi - paramDelta;
+  if (fS)
+    param2 += paramDelta;
+  else
+    param2 += paramDelta - 2 * pi;
+
+  // add fisrt 3 points
+  std::list<std::pair<double, vec_t>> sampling;
+  sampling.push_back(std::pair<double, vec_t>(param1, vec_t(center.x + radiuses.x * cos(param1), center.y + radiuses.y * sin(param1))));
+  double med = (param1 + param2) / 2;
+  sampling.push_back(std::pair<double, vec_t>(med, vec_t(center.x + radiuses.x * cos(med), center.y + radiuses.y * sin(med))));
+  sampling.push_back(std::pair<double, vec_t>(param2, vec_t(center.x + radiuses.x * cos(param2), center.y + radiuses.y * sin(param2))));
+
+  // sampling
+  auto cur = sampling.begin();
+  auto next = cur;
+  next++;
+  double accuracy2 = accuracy * accuracy;
+  while (next != sampling.end()) {
+    if ((cur->second - next->second).Len2() < accuracy2) {
+      cur = next;
+      next++;
+    }
+    else {
+      double med = (cur->first + next->first) / 2;
+      next = sampling.insert(next, std::pair<double, vec_t>(med, vec_t(center.x + radiuses.x * cos(med), center.y + radiuses.y * sin(med))));
+    }
+  }
+
+  // create result vector
+  std::vector<vec_t> res(sampling.size());
+  cur = sampling.begin();
+  for (auto &vec : res) {
+    vec = cur->second;
+    cur++;
+  }
   return res;
 }
