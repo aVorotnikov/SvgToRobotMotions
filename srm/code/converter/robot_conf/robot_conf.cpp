@@ -12,6 +12,7 @@
 #include <map>
 #include <fstream>
 #include <sstream>
+#include <iterator>
 #include <iomanip>
 
 /** \brief Project namespace */
