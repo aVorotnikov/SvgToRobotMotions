@@ -49,3 +49,20 @@ std::vector<srm::vec_t> srm::EllipseSampling(vec_t center, vec_t radiuses, doubl
   }
   return res;
 }
+
+/**
+ * Ellipse arc from 'path' tag sampling function
+ * @param[in] x1 first arc point
+ * @param[in] x2 second arc point
+ * @param[in] radiuses 2 ellipse radiuses by x and y
+ * @param[in] fA flag for arc angle size
+ * @param[in] fS flag for angle delta
+ * @param[in] accuracy sampling accuracy
+ * @return point vector with sampling
+ */
+std::vector<srm::vec_t> srm::EllipseArcSampling(vec_t x1, vec_t x2, vec_t radiuses, bool fA, bool fS, double accuracy) {
+  std::vector<vec_t> res(2);
+  res[0] = x1;
+  res[1] = x2;
+  return res;
+}
