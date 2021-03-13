@@ -79,9 +79,13 @@ std::vector<srm::vec_t> srm::EllipseArcSampling(vec_t p1, vec_t p2, vec_t radius
     u = vec_t(1, 0),
     v = vec_t((p1s.x - cs.x) / radiuses.x, (p1s.y - cs.y) / radiuses.y);
   double param1 = acos(u.Dot(v) / u.Len() / v.Len());
+  if (u.Cross(v) < 0)
+    param1 = -param1;
   u = v;
   v = vec_t(-(p1s.x + cs.x) / radiuses.x, -(p1s.y + cs.y) / radiuses.y);
   double paramDelta = acos(u.Dot(v) / u.Len() / v.Len()), param2 = param1;
+  if (u.Cross(v) < 0)
+    paramDelta = 2 * pi - paramDelta;
   if (fS)
     param2 += paramDelta;
   else
@@ -96,7 +100,8 @@ std::vector<srm::vec_t> srm::EllipseArcSampling(vec_t p1, vec_t p2, vec_t radius
 
   // sampling
   auto cur = sampling.begin();
-  auto next = cur++;
+  auto next = cur;
+  next++;
   double accuracy2 = accuracy * accuracy;
   while (next != sampling.end()) {
     if ((cur->second - next->second).Len2() < accuracy2) {
@@ -105,7 +110,7 @@ std::vector<srm::vec_t> srm::EllipseArcSampling(vec_t p1, vec_t p2, vec_t radius
     }
     else {
       double med = (cur->first + next->first) / 2;
-      sampling.insert(cur, std::pair<double, vec_t>(med, vec_t(center.x + radiuses.x * cos(med), center.y + radiuses.y * sin(med))));
+      next = sampling.insert(next, std::pair<double, vec_t>(med, vec_t(center.x + radiuses.x * cos(med), center.y + radiuses.y * sin(med))));
     }
   }
 
