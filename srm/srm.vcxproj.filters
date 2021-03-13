@@ -40,6 +40,9 @@
     <Filter Include="Исходные файлы\Converter\Robot configuration\Coordinate system">
       <UniqueIdentifier>{181af5df-b273-444f-9c73-ffc9dcbccf91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Converter\Tags translator\Ellipse sampling">
+      <UniqueIdentifier>{83935534-3601-4563-a1ad-9728b2b68e96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -65,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="code\converter\robot_conf\cs\cs.cpp">
       <Filter>Исходные файлы\Converter\Robot configuration\Coordinate system</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\tags_translator\ellipse\ellipse.cpp">
+      <Filter>Исходные файлы\Converter\Tags translator\Ellipse sampling</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="code\math\matr2.h">
       <Filter>Исходные файлы\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\tags_translator\ellipse\ellipse.h">
+      <Filter>Исходные файлы\Converter\Tags translator\Ellipse sampling</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
