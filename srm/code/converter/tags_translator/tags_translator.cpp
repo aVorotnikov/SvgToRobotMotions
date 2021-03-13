@@ -1,7 +1,7 @@
 /**
  * @file
  * @brief source file for tagsToPrimitives functions
- * @authors Vorotnikov Andrey, Pavlov Ilya
+ * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
  * @date 13.03.2021
  *
  * Contains tagsToPrimitives realisation and support static functions for each of tags
@@ -156,35 +156,118 @@ static void _circleToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t
  */
 static void _rectToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *rectanglePrimitive) {
   double x, y, height, width;
-  try {
-    if (tag->last_attribute("x"))
+  const double defaultX = 0, defaultY = 0;
+  srm::translator_t* trans = srm::translator_t::GetPtr();
+
+  if (tag->last_attribute("x")) {
+    try {
       x = std::stod(tag->last_attribute("x")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"rect\"");
-    if (tag->last_attribute("y"))
+      if (std::string(tag->last_attribute("x")->value()).find("%") != std::string::npos) {
+        x = trans->roboConf.GetW() * x / 100;
+      }
+    }
+    catch(std::exception) {
+      trans->WriteLog("Warning: invalid attribute x in rect");
+      x = defaultX;
+    }
+  }
+  else {
+    trans->WriteLog("Warning: attribute x in rect is not set");
+    x = defaultX;
+  }
+
+  if (tag->last_attribute("y")) {
+    try {
       y = std::stod(tag->last_attribute("y")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"rect\"");
-    if (tag->last_attribute("height"))
-      height = std::stod(tag->last_attribute("height")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"rect\"");
-    if (tag->last_attribute("width"))
-      width = std::stod(tag->last_attribute("width")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"rect\"");
+      if (std::string(tag->last_attribute("y")->value()).find("%") != std::string::npos) {
+        y = trans->roboConf.GetH() * y / 100;
+      }
+    }
+    catch(std::exception) {
+      trans->WriteLog("Warning: invalid attribute y in rect");
+      y = defaultY;
+    }
   }
-  catch (std::exception error) {
-    throw std::exception("Invalid attribute value in tag \"rect\"");
+  else {
+    trans->WriteLog("Warning: attribute y in rect is not set");
+    y = defaultY;
   }
+
+  if (tag->last_attribute("height")) {
+    height = strtod(tag->last_attribute("height")->value(), NULL);
+    if (height <= 0) {
+      trans->WriteLog("Warning: attribute height in rect must be more than 0");
+      return;
+    }
+    if (std::string(tag->last_attribute("height")->value()).find("%") != std::string::npos) {
+      height = trans->roboConf.GetH() * height / 100;
+    }
+  }
+  else {
+    trans->WriteLog("Warning: attribute height in rect is not set");
+    return;
+  }
+
+  if (tag->last_attribute("width")) {
+    width = std::stod(tag->last_attribute("width")->value(), NULL);
+    if (width <= 0) {
+      trans->WriteLog("Warning: attribute widtht in rect is less or equal to zero");
+      return;
+    }
+    if (std::string(tag->last_attribute("width")->value()).find("%") != std::string::npos) {
+      width = trans->roboConf.GetW() * width / 100;
+    }
+  }
+  else {
+    trans->WriteLog("Warning: attribute width in rect is not set");
+    return;
+  }
+
   double rx = 0;
   double ry = 0;
 
   if (tag->last_attribute("rx")) {
-    rx = strtod(tag->last_attribute("rx")->value(), NULL);
+    try { 
+      rx = std::stod(tag->last_attribute("rx")->value(), NULL); 
+      if (std::string(tag->last_attribute("rx")->value()).find("%") != std::string::npos) {
+        rx = trans->roboConf.GetW() * rx / 100;
+      }
+    }
+    catch (std::exception) {
+      rx = -1;
+    }
   }
   if (tag->last_attribute("ry")) {
-    ry = strtod(tag->last_attribute("ry")->value(), NULL);
+    try {
+      ry = std::stod(tag->last_attribute("ry")->value(), NULL);
+      if (std::string(tag->last_attribute("ry")->value()).find("%") != std::string::npos) {
+        ry = trans->roboConf.GetH() * ry / 100;
+      }
+    }
+    catch (std::exception) {
+      ry = -1;
+    }
+  }
+  if (rx >= 0 && ry < 0) {
+    trans->WriteLog("Warning: wrong attribute ry in rect");
+    ry = rx;
+  }
+  else if (rx < 0 && ry >= 0) {
+    trans->WriteLog("Warning: wrong attribute rx in rect");
+    rx = ry;
+  }
+  else if (rx < 0 && ry < 0) {
+    trans->WriteLog("Warning: wrong attributes rx and ry in rect");
+    rx = ry = 0;
+  }
+
+  if (rx > width / 2) {
+    rx = width / 2;
+    trans->WriteLog("attribute rx in rect is more than half of width");
+  }
+  if (ry > height / 2) {
+    rx = height/ 2;
+    trans->WriteLog("attribute ry in rect is more than half of height");
   }
 
   // Transform to primitive
@@ -213,17 +296,45 @@ void TagsToPrimitives(const std::list<rapidxml::xml_node<>*> &tags, std::list<sr
       tagName.assign(tag->name(), tag->name_size());
 
       if (tagName == "svg") {
-        srm::translator_t::GetPtr();
-        // TODO: Set width and height for cs
+        const double defaultWidth = 300, defaultHeight = 150;
+        double width, height;
+        if (tag->last_attribute("width")) {
+          width = strtod(tag->last_attribute("width")->value(), NULL);
+          if (width <= 0) {
+            width = defaultWidth;
+            srm::translator_t::GetPtr()->WriteLog("Warning: svg width must be more than 0");
+          }
+        }
+        else {
+          width = defaultWidth;
+          srm::translator_t::GetPtr()->WriteLog("Warning: svg width is not set");
+        }
+        if (tag->last_attribute("height")) {
+          height = strtod(tag->last_attribute("height")->value(), NULL);
+          if (height <= 0) {
+            height = defaultHeight;
+            srm::translator_t::GetPtr()->WriteLog("Warning: svg height must be more than 0");
+          }
+        }
+        else {
+          height = defaultHeight;
+          srm::translator_t::GetPtr()->WriteLog("Warning: svg height is not set");
+        }
+        srm::translator_t::GetPtr()->roboConf.SetWH(width, height);
       }
-      if (tagName == "path") {
+      else if (tagName == "path") {
         srm::path_t path(primitives);
         path.ParsePath(tag);
       }
       else if (tagName == "rect") {
         srm::primitive_t* rectanglePrimitive = new srm::primitive_t();
         _rectToPrimitive(tag, rectanglePrimitive);
-        primitives->push_back(rectanglePrimitive);
+        if (rectanglePrimitive->size() == 0) {
+          delete rectanglePrimitive;
+        }
+        else {
+          primitives->push_back(rectanglePrimitive);
+        }
       }
       else if (tagName == "circle") {
         srm::primitive_t* circlePrimitive = new srm::primitive_t();
