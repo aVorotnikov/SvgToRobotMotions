@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class source file
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 11.03.2021
+ * @date 13.03.2021
  *
  * Contains main converter class realisatiion
  */
