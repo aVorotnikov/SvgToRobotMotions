@@ -352,3 +352,6 @@ MigrationBackup/
 # Dirs from doxygen
 html
 latex
+
+# AS language files
+*.as
