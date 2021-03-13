@@ -19,7 +19,7 @@ srm::translator_t srm::translator_t::singleToneVar;  ///< tranlator singletone v
 /**
  * Private constructor for single tone
  */
-srm::translator_t::translator_t(void) noexcept {
+srm::translator_t::translator_t(void) noexcept : logStream(&std::cout) {
 }
 
 /**
@@ -28,6 +28,14 @@ srm::translator_t::translator_t(void) noexcept {
  */
 srm::translator_t * srm::translator_t::GetPtr(void) noexcept {
   return &singleToneVar;
+}
+
+/**
+ * Write string in log stream function
+ * @param[in] str string to write
+ */
+void srm::translator_t::WriteLog(const std::string &str) noexcept {
+  *logStream << str << std::endl;
 }
 
 /**

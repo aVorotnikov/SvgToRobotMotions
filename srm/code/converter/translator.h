@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class header file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 11.03.2021
+ * @date 13.03.2021
  *
  * Contains main converter class description
  */
@@ -13,6 +13,7 @@
 #define __TRANSLATOR_H_INCLUDED
 
 #include <string>
+#include <ostream>
 #include "rapidxml.hpp"
 #include "robot_conf/robot_conf.h"
 
@@ -30,6 +31,8 @@ namespace srm {
     rapidxml::xml_document<> xmlTree;   ///< the root of xml DOM
     char *xmlString;                    ///< rapidxml needs this char string for its work
 
+    std::ostream *logStream;            ///< stream to make logs
+
     /**
      * Private constructor for single tone
      */
@@ -43,6 +46,12 @@ namespace srm {
      * @return pointer to single tone variable
      */
     static translator_t * GetPtr(void) noexcept;
+
+    /**
+     * Write string in log stream function
+     * @param[in] str string to write
+     */
+    void WriteLog(const std::string &str) noexcept;
 
     /**
      * @defgroup converterFuncs Main functions to convert
