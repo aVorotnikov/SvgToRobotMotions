@@ -2,7 +2,7 @@
  * @file
  * @brief source file for tagsToPrimitives functions
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 13.03.2021
+ * @date 14.03.2021
  *
  * Contains tagsToPrimitives realisation and support static functions for each of tags
  */
@@ -87,29 +87,69 @@ static void _ellipseToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_
  * @param[in] tag pointer to line node in xml DOM
  * @param[out] linePrimitive the primitive representations of line
  */
-static void _lineToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *linePrimitive) {
+static void _lineToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *linePrimitive) noexcept {
   double x1, y1, x2, y2;
-  try {
-    if (tag->last_attribute("x1"))
+  srm::translator_t* trans = srm::translator_t::GetPtr();
+ 
+  if (tag->last_attribute("x1")) {
+    try {
       x1 = std::stod(tag->last_attribute("x1")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"line\"");
-    if (tag->last_attribute("y1"))
-      y1 = std::stod(tag->last_attribute("y1")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"line\"");
-    if (tag->last_attribute("x2"))
+    }
+    catch (std::exception) {
+      x1 = 0;
+      trans->WriteLog("Warning: invalid attribute x1 in line");
+    }
+  }
+  else {
+    x1 = 0;
+    trans->WriteLog("Warning: attribute x1 in line is not set");
+  }
+
+  if (tag->last_attribute("x2")) {
+    try {
       x2 = std::stod(tag->last_attribute("x2")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"line\"");
-    if (tag->last_attribute("y2"))
+    }
+    catch (std::exception) {
+      x2 = 0;
+      trans->WriteLog("Warning: invalid attribute x2 in line");
+    }
+  }
+  else {
+    x2 = 0;
+    trans->WriteLog("Warning: attribute x2 in line is not set");
+  }
+
+  if (tag->last_attribute("y1")) {
+    try {
+      y1 = std::stod(tag->last_attribute("y1")->value(), NULL);
+    }
+    catch (std::exception) {
+      y1 = 0;
+      trans->WriteLog("Warning: invalid attribute y1 in line");
+    }
+  }
+  else {
+    y1 = 0;
+    trans->WriteLog("Warning: attribute y1 in line is not set");
+  }
+
+  if (tag->last_attribute("y2")) {
+    try {
       y2 = std::stod(tag->last_attribute("y2")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"line\"");
+    }
+    catch (std::exception) {
+      y2 = 0;
+      trans->WriteLog("Warning: invalid attribute y2 in line");
+    }
   }
-  catch (std::exception error) {
-    throw std::exception("Invalid attribute value in tag \"line\"");
+  else {
+    y2 = 0;
+    trans->WriteLog("Warning: attribute y2 in line is not set");
   }
+
+  if (x1 == x2 && y1 == y2)
+    return;
+
   srm::segment_t p(x2, y2);
   linePrimitive->start.x = x1;
   linePrimitive->start.y = y1;
@@ -154,7 +194,7 @@ static void _circleToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t
  * @param[in] tag pointer to rectangle node in xml DOM
  * @param[out] rectanglePrimitive the primitive representations of rectangle
  */
-static void _rectToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *rectanglePrimitive) {
+static void _rectToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *rectanglePrimitive) noexcept {
   double x, y, height, width;
   const double defaultX = 0, defaultY = 0;
   srm::translator_t* trans = srm::translator_t::GetPtr();
@@ -285,91 +325,85 @@ static void _rectToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *
 }
 
 /**
+ * Process and save svg width and height
+ * @param[in] tag pointer to rectangle node in xml DOM
+ */
+static void _processSvgParams(const rapidxml::xml_node<>* tag) noexcept {
+  const double defaultWidth = 300, defaultHeight = 150;
+  double width, height;
+  if (tag->last_attribute("width")) {
+    width = strtod(tag->last_attribute("width")->value(), NULL);
+    if (width <= 0) {
+      width = defaultWidth;
+      srm::translator_t::GetPtr()->WriteLog("Warning: svg width must be more than 0");
+    }
+  }
+  else {
+    width = defaultWidth;
+    srm::translator_t::GetPtr()->WriteLog("Warning: svg width is not set");
+  }
+  if (tag->last_attribute("height")) {
+    height = strtod(tag->last_attribute("height")->value(), NULL);
+    if (height <= 0) {
+      height = defaultHeight;
+      srm::translator_t::GetPtr()->WriteLog("Warning: svg height must be more than 0");
+    }
+  }
+  else {
+    height = defaultHeight;
+    srm::translator_t::GetPtr()->WriteLog("Warning: svg height is not set");
+  }
+  srm::translator_t::GetPtr()->roboConf.SetWH(width, height);
+}
+
+/**
  * Transform svg tags to primitives
  * @param[in] tags the list of tags in DOM
  * @param[out] primitives the list of primitive representations of tags
  */
-void TagsToPrimitives(const std::list<rapidxml::xml_node<>*> &tags, std::list<srm::primitive_t*> *primitives) {
+void TagsToPrimitives(const std::list<rapidxml::xml_node<>*>& tags, std::list<srm::primitive_t*>* primitives) {
   std::string tagName;
   for (auto tag : tags) {
-    try {
-      tagName.assign(tag->name(), tag->name_size());
+    tagName.assign(tag->name(), tag->name_size());
 
-      if (tagName == "svg") {
-        const double defaultWidth = 300, defaultHeight = 150;
-        double width, height;
-        if (tag->last_attribute("width")) {
-          width = strtod(tag->last_attribute("width")->value(), NULL);
-          if (width <= 0) {
-            width = defaultWidth;
-            srm::translator_t::GetPtr()->WriteLog("Warning: svg width must be more than 0");
-          }
-        }
-        else {
-          width = defaultWidth;
-          srm::translator_t::GetPtr()->WriteLog("Warning: svg width is not set");
-        }
-        if (tag->last_attribute("height")) {
-          height = strtod(tag->last_attribute("height")->value(), NULL);
-          if (height <= 0) {
-            height = defaultHeight;
-            srm::translator_t::GetPtr()->WriteLog("Warning: svg height must be more than 0");
-          }
-        }
-        else {
-          height = defaultHeight;
-          srm::translator_t::GetPtr()->WriteLog("Warning: svg height is not set");
-        }
-        srm::translator_t::GetPtr()->roboConf.SetWH(width, height);
-      }
-      else if (tagName == "path") {
-        srm::path_t path(primitives);
-        path.ParsePath(tag);
-      }
-      else if (tagName == "rect") {
-        srm::primitive_t* rectanglePrimitive = new srm::primitive_t();
-        _rectToPrimitive(tag, rectanglePrimitive);
-        if (rectanglePrimitive->size() == 0) {
-          delete rectanglePrimitive;
-        }
-        else {
-          primitives->push_back(rectanglePrimitive);
-        }
+    if (tagName == "svg") {
+      _processSvgParams(tag);
+    }
+    else if (tagName == "g") {
+      // TODO: realise group processing
+    }
+    else if (tagName == "path") {
+      srm::path_t path(primitives);
+      path.ParsePath(tag);
+    }
+    else {
+      srm::primitive_t* primitive = new srm::primitive_t();
+      if (tagName == "rect") {
+        _rectToPrimitive(tag, primitive);
       }
       else if (tagName == "circle") {
-        srm::primitive_t* circlePrimitive = new srm::primitive_t();
-        _circleToPrimitive(tag, circlePrimitive);
-        primitives->push_back(circlePrimitive);
+        _circleToPrimitive(tag, primitive);
       }
       else if (tagName == "ellipse") {
-        srm::primitive_t* ellipsePrimitive = new srm::primitive_t();
-        _ellipseToPrimitive(tag, ellipsePrimitive);
-        primitives->push_back(ellipsePrimitive);
+        _ellipseToPrimitive(tag, primitive);
       }
       else if (tagName == "line") {
-        srm::primitive_t* linePrimitive = new srm::primitive_t();
-        _lineToPrimitive(tag, linePrimitive);
-        primitives->push_back(linePrimitive);
+        _lineToPrimitive(tag, primitive);
       }
       else if (tagName == "polyline") {
-        srm::primitive_t* polylinePrimitive = new srm::primitive_t();
-        _polylineToPrimitive(tag, polylinePrimitive);
-        primitives->push_back(polylinePrimitive);
+        _polylineToPrimitive(tag, primitive);
       }
       else if (tagName == "polygon") {
-        srm::primitive_t* polygonPrimitive = new srm::primitive_t();
-        _polygonToPrimitive(tag, polygonPrimitive);
-        primitives->push_back(polygonPrimitive);
+        _polygonToPrimitive(tag, primitive);
       }
       else if (tagName == "text") {
         // TODO: realise text processing
       }
-      else {
-        continue;
-      }
-    }
-    catch(std::exception error) {
-      throw error;
+    
+      if (primitive->size() > 0)
+        primitives->push_back(primitive);
+      else
+        delete primitive;
     }
   }
 }
