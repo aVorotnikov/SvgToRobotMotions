@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="code\converter\robot_conf\cs\cs.cpp" />
     <ClCompile Include="code\converter\robot_conf\robot_conf.cpp" />
+    <ClCompile Include="code\converter\tags_translator\ellipse\ellipse.cpp" />
     <ClCompile Include="code\converter\tags_translator\path\bezier\bezier.cpp" />
     <ClCompile Include="code\converter\tags_translator\path\path.cpp" />
     <ClCompile Include="code\converter\tags_translator\tags_translator.cpp" />
@@ -31,6 +32,7 @@
   <ItemGroup>
     <ClInclude Include="code\converter\robot_conf\cs\cs.h" />
     <ClInclude Include="code\converter\robot_conf\robot_conf.h" />
+    <ClInclude Include="code\converter\tags_translator\ellipse\ellipse.h" />
     <ClInclude Include="code\converter\tags_translator\path\bezier\bezier.h" />
     <ClInclude Include="code\converter\defs.h" />
     <ClInclude Include="code\converter\tags_translator\path\path.h" />
@@ -38,6 +40,7 @@
     <ClInclude Include="code\converter\primitive\primitive.h" />
     <ClInclude Include="code\converter\rapidxml.hpp" />
     <ClInclude Include="code\converter\translator.h" />
+    <ClInclude Include="code\math\matr2.h" />
     <ClInclude Include="code\math\vector2.h" />
     <ClInclude Include="code\math\vector3.h" />
     <ClInclude Include="code\srm.h" />

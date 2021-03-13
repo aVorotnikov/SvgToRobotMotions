@@ -2,7 +2,7 @@
  * @file
  * @brief Main program source file
  * @authors Vorotnikov Andrey
- * @date 11.03.2021
+ * @date 12.03.2021
  *
  * Contains main function to start program
  */
@@ -24,7 +24,7 @@
  * @return system code (0 if success)
  */
 int main(int argC, char *argV[]) {
-  if (argC != 3) {
+  if (argC != 3 && argC != 4) {
     std::cout << "Error: wrong params" << std::endl;
     return 0;
   }
@@ -32,6 +32,8 @@ int main(int argC, char *argV[]) {
   try {
     srm::translator_t *trans = srm::translator_t::GetPtr();
 
+    if (argC == 4)
+      trans->roboConf.LoadConf(argV[3]);
     trans->SetSvg(argV[1]);
     trans->GenCode(argV[2]);
   }

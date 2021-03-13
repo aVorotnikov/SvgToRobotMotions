@@ -2,7 +2,7 @@
  * @file
  * @brief Common definitions header file
  * @authors Vorotnikov Andrey
- * @date 07.03.2021
+ * @date 13.03.2021
  *
  * Contains common definitions for converter
  */
@@ -22,6 +22,9 @@ namespace srm {
 
   /** 3 dimensional vector class for converter */
   using vec3_t = math::vector3_t<>;
+
+  /** pi number */
+  constexpr double pi = 3.14159265358979323846;
 }
 
 #endif /* __DEFS_H_INLUDED */

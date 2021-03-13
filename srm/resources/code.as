@@ -1,4 +1,4 @@
-.PROGRAM resources/code.as()
+.PROGRAM resources\code.as()
 	LAPPRO SHIFT (p1 BY -nan(ind), -nan(ind), -nan(ind)), 500
 	LMOVE SHIFT (p1 BY -nan(ind), -nan(ind), -nan(ind))
 	LMOVE SHIFT (p1 BY -nan(ind), -nan(ind), -nan(ind))

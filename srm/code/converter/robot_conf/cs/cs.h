@@ -2,7 +2,7 @@
  * @file
  * @brief Coordinate system header file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 11.03.2021
+ * @date 12.03.2021
  *
  * Contains cs_t class definition to morph svg coordinate system to robor coordinate system
  */
@@ -48,13 +48,7 @@ namespace srm {
      */
     cs_t(double w, double h, vec3_t p1, vec3_t p2, vec3_t p3) noexcept;
 
-    /**
-     * Set svg image width and height function
-     * @param[in] w image width
-     * @param[in] h image height
-     */
-    void SetWH(double w, double h) noexcept;
-
+  protected:
     /**
      * Set board plane function
      * @param[in] p1 first board angle
@@ -62,6 +56,14 @@ namespace srm {
      * @param[in] p3 third board angle
      */
     void SetPlane(vec3_t p1, vec3_t p2, vec3_t p3) noexcept;
+
+  public:
+    /**
+     * Set svg image width and height function
+     * @param[in] w image width
+     * @param[in] h image height
+     */
+    void SetWH(double w, double h) noexcept;
 
     /**
      * Get svg image width function
