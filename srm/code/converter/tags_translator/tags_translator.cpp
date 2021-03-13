@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief source file for tagsToPrimitives functions
- * @authors Pavlov Ilya
- * @date 11.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya
+ * @date 13.03.2021
  *
  * Contains tagsToPrimitives realisation and support static functions for each of tags
  */
@@ -69,11 +69,10 @@ static void _ellipseToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_
   ellipsePrimitive->start.x = cx + rx;
   ellipsePrimitive->start.y = cy;
 
-  const double PI = 3.14159265358979323846;
-  double delta = PI / 20;
+  double delta = srm::pi / 20;
   double t = delta;
   double x, y;
-  while (t < 2 * PI) {
+  while (t < 2 * srm::pi) {
     x = cx + rx * cos(t);
     y = cy + ry * sin(t);
     // TODO: check accuracy
