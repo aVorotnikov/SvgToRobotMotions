@@ -225,7 +225,7 @@ static void _lineToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *
  * @param[in] tag pointer to circle node in xml DOM
  * @param[out] circlePrimitive the primitive representations of circle
  */
-static void _circleToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *circlePrimitive) {
+static void _circleToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *circlePrimitive) noexcept{
   double cx, cy, r;
   const double defaultCoord = 0;
   srm::translator_t *trans = srm::translator_t::GetPtr();
@@ -468,7 +468,7 @@ static void _processSvgParams(const rapidxml::xml_node<> *tag) noexcept {
  * @param[in] tags the list of tags in DOM
  * @param[out] primitives the list of primitive representations of tags
  */
-void TagsToPrimitives(const std::list<rapidxml::xml_node<>*> &tags, std::list<srm::primitive_t*> *primitives) {
+void TagsToPrimitives(const std::list<rapidxml::xml_node<>*> &tags, std::list<srm::primitive_t*> *primitives) noexcept {
   std::string tagName;
   for (auto tag : tags) {
     tagName.assign(tag->name(), tag->name_size());
