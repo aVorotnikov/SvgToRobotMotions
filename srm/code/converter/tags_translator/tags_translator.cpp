@@ -2,7 +2,7 @@
  * @file
  * @brief source file for tagsToPrimitives functions
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 14.03.2021
+ * @date 15.03.2021
  *
  * Contains tagsToPrimitives realisation and support static functions for each of tags
  */
@@ -11,14 +11,6 @@
 
 #include <cmath>
 #include <sstream>
-
-/**
- * Transform primitive by attribute transform
- *
- */
-static void _transformPrimitive(srm::primitive_t *primitive) {
-  // TODO: add required parametres and realise _transformPrimitive
-}
 
 /**
  * Transform svg polyline to primitive
