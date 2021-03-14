@@ -2,7 +2,7 @@
  * @file
  * @brief Robot configuration header file
  * @authors Vorotnikov Andrey
- * @date 12.03.2021
+ * @date 14.03.2021
  *
  * Contains robot_conf_t class definition to load and save robot configuration
  */
@@ -25,9 +25,10 @@ namespace srm {
   class robot_conf_t : public cs_t {
   private:
     double
-      dist,         ///< distance of departure
-      accuracy,     ///< robot accuracy
-      pouringStep;  ///< step for pouring
+      dist,                   ///< distance of departure
+      accuracy,               ///< robot accuracy
+      pouringStep;            ///< step for pouring
+    std::string programName;  ///< name of robot program
 
   public:
     /**
@@ -40,25 +41,31 @@ namespace srm {
      * Get departure distance function.
      * @return distance of departure
      */
-    double GetDepDist(void);
+    double GetDepDist(void) const noexcept;
 
     /**
      * Get accuracy in robot cs function.
      * @return robot accuracy
      */
-    double GetRoboAcc(void);
+    double GetRoboAcc(void) const noexcept;
 
     /**
      * Get accuracy in svg cs function.
      * @return svg accuracy
      */
-    double GetSvgAcc(void);
+    double GetSvgAcc(void) const noexcept;
 
     /**
      * Get pouring step value function.
      * @return pouring step
      */
-    double GetPouringStep(void);
+    double GetPouringStep(void) const noexcept;
+
+    /**
+     * Get program name function.
+     * @return string wirh program name
+     */
+    std::string GetProgramName(void) const noexcept;
   };
 }
 

@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class source file
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 13.03.2021
+ * @date 14.03.2021
  *
  * Contains main converter class realisatiion
  */
@@ -113,7 +113,7 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
   }
 
   // NOT REAL PROGRAM, JUST TEST
-  fout << ".PROGRAM " << codeFileName  << "()" <<std::endl;
+  fout << ".PROGRAM " << roboConf.GetProgramName() << "()" <<std::endl;
   
   for (auto primitive : primitives) {
     fout << *primitive << ";\n";
