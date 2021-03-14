@@ -2,7 +2,7 @@
  * @file
  * @brief Robot configuration source file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 13.03.2021
+ * @date 14.03.2021
  *
  * Contains robot_conf_t class realisation to load and save robot configuration
  */
@@ -17,31 +17,34 @@
 
 /** \brief Project namespace */
 namespace srm {
-  /**
-   * @brief Robot configuration file parameter saving struct
-   *
-   * Struct to save parsed lines in robot configuration file
-   */
-  struct robot_file_t {
-    std::pair<bool, srm::vec3_t>
-      p1,           ///< main board point
-      p2,           ///< ort i board point
-      p3;           ///< ort j board point
-    std::pair<bool, double>
-      dist,         ///< distance of departure
-      accuracy,     ///< robot accuracy
-      pouringStep;  ///< step for pouring
-  };
+  /** \brief Robot congiguration file namespace */
+  namespace rcf {
+    /**
+     * @brief Robot configuration file parameter saving struct
+     *
+     * Struct to save parsed lines in robot configuration file
+     */
+    struct robot_file_t {
+      std::pair<bool, srm::vec3_t>
+        p1,           ///< main board point
+        p2,           ///< ort i board point
+        p3;           ///< ort j board point
+      std::pair<bool, double>
+        dist,         ///< distance of departure
+        accuracy,     ///< robot accuracy
+        pouringStep;  ///< step for pouring
+    };
 
-  /**
-   * @brief Robot configuration file parsing struct
-   *
-   * Struct to save possible lines in robot configuration file
-   */
-  struct line_t {
-    std::function<void (robot_file_t *, const std::vector<double> &)> func;  ///< function to parse
-    int numOfParams;                                                         ///< number of parametres
-  };
+    /**
+     * @brief Robot configuration file parsing struct
+     *
+     * Struct to save possible lines in robot configuration file
+     */
+    struct line_t {
+      std::function<void (robot_file_t *, const std::vector<double> &)> func;  ///< function to parse
+      int numOfParams;                                                         ///< number of parametres
+    };
+  }
 }
 
 /**
@@ -49,7 +52,7 @@ namespace srm {
  * @param[out] rConf robot configuration file variable
  * @param[in] params line param
  */
-static void _p1Func(srm::robot_file_t *rConf, const std::vector<double> &params) {
+static void _p1Func(srm::rcf::robot_file_t *rConf, const std::vector<double> &params) {
   rConf->p1.first = true;
   rConf->p1.second = srm::vec3_t(params[0], params[1], params[2]);
 }
@@ -59,7 +62,7 @@ static void _p1Func(srm::robot_file_t *rConf, const std::vector<double> &params)
  * @param[out] rConf robot configuration file variable
  * @param[in] params line param
  */
-static void _p2Func(srm::robot_file_t *rConf, const std::vector<double> &params) {
+static void _p2Func(srm::rcf::robot_file_t *rConf, const std::vector<double> &params) {
   rConf->p2.first = true;
   rConf->p2.second = srm::vec3_t(params[0], params[1], params[2]);
 }
@@ -69,7 +72,7 @@ static void _p2Func(srm::robot_file_t *rConf, const std::vector<double> &params)
  * @param[out] rConf robot configuration file variable
  * @param[in] params line param
  */
-static void _p3Func(srm::robot_file_t *rConf, const std::vector<double> &params) {
+static void _p3Func(srm::rcf::robot_file_t *rConf, const std::vector<double> &params) {
   rConf->p3.first = true;
   rConf->p3.second = srm::vec3_t(params[0], params[1], params[2]);
 }
@@ -79,7 +82,7 @@ static void _p3Func(srm::robot_file_t *rConf, const std::vector<double> &params)
  * @param[out] rConf robot configuration file variable
  * @param[in] params line param
  */
-static void _distFunc(srm::robot_file_t *rConf, const std::vector<double> &params) {
+static void _distFunc(srm::rcf::robot_file_t *rConf, const std::vector<double> &params) {
   rConf->dist.first = true;
   rConf->dist.second = params[0];
 }
@@ -89,7 +92,7 @@ static void _distFunc(srm::robot_file_t *rConf, const std::vector<double> &param
  * @param[out] rConf robot configuration file variable
  * @param[in] params line param
  */
-static void _accuFunc(srm::robot_file_t *rConf, const std::vector<double> &params) {
+static void _accuFunc(srm::rcf::robot_file_t *rConf, const std::vector<double> &params) {
   rConf->accuracy.first = true;
   rConf->accuracy.second = params[0];
 }
@@ -99,12 +102,12 @@ static void _accuFunc(srm::robot_file_t *rConf, const std::vector<double> &param
  * @param[out] rConf robot configuration file variable
  * @param[in] params line param
  */
-static void _stepFunc(srm::robot_file_t *rConf, const std::vector<double> &params) {
+static void _stepFunc(srm::rcf::robot_file_t *rConf, const std::vector<double> &params) {
   rConf->pouringStep.first = true;
   rConf->pouringStep.second = params[0];
 }
 
-static std::map<const std::string, srm::line_t> s_Lines = {
+static std::map<const std::string, srm::rcf::line_t> s_Lines = {
   {"p1", {_p1Func, 3}},
   {"p2", {_p2Func, 3}},
   {"p3", {_p3Func, 3}},
@@ -121,7 +124,7 @@ void srm::robot_conf_t::LoadConf(const std::string &confFileName) {
   std::ifstream iFStream(confFileName);
 
   int lineNum = 0;
-  robot_file_t roboFile = {};
+  rcf::robot_file_t roboFile = {};
 
   while (!iFStream.eof()) {
     lineNum++;

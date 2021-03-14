@@ -19,6 +19,7 @@
 #include "converter/translator.h"
 #include "converter/rapidxml.hpp"
 #include "converter/primitive/primitive.h"
+#include "converter/tags_translator/tag/tag.h"
 #include "converter/tags_translator/tags_translator.h"
 #include "converter/tags_translator/path/path.h"
 #include "converter/tags_translator/path/bezier/bezier.h"

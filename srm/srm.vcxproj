@@ -35,6 +35,7 @@
     <ClInclude Include="code\converter\tags_translator\ellipse\ellipse.h" />
     <ClInclude Include="code\converter\tags_translator\path\bezier\bezier.h" />
     <ClInclude Include="code\converter\defs.h" />
+    <ClInclude Include="code\converter\tags_translator\tag\tag.h" />
     <ClInclude Include="code\converter\tags_translator\path\path.h" />
     <ClInclude Include="code\converter\tags_translator\tags_translator.h" />
     <ClInclude Include="code\converter\primitive\primitive.h" />

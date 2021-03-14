@@ -540,7 +540,7 @@ static void _processSvgParams(const rapidxml::xml_node<> *tag) noexcept {
  * @param[in] tags the list of tags in DOM
  * @param[out] primitives the list of primitive representations of tags
  */
-void TagsToPrimitives(const std::list<rapidxml::xml_node<>*> &tags, std::list<srm::primitive_t*> *primitives) noexcept {
+void srm::TagsToPrimitives(const std::list<rapidxml::xml_node<>*> &tags, std::list<srm::primitive_t*> *primitives) noexcept {
   std::string tagName;
   for (auto tag : tags) {
     tagName.assign(tag->name(), tag->name_size());
