@@ -42,43 +42,94 @@ static void _polygonToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_
   * @param[in] tag pointer to ellipse node in xml DOM
   * @param[out] ellipsePrimitive the primitive representations of ellipse
   */
-static void _ellipseToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *ellipsePrimitive) {
+static void _ellipseToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *ellipsePrimitive) noexcept {
   double cx, cy, rx, ry;
-  try {
-    if (tag->last_attribute("cx"))
+  const double defaultCoord = 0;
+  srm::translator_t *trans = srm::translator_t::GetPtr();
+
+  if (tag->last_attribute("cx")) {
+    try {
       cx = std::stod(tag->last_attribute("cx")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"ellipse\"");
-    if(tag->last_attribute("cx"))
+      if (std::string(tag->last_attribute("cx")->value()).find("%") != std::string::npos) {
+        cx = trans->roboConf.GetW() * cx / 100;
+      }
+    }
+    catch (std::exception) {
+      cx = defaultCoord;
+      trans->WriteLog("Warning: invalid attribute cx in ellipse");
+    }
+  }
+  else {
+    cx = defaultCoord;
+    trans->WriteLog("Warning: attribute cx is not set in ellipse");
+  }
+
+  if (tag->last_attribute("cy")) {
+    try {
       cy = std::stod(tag->last_attribute("cy")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"ellipse\"");
-    if(tag->last_attribute("cx"))
+      if (std::string(tag->last_attribute("cy")->value()).find("%") != std::string::npos) {
+        cy = trans->roboConf.GetH() * cy / 100;
+      }
+    }
+    catch (std::exception) {
+      cy = defaultCoord;
+      trans->WriteLog("Warning: invalid attribute cy in ellipse");
+    }
+  }
+  else {
+    cy = defaultCoord;
+    trans->WriteLog("Warning: attribute cy is not set in ellipse");
+  }
+
+  if (tag->last_attribute("rx")) {
+    try {
       rx = std::stod(tag->last_attribute("rx")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"ellipse\"");
-    if(tag->last_attribute("cx"))
+      if (std::string(tag->last_attribute("rx")->value()).find("%") != std::string::npos) {
+        rx = trans->roboConf.GetW() * rx / 100;
+      }
+    }
+    catch (std::exception) {
+      ry = -1;
+    }
+  }
+  else {
+    rx = -1;
+  }
+  
+  if (tag->last_attribute("ry")) {
+    try {
       ry = std::stod(tag->last_attribute("ry")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"ellipse\"");
+      if (std::string(tag->last_attribute("ry")->value()).find("%") != std::string::npos) {
+        ry = trans->roboConf.GetH() * ry / 100;
+      }
+    }
+    catch (std::exception) {
+      ry = -1;
+    }
   }
-  catch (std::exception error) {
-    throw std::exception("Invalid attribute value in tag \"ellipse\"");
+  else {
+    ry = -1;
   }
 
-  ellipsePrimitive->start.x = cx + rx;
-  ellipsePrimitive->start.y = cy;
-
-  double delta = srm::pi / 20;
-  double t = delta;
-  double x, y;
-  while (t < 2 * srm::pi) {
-    x = cx + rx * cos(t);
-    y = cy + ry * sin(t);
-    // TODO: check accuracy
-    srm::segment_t p(x, y);
-    ellipsePrimitive->push_back(p);
-    t += delta;
+  if (rx > 0 && ry <= 0) {
+    trans->WriteLog("Warning: invalid attribute ry in ellipse");
+  }
+  else if (rx <= 0 && ry > 0) {
+    trans->WriteLog("Warning: invalid attribute rx in ellipse");
+  }
+  else if (rx <= 0 && ry <= 0) {
+    trans->WriteLog("Warning: invalid attributes rx and ry in ellipse");
+    return;
+  }
+ 
+  std::vector<srm::vec_t> discreteEllipse =
+    srm::EllipseSampling(srm::vec_t(cx, cy), srm::vec_t(rx, ry), trans->roboConf.GetSvgAcc());
+  
+  ellipsePrimitive->start.x = discreteEllipse[0].x;
+  ellipsePrimitive->start.y = discreteEllipse[0].y;
+  ellipsePrimitive->reserve(discreteEllipse.size() - 1);
+  for (unsigned int i = 1; i < discreteEllipse.size(); ++i) {
+    ellipsePrimitive->push_back(srm::segment_t(discreteEllipse[i].x, discreteEllipse[i].y));
   }
 }
 
@@ -89,61 +140,74 @@ static void _ellipseToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_
  */
 static void _lineToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *linePrimitive) noexcept {
   double x1, y1, x2, y2;
-  srm::translator_t* trans = srm::translator_t::GetPtr();
+  const double defaultCoord = 0;
+  srm::translator_t *trans = srm::translator_t::GetPtr();
  
   if (tag->last_attribute("x1")) {
     try {
       x1 = std::stod(tag->last_attribute("x1")->value(), NULL);
+      if (std::string(tag->last_attribute("x1")->value()).find("%") != std::string::npos) {
+        x1 = trans->roboConf.GetW() * x1 / 100;
+      }
     }
     catch (std::exception) {
-      x1 = 0;
+      x1 = defaultCoord;
       trans->WriteLog("Warning: invalid attribute x1 in line");
     }
   }
   else {
-    x1 = 0;
+    x1 = defaultCoord;
     trans->WriteLog("Warning: attribute x1 in line is not set");
   }
 
   if (tag->last_attribute("x2")) {
     try {
       x2 = std::stod(tag->last_attribute("x2")->value(), NULL);
+      if (std::string(tag->last_attribute("x2")->value()).find("%") != std::string::npos) {
+        x2 = trans->roboConf.GetW() * x2 / 100;
+      }
     }
     catch (std::exception) {
-      x2 = 0;
+      x2 = defaultCoord;
       trans->WriteLog("Warning: invalid attribute x2 in line");
     }
   }
   else {
-    x2 = 0;
+    x2 = defaultCoord;
     trans->WriteLog("Warning: attribute x2 in line is not set");
   }
 
   if (tag->last_attribute("y1")) {
     try {
       y1 = std::stod(tag->last_attribute("y1")->value(), NULL);
+      if (std::string(tag->last_attribute("y1")->value()).find("%") != std::string::npos) {
+        y1 = trans->roboConf.GetH() * y1 / 100;
+      }
     }
     catch (std::exception) {
-      y1 = 0;
+      y1 = defaultCoord;
       trans->WriteLog("Warning: invalid attribute y1 in line");
     }
   }
   else {
-    y1 = 0;
+    y1 = defaultCoord;
     trans->WriteLog("Warning: attribute y1 in line is not set");
   }
 
   if (tag->last_attribute("y2")) {
     try {
       y2 = std::stod(tag->last_attribute("y2")->value(), NULL);
+      if (std::string(tag->last_attribute("y2")->value()).find("%") != std::string::npos) {
+        y2 = trans->roboConf.GetH() * y2 / 100;
+      }
     }
     catch (std::exception) {
-      y2 = 0;
+      y2 = defaultCoord;
       trans->WriteLog("Warning: invalid attribute y2 in line");
     }
   }
   else {
-    y2 = 0;
+    y2 = defaultCoord;
     trans->WriteLog("Warning: attribute y2 in line is not set");
   }
 
@@ -163,30 +227,73 @@ static void _lineToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *
  */
 static void _circleToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *circlePrimitive) {
   double cx, cy, r;
-  try {
-    if (tag->last_attribute("cx"))
-      cx = std::stod(tag->last_attribute("cx")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"circle\"");
-    if(tag->last_attribute("cy"))
-      cy = std::stod(tag->last_attribute("cy")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"circle\"");
-    if(tag->last_attribute("r"))
-      r = std::stod(tag->last_attribute("r")->value(), NULL);
-    else
-      throw std::exception("No required attribute in tag \"circle\"");
-  }
-  catch (std::exception error) {
-    throw std::exception("Invalid attribute value in tag \"circle\"");
-  }
-  /*
-  srm::motion::arc_t* arc = new srm::motion::arc_t(cx, cy + r, cx, cy - r);
-  circlePrimitive->start.x = cx;
-  circlePrimitive->start.y = cy - r;
-  circlePrimitive->push_back(arc);*/
+  const double defaultCoord = 0;
+  srm::translator_t *trans = srm::translator_t::GetPtr();
 
-  // TODO: Fix circle translating with segment_t 
+  if (tag->last_attribute("cx")) {
+    try {
+      cx = std::stod(tag->last_attribute("cx")->value(), NULL);
+      if (std::string(tag->last_attribute("cx")->value()).find("%") != std::string::npos) {
+        cx = trans->roboConf.GetW() * cx / 100;
+      }
+    }
+    catch (std::exception) {
+      cx = defaultCoord;
+      trans->WriteLog("Warning: invalid attribute cx in circle");
+    }
+  }
+  else {
+    cx = defaultCoord;
+    trans->WriteLog("Warning: attribute cx is not set in circle");
+  }
+
+  if (tag->last_attribute("cy")) {
+    try {
+      cy = std::stod(tag->last_attribute("cy")->value(), NULL);
+      if (std::string(tag->last_attribute("cy")->value()).find("%") != std::string::npos) {
+        cy = trans->roboConf.GetH() * cy / 100;
+      }
+    }
+    catch (std::exception) {
+      cy = defaultCoord;
+      trans->WriteLog("Warning: invalid attribute cy in circle");
+    }
+  }
+  else {
+    cy = defaultCoord;
+    trans->WriteLog("Warning: attribute cy is not set in circle");
+  }
+
+  if (tag->last_attribute("r")) {
+    try {
+      r = std::stod(tag->last_attribute("rx")->value(), NULL);
+      if (r <= 0) {
+        trans->WriteLog("Warning: attribute r in circle must be more than 0");
+        return;
+      }
+      if (std::string(tag->last_attribute("r")->value()).find("%") != std::string::npos) {
+        r = trans->roboConf.GetW() * r / 100;
+      }
+    }
+    catch (std::exception) {
+      trans->WriteLog("Warning: invalid attribute r in circle");
+      return;
+    }
+  }
+  else {
+    trans->WriteLog("Warning: attribute r is not set in circle");
+    return;
+  }
+
+  std::vector<srm::vec_t> discreteCircle =
+    srm::EllipseSampling(srm::vec_t(cx, cy), srm::vec_t(r, r), trans->roboConf.GetSvgAcc());
+
+  circlePrimitive->start.x = discreteCircle[0].x;
+  circlePrimitive->start.y = discreteCircle[0].y;
+  circlePrimitive->reserve(discreteCircle.size() - 1);
+  for (unsigned int i = 1; i < discreteCircle.size(); ++i) {
+    circlePrimitive->push_back(srm::segment_t(discreteCircle[i].x, discreteCircle[i].y));
+  }
 }
 
 /**
@@ -197,7 +304,7 @@ static void _circleToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t
 static void _rectToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *rectanglePrimitive) noexcept {
   double x, y, height, width;
   const double defaultX = 0, defaultY = 0;
-  srm::translator_t* trans = srm::translator_t::GetPtr();
+  srm::translator_t *trans = srm::translator_t::GetPtr();
 
   if (tag->last_attribute("x")) {
     try {
@@ -206,7 +313,7 @@ static void _rectToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *
         x = trans->roboConf.GetW() * x / 100;
       }
     }
-    catch(std::exception) {
+    catch (std::exception) {
       trans->WriteLog("Warning: invalid attribute x in rect");
       x = defaultX;
     }
@@ -223,7 +330,7 @@ static void _rectToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *
         y = trans->roboConf.GetH() * y / 100;
       }
     }
-    catch(std::exception) {
+    catch (std::exception) {
       trans->WriteLog("Warning: invalid attribute y in rect");
       y = defaultY;
     }
@@ -328,7 +435,7 @@ static void _rectToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *
  * Process and save svg width and height
  * @param[in] tag pointer to rectangle node in xml DOM
  */
-static void _processSvgParams(const rapidxml::xml_node<>* tag) noexcept {
+static void _processSvgParams(const rapidxml::xml_node<> *tag) noexcept {
   const double defaultWidth = 300, defaultHeight = 150;
   double width, height;
   if (tag->last_attribute("width")) {
@@ -361,7 +468,7 @@ static void _processSvgParams(const rapidxml::xml_node<>* tag) noexcept {
  * @param[in] tags the list of tags in DOM
  * @param[out] primitives the list of primitive representations of tags
  */
-void TagsToPrimitives(const std::list<rapidxml::xml_node<>*>& tags, std::list<srm::primitive_t*>* primitives) {
+void TagsToPrimitives(const std::list<rapidxml::xml_node<>*> &tags, std::list<srm::primitive_t*> *primitives) {
   std::string tagName;
   for (auto tag : tags) {
     tagName.assign(tag->name(), tag->name_size());
@@ -377,7 +484,7 @@ void TagsToPrimitives(const std::list<rapidxml::xml_node<>*>& tags, std::list<sr
       path.ParsePath(tag);
     }
     else {
-      srm::primitive_t* primitive = new srm::primitive_t();
+      srm::primitive_t *primitive = new srm::primitive_t();
       if (tagName == "rect") {
         _rectToPrimitive(tag, primitive);
       }
