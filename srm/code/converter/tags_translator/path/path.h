@@ -2,7 +2,7 @@
  * @file
  * @brief Path parsing class header file
  * @authors Chevykalov Grigory
- * @date 10.03.2021
+ * @date 14.03.2021
  *
  * Contains path parsing class description
  */
@@ -21,10 +21,10 @@
 /** \brief Project namespace */
 namespace srm {
   /**
-  * @brief Analyzer states class
-  *
-  * Contains possible states of analyzer
-  */
+   * @brief Analyzer states class
+   *
+   * Contains possible states of analyzer
+   */
   enum class state_t {
     start,
     comma,
@@ -33,10 +33,10 @@ namespace srm {
     error
   };
   /**
-  * @brief Path parsing class
-  *
-  * Contains method to parse path
-  */
+   * @brief Path parsing class
+   *
+   * Contains method to parse path
+   */
   class path_t {
   private:
     std::list<srm::primitive_t *> *primitives;  ///< pointer to the currently filling list of primitives
@@ -44,7 +44,6 @@ namespace srm {
     srm::vec_t last;                            ///< last significant point
     srm::vec_t checkPoint;                      ///< last control point of the last Bezier curve
     char lastCommand;                           ///< previous command
-    double accuracy;                            ///< accuracy of approximation of Bezier curves and elliptical arcs
     state_t state;                              ///< the current state of the analyzer
 
     /**
@@ -169,13 +168,13 @@ namespace srm {
      * Processes the elliptical arc command with absolute coordinates as arguments ("A")
      * @param[in] nums vector of numeric command arguments
      */
-    void PathAAbs(const std::vector<double>& nums) noexcept;
+    void PathAAbs(const std::vector<double> &nums) noexcept;
 
     /**
      * Processes the elliptical arc command with relative coordinates as arguments ("a")
      * @param[in] nums vector of numeric command arguments
      */
-    void PathARel(const std::vector<double>& nums) noexcept;
+    void PathARel(const std::vector<double> &nums) noexcept;
 
     /**@}*/
 
@@ -183,11 +182,9 @@ namespace srm {
     /**
      * Constructor for path_t
      * @param[in] ps pointer to a list of primitives
-     * @param[in] acc accuracy of approximation of Bezier curves and elliptical arcs
-     * @warning accuracy must be greater than 0, otherwise will set to 1
      * @warning pointer mustn't be nullptr
      */
-    path_t(std::list<srm::primitive_t *> *ps, double acc = 1);
+    path_t(std::list<srm::primitive_t *> *ps);
 
     /**
      * Main path parsing function

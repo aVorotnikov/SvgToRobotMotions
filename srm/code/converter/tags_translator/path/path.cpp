@@ -2,7 +2,7 @@
  * @file
  * @brief Path parsing class source file
  * @authors Chevykalov Grigory
- * @date 10.03.2021
+ * @date 14.03.2021
  *
  * Contains path parsing class realisation
  */
@@ -14,18 +14,11 @@
 /**
  * Constructor for path_t
  * @param[in] ps pointer to a list of primitives
- * @param[in] acc accuracy of approximation of Bezier curves and elliptical arcs
- * @warning accuracy must be greater than 0, otherwise will set to 1
  * @warning pointer mustn't be nullptr
  */
-srm::path_t::path_t(std::list<srm::primitive_t *> *ps, double acc) {
+srm::path_t::path_t(std::list<srm::primitive_t *> *ps) {
   if(ps == nullptr)
     throw std::exception("Incorrect pointer");
-
-  if (acc > 0)
-    accuracy = acc;
-  else
-    accuracy = 1;
 
   primitives = ps;
   primitive = nullptr;
@@ -60,6 +53,7 @@ std::vector<double> srm::path_t::GetNums(const char **strPtr) noexcept {
       // the sequence is not a number
       if (str == end) {
         state = srm::state_t::error;
+        srm::translator_t::GetPtr()->WriteLog("Warning: invalid symbol in attribute d in path");
         break;
       }
 
@@ -72,6 +66,7 @@ std::vector<double> srm::path_t::GetNums(const char **strPtr) noexcept {
       // wrong comma position
       if (state != srm::state_t::number) {
         state = srm::state_t::error;
+        srm::translator_t::GetPtr()->WriteLog("Warning: missing number before comma in attribute d in path");
         break;
       }
 
@@ -81,6 +76,7 @@ std::vector<double> srm::path_t::GetNums(const char **strPtr) noexcept {
     // non-convertible character reached
     else {
       state = srm::state_t::error;
+      srm::translator_t::GetPtr()->WriteLog("Warning: invalid symbol in attribute d in path");
       break;
     }
   }
@@ -114,6 +110,7 @@ void srm::path_t::PathMAbs(const std::vector<double> &nums) noexcept {
   }
   else {
     state = srm::state_t::error;
+    srm::translator_t::GetPtr()->WriteLog("Warning: wrong number of points in command M in attribute d in path");
     return;
   }
 
@@ -122,14 +119,14 @@ void srm::path_t::PathMAbs(const std::vector<double> &nums) noexcept {
     srm::vec_t cur(nums[counter], nums[counter + 1]);
     if ((cur - last).Len2() != 0) {
       last = cur;
-      srm::segment_t p(last.x, last.y);
-      primitive->push_back(p);
+      primitive->push_back(srm::segment_t(last.x, last.y));
     }
   }
 
   // handle the wrong number of arguments
   if (size - counter > 0) {
     state = srm::state_t::error;
+    srm::translator_t::GetPtr()->WriteLog("Warning: wrong number of points in command M in attribute d in path");
     return;
   }
 }
@@ -159,6 +156,7 @@ void srm::path_t::PathMRel(const std::vector<double> &nums) noexcept {
   }
   else {
     state = srm::state_t::error;
+    srm::translator_t::GetPtr()->WriteLog("Warning: wrong number of points in command m in attribute d in path");
     return;
   }
 
@@ -167,14 +165,14 @@ void srm::path_t::PathMRel(const std::vector<double> &nums) noexcept {
     srm::vec_t delta(nums[counter], nums[counter + 1]);
     if (delta.Len2() != 0) {
       last += delta;
-      srm::segment_t p(last.x, last.y);
-      primitive->push_back(p);
+      primitive->push_back(srm::segment_t(last.x, last.y));
     }
   }
 
   // handle the wrong number of arguments
   if (size - counter > 0) {
     state = srm::state_t::error;
+    srm::translator_t::GetPtr()->WriteLog("Warning: wrong number of points in command m in attribute d in path");
     return;
   }
 }
@@ -192,14 +190,14 @@ void srm::path_t::PathLAbs(const std::vector<double> &nums) noexcept {
     srm::vec_t cur(nums[counter], nums[counter + 1]);
     if ((cur - last).Len2() != 0) {
       last = cur;
-      srm::segment_t p(last.x, last.y);
-      primitive->push_back(p);
+      primitive->push_back(srm::segment_t(last.x, last.y));
     }
   }
 
   // handle the wrong number of arguments
   if (size - counter > 0) {
     state = srm::state_t::error;
+    srm::translator_t::GetPtr()->WriteLog("Warning: wrong number of points in command L in attribute d in path");
     return;
   }
 }
@@ -217,14 +215,14 @@ void srm::path_t::PathLRel(const std::vector<double> &nums) noexcept {
     srm::vec_t delta(nums[counter], nums[counter + 1]);
     if (delta.Len2() != 0) {
       last += delta;
-      srm::segment_t p(last.x, last.y);
-      primitive->push_back(p);
+      primitive->push_back(srm::segment_t(last.x, last.y));
     }
   }
 
   // handle the wrong number of arguments
   if (size - counter > 0) {
     state = srm::state_t::error;
+    srm::translator_t::GetPtr()->WriteLog("Warning: wrong number of points in command l in attribute d in path");
     return;
   }
 }
@@ -240,6 +238,7 @@ void srm::path_t::PathHAbs(const std::vector<double> &nums) noexcept {
   // handle the wrong number of arguments
   if(size == 0) {
     state = srm::state_t::error;
+    srm::translator_t::GetPtr()->WriteLog("Warning: wrong number of points in command H in attribute d in path");
     return;
   }
 
@@ -247,8 +246,7 @@ void srm::path_t::PathHAbs(const std::vector<double> &nums) noexcept {
   for (; size > counter; counter++) {
     if (nums[counter] != last.x) {
       last.x = nums[counter];
-      srm::segment_t p(last.x, last.y);
-      primitive->push_back(p);
+      primitive->push_back(srm::segment_t(last.x, last.y));
     }
   }
 }
@@ -264,6 +262,7 @@ void srm::path_t::PathHRel(const std::vector<double> &nums) noexcept {
   // handle the wrong number of arguments
   if (size == 0) {
     state = srm::state_t::error;
+    srm::translator_t::GetPtr()->WriteLog("Warning: wrong number of points in command h in attribute d in path");
     return;
   }
 
@@ -271,8 +270,7 @@ void srm::path_t::PathHRel(const std::vector<double> &nums) noexcept {
   for (; size > counter; counter++) {
     if (nums[counter] != 0) {
       last.x += nums[counter];
-      srm::segment_t p(last.x, last.y);
-      primitive->push_back(p);
+      primitive->push_back(srm::segment_t(last.x, last.y));
     }
   }
 }
@@ -288,6 +286,7 @@ void srm::path_t::PathVAbs(const std::vector<double> &nums) noexcept {
   // handle the wrong number of arguments
   if (size == 0) {
     state = srm::state_t::error;
+    srm::translator_t::GetPtr()->WriteLog("Warning: wrong number of points in command V in attribute d in path");
     return;
   }
 
@@ -295,8 +294,7 @@ void srm::path_t::PathVAbs(const std::vector<double> &nums) noexcept {
   for (; size > counter; counter++) {
     if (nums[counter] != last.y) {
       last.y = nums[counter];
-      srm::segment_t p(last.x, last.y);
-      primitive->push_back(p);
+      primitive->push_back(srm::segment_t(last.x, last.y));
     }
   }
 }
@@ -312,6 +310,7 @@ void srm::path_t::PathVRel(const std::vector<double> &nums) noexcept {
   // handle the wrong number of arguments
   if (size == 0) {
     state = srm::state_t::error;
+    srm::translator_t::GetPtr()->WriteLog("Warning: wrong number of points in command v in attribute d in path");
     return;
   }
 
@@ -319,8 +318,7 @@ void srm::path_t::PathVRel(const std::vector<double> &nums) noexcept {
   for (; size > counter; counter++) {
     if (nums[counter] != 0) {
       last.y += nums[counter];
-      srm::segment_t p(last.x, last.y);
-      primitive->push_back(p);
+      primitive->push_back(srm::segment_t(last.x, last.y));
     }
   }
 }
@@ -334,13 +332,13 @@ void srm::path_t::PathZ(const std::vector<double> &nums) noexcept {
   // add the subpath close line segments to a primitive
   if ((last - primitive->start).Len2() != 0) {
     last = primitive->start;
-    srm::segment_t p(last.x, last.y);
-    primitive->push_back(p);
+    primitive->push_back(srm::segment_t(last.x, last.y));
   }
 
   // handle the wrong number of arguments
   if (nums.size() != 0) {
     state = srm::state_t::error;
+    srm::translator_t::GetPtr()->WriteLog("Warning: wrong number of points in command Z/z in attribute d in path");
     return;
   }
 }
@@ -352,6 +350,7 @@ void srm::path_t::PathZ(const std::vector<double> &nums) noexcept {
 void srm::path_t::PathCAbs(const std::vector<double> &nums) noexcept {
   size_t counter = 0;
   size_t size = nums.size();
+  srm::translator_t* trans = srm::translator_t::GetPtr();
 
   for (; size - counter > 5; counter += 6) {
     build_bezier_t bezier;
@@ -368,18 +367,17 @@ void srm::path_t::PathCAbs(const std::vector<double> &nums) noexcept {
     bezier.push_back(last);
     if ((bezier[0] - bezier[1]).Len2() != 0 || (bezier[1] - bezier[2]).Len2() != 0 || (bezier[2] - bezier[3]).Len2() != 0) {
       std::vector<vec_t> res;
-      res = bezier.Sampling(accuracy);
+      res = bezier.Sampling(trans->roboConf.GetSvgAcc());
       // add a sequence of line segments to a primitive
-      for (auto& r : res) {
-        srm::segment_t p(r.x, r.y);
-        primitive->push_back(p);
-      }
+      for (auto& r : res)
+        primitive->push_back(srm::segment_t(r.x, r.y));
     }
   }
 
   // handle the wrong number of arguments
   if (size - counter > 0) {
     state = srm::state_t::error;
+    trans->WriteLog("Warning: wrong number of points in command C in attribute d in path");
     return;
   }
 }
@@ -391,6 +389,7 @@ void srm::path_t::PathCAbs(const std::vector<double> &nums) noexcept {
 void srm::path_t::PathCRel(const std::vector<double> &nums) noexcept {
   size_t counter = 0;
   size_t size = nums.size();
+  srm::translator_t* trans = srm::translator_t::GetPtr();
 
   for (; size - counter > 5; counter += 6) {
     build_bezier_t bezier;
@@ -407,18 +406,17 @@ void srm::path_t::PathCRel(const std::vector<double> &nums) noexcept {
     bezier.push_back(last);
     if ((bezier[0] - bezier[1]).Len2() != 0 || (bezier[1] - bezier[2]).Len2() != 0 || (bezier[2] - bezier[3]).Len2() != 0) {
       std::vector<vec_t> res;
-      res = bezier.Sampling(accuracy);
+      res = bezier.Sampling(trans->roboConf.GetSvgAcc());
       // add a sequence of line segments to a primitive
-      for (auto& r : res) {
-        srm::segment_t p(r.x, r.y);
-        primitive->push_back(p);
-      }
+      for (auto& r : res)
+        primitive->push_back(srm::segment_t(r.x, r.y));
     }
   }
 
   // handle the wrong number of arguments
   if (size - counter > 0) {
     state = srm::state_t::error;
+    trans->WriteLog("Warning: wrong number of points in command c in attribute d in path");
     return;
   }
 }
@@ -430,6 +428,7 @@ void srm::path_t::PathCRel(const std::vector<double> &nums) noexcept {
 void srm::path_t::PathQAbs(const std::vector<double> &nums) noexcept {
   size_t counter = 0;
   size_t size = nums.size();
+  srm::translator_t* trans = srm::translator_t::GetPtr();
 
   for (; size - counter > 3; counter += 4) {
     build_bezier_t bezier;
@@ -443,18 +442,17 @@ void srm::path_t::PathQAbs(const std::vector<double> &nums) noexcept {
     bezier.push_back(last);
     if ((bezier[0] - bezier[1]).Len2() != 0 || (bezier[1] - bezier[2]).Len2() != 0) {
       std::vector<vec_t> res;
-      res = bezier.Sampling(accuracy);
+      res = bezier.Sampling(trans->roboConf.GetSvgAcc());
       // add a sequence of line segments to a primitive
-      for (auto& r : res) {
-        srm::segment_t p(r.x, r.y);
-        primitive->push_back(p);
-      }
+      for (auto& r : res)
+        primitive->push_back(srm::segment_t(r.x, r.y));
     }
   }
   
   // handle the wrong number of arguments
   if (size - counter > 0) {
     state = srm::state_t::error;
+    trans->WriteLog("Warning: wrong number of points in command Q in attribute d in path");
     return;
   }
 }
@@ -466,6 +464,7 @@ void srm::path_t::PathQAbs(const std::vector<double> &nums) noexcept {
 void srm::path_t::PathQRel(const std::vector<double> &nums) noexcept {
   size_t counter = 0;
   size_t size = nums.size();
+  srm::translator_t* trans = srm::translator_t::GetPtr();
 
   for (; size - counter > 3; counter += 4) {
     build_bezier_t bezier;
@@ -479,18 +478,17 @@ void srm::path_t::PathQRel(const std::vector<double> &nums) noexcept {
     bezier.push_back(last);
     if ((bezier[0] - bezier[1]).Len2() != 0 || (bezier[1] - bezier[2]).Len2() != 0) {
       std::vector<vec_t> res;
-      res = bezier.Sampling(accuracy);
+      res = bezier.Sampling(trans->roboConf.GetSvgAcc());
       // add a sequence of line segments to a primitive
-      for (auto& r : res) {
-        srm::segment_t p(r.x, r.y);
-        primitive->push_back(p);
-      }
+      for (auto& r : res)
+        primitive->push_back(srm::segment_t(r.x, r.y));
     }
   }
 
   // handle the wrong number of arguments
   if (size - counter > 0) {
     state = srm::state_t::error;
+    trans->WriteLog("Warning: wrong number of points in command q in attribute d in path");
     return;
   }
 }
@@ -502,6 +500,7 @@ void srm::path_t::PathQRel(const std::vector<double> &nums) noexcept {
 void srm::path_t::PathSAbs(const std::vector<double> &nums) noexcept {
   size_t counter = 0;
   size_t size = nums.size();
+  srm::translator_t* trans = srm::translator_t::GetPtr();
 
   for (; size - counter > 3; counter += 4) {
     build_bezier_t bezier;
@@ -523,18 +522,17 @@ void srm::path_t::PathSAbs(const std::vector<double> &nums) noexcept {
     bezier.push_back(last);
     if ((bezier[0] - bezier[1]).Len2() != 0 || (bezier[1] - bezier[2]).Len2() != 0 || (bezier[2] - bezier[3]).Len2() != 0) {
       std::vector<vec_t> res;
-      res = bezier.Sampling(accuracy);
+      res = bezier.Sampling(trans->roboConf.GetSvgAcc());
       // add a sequence of line segments to a primitive
-      for (auto& r : res) {
-        srm::segment_t p(r.x, r.y);
-        primitive->push_back(p);
-      }
+      for (auto& r : res)
+        primitive->push_back(srm::segment_t(r.x, r.y));
     }
   }
 
   // handle the wrong number of arguments
   if (size - counter > 0) {
     state = srm::state_t::error;
+    trans->WriteLog("Warning: wrong number of points in command S in attribute d in path");
     return;
   }
 }
@@ -546,6 +544,7 @@ void srm::path_t::PathSAbs(const std::vector<double> &nums) noexcept {
 void srm::path_t::PathSRel(const std::vector<double> &nums) noexcept {
   size_t counter = 0;
   size_t size = nums.size();
+  srm::translator_t* trans = srm::translator_t::GetPtr();
 
   for (; size - counter > 3; counter += 4) {
     build_bezier_t bezier;
@@ -567,18 +566,17 @@ void srm::path_t::PathSRel(const std::vector<double> &nums) noexcept {
     bezier.push_back(last);
     if ((bezier[0] - bezier[1]).Len2() != 0 || (bezier[1] - bezier[2]).Len2() != 0 || (bezier[2] - bezier[3]).Len2() != 0) {
       std::vector<vec_t> res;
-      res = bezier.Sampling(accuracy);
+      res = bezier.Sampling(trans->roboConf.GetSvgAcc());
       // add a sequence of line segments to a primitive
-      for (auto& r : res) {
-        srm::segment_t p(r.x, r.y);
-        primitive->push_back(p);
-      }
+      for (auto& r : res)
+        primitive->push_back(srm::segment_t(r.x, r.y));
     }
   }
 
   // handle the wrong number of arguments
   if (size - counter > 0) {
     state = srm::state_t::error;
+    trans->WriteLog("Warning: wrong number of points in command s in attribute d in path");
     return;
   }
 }
@@ -590,6 +588,7 @@ void srm::path_t::PathSRel(const std::vector<double> &nums) noexcept {
 void srm::path_t::PathTAbs(const std::vector<double> &nums) noexcept {
   size_t counter = 0;
   size_t size = nums.size();
+  srm::translator_t* trans = srm::translator_t::GetPtr();
 
   for (; size - counter > 1; counter += 2) {
     build_bezier_t bezier;
@@ -608,18 +607,17 @@ void srm::path_t::PathTAbs(const std::vector<double> &nums) noexcept {
     bezier.push_back(last);
     if ((bezier[0] - bezier[1]).Len2() != 0 || (bezier[1] - bezier[2]).Len2() != 0) {
       std::vector<vec_t> res;
-      res = bezier.Sampling(accuracy);
+      res = bezier.Sampling(trans->roboConf.GetSvgAcc());
       // add a sequence of line segments to a primitive
-      for (auto& r : res) {
-        srm::segment_t p(r.x, r.y);
-        primitive->push_back(p);
-      }
+      for (auto& r : res)
+        primitive->push_back(srm::segment_t(r.x, r.y));
     }
   }
  
   // handle the wrong number of arguments
   if (size - counter > 0) {
     state = srm::state_t::error;
+    trans->WriteLog("Warning: wrong number of points in command T in attribute d in path");
     return;
   }
 }
@@ -631,6 +629,7 @@ void srm::path_t::PathTAbs(const std::vector<double> &nums) noexcept {
 void srm::path_t::PathTRel(const std::vector<double> &nums) noexcept {
   size_t counter = 0;
   size_t size = nums.size();
+  srm::translator_t* trans = srm::translator_t::GetPtr();
 
   for (; size - counter > 1; counter += 2) {
     build_bezier_t bezier;
@@ -649,18 +648,17 @@ void srm::path_t::PathTRel(const std::vector<double> &nums) noexcept {
     bezier.push_back(last);
     if ((bezier[0] - bezier[1]).Len2() != 0 || (bezier[1] - bezier[2]).Len2() != 0) {
       std::vector<vec_t> res;
-      res = bezier.Sampling(accuracy);
+      res = bezier.Sampling(trans->roboConf.GetSvgAcc());
       // add a sequence of line segments to a primitive
-      for (auto& r : res) {
-        srm::segment_t p(r.x, r.y);
-        primitive->push_back(p);
-      }
+      for (auto& r : res)
+        primitive->push_back(srm::segment_t(r.x, r.y));
     }
   }
 
   // handle the wrong number of arguments
   if (size - counter > 0) {
     state = srm::state_t::error;
+    trans->WriteLog("Warning: wrong number of points in command t in attribute d in path");
     return;
   }
 }
@@ -669,16 +667,98 @@ void srm::path_t::PathTRel(const std::vector<double> &nums) noexcept {
  * Processes the elliptical arc command with absolute coordinates as arguments ("A")
  * @param[in] nums vector of numeric command arguments
  */
-void PathAAbs(const std::vector<double> &nums) noexcept {
-  //TODO
+void srm::path_t::PathAAbs(const std::vector<double> &nums) noexcept {
+  size_t counter = 0;
+  size_t size = nums.size();
+  srm::translator_t* trans = srm::translator_t::GetPtr();
+
+  for (; size - counter > 6; counter += 7) {
+    double phi = nums[counter + 2] / 180 * pi, fA = nums[counter + 3], fS = nums[counter + 4];
+    // check flags
+    if (fA != 0 && fA != 1) {
+      state = srm::state_t::error;
+      trans->WriteLog("Warning: invalid flag fA in command A in attribute d in path");
+      return;
+    }
+    if (fS != 0 && fS != 1) {
+      state = srm::state_t::error;
+      trans->WriteLog("Warning: invalid flag fS in command A in attribute d in path");
+      return;
+    }
+
+    srm::vec_t radiuses(fabs(nums[counter]), fabs(nums[counter + 1])), cur(nums[counter + 5], nums[counter + 6]);
+    if ((cur - last).Len2() != 0) {
+      // check radiuses
+      if (radiuses.x == 0 || radiuses.y == 0) {
+        last = cur;
+        primitive->push_back(srm::segment_t(last.x, last.y));
+      }
+      else {
+        std::vector<vec_t> res;
+        res = EllipseArcSampling(last, cur, radiuses, fA, fS, phi, trans->roboConf.GetSvgAcc());
+        last = cur;
+        // add a sequence of line segments to a primitive
+        for (auto& r : res)
+          primitive->push_back(srm::segment_t(r.x, r.y));
+      }
+    }
+  }
+
+  // handle the wrong number of arguments
+  if (size - counter > 0) {
+    state = srm::state_t::error;
+    trans->WriteLog("Warning: wrong number of parameters in command A in attribute d in path");
+    return;
+  }
 }
 
 /**
  * Processes the elliptical arc command with relative coordinates as arguments ("a")
  * @param[in] nums vector of numeric command arguments
  */
-void PathARel(const std::vector<double> &nums) noexcept {
-  //TODO
+void srm::path_t::PathARel(const std::vector<double> &nums) noexcept {
+  size_t counter = 0;
+  size_t size = nums.size();
+  srm::translator_t* trans = srm::translator_t::GetPtr();
+
+  for (; size - counter > 6; counter += 7) {
+    double phi = nums[counter + 2] / 180 * pi, fA = nums[counter + 3], fS = nums[counter + 4];
+    // check flags
+    if (fA != 0 && fA != 1) {
+      state = srm::state_t::error;
+      trans->WriteLog("Warning: invalid flag fA in command a in attribute d in path");
+      return;
+    }
+    if (fS != 0 && fS != 1) {
+      state = srm::state_t::error;
+      trans->WriteLog("Warning: invalid flag fS in command a in attribute d in path");
+      return;
+    }
+
+    srm::vec_t radiuses(fabs(nums[counter]), fabs(nums[counter + 1])), delta(nums[counter + 5], nums[counter + 6]);
+    if (delta.Len2() != 0) {
+      // check radiuses
+      if (radiuses.x == 0 || radiuses.y == 0) {
+        last += delta;
+        primitive->push_back(srm::segment_t(last.x, last.y));
+      }
+      else {
+        std::vector<vec_t> res;
+        res = EllipseArcSampling(last, last + delta, radiuses, fA, fS, phi, trans->roboConf.GetSvgAcc());
+        last += delta;
+        // add a sequence of line segments to a primitive
+        for (auto& r : res)
+          primitive->push_back(srm::segment_t(r.x, r.y));
+      }
+    }
+  }
+
+  // handle the wrong number of arguments
+  if (size - counter > 0) {
+    state = srm::state_t::error;
+    trans->WriteLog("Warning: wrong number of parameters in command a in attribute d in path");
+    return;
+  }
 }
 
 /**
@@ -702,6 +782,7 @@ void srm::path_t::ParsePath(const rapidxml::xml_node<> *tag) noexcept {
         // wrong start of path string
         if (command != 'm' && command != 'M') {
           state = srm::state_t::error;
+          srm::translator_t::GetPtr()->WriteLog("Warning: wrong first command in attribute d in path");
           break;
         }
       }
@@ -761,8 +842,15 @@ void srm::path_t::ParsePath(const rapidxml::xml_node<> *tag) noexcept {
         case 't':
           this->PathTRel(nums);
           break;
+        case 'A':
+          this->PathAAbs(nums);
+          break;
+        case 'a':
+          this->PathARel(nums);
+          break;
         default:
           state = srm::state_t::error;
+          srm::translator_t::GetPtr()->WriteLog("Warning: invalid symbol in attribute d in path");
           break;
       }
 
@@ -776,6 +864,7 @@ void srm::path_t::ParsePath(const rapidxml::xml_node<> *tag) noexcept {
     // unhandled character
     else {
       state = srm::state_t::error;
+      srm::translator_t::GetPtr()->WriteLog("Warning: invalid symbol in attribute d in path");
       break;
     }
   }
