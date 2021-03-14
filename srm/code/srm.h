@@ -2,7 +2,7 @@
  * @file
  * @brief Precompiled header
  * @authors Vorotnikov Andrey
- * @date 13.03.2021
+ * @date 14.03.2021
  *
  * Contains includes of header file to accelerate compilation
  */
@@ -19,6 +19,7 @@
 #include "converter/translator.h"
 #include "converter/rapidxml.hpp"
 #include "converter/primitive/primitive.h"
+#include "converter/split_primitives/split_prims.h"
 #include "converter/tags_translator/tags_translator.h"
 #include "converter/tags_translator/path/path.h"
 #include "converter/tags_translator/path/bezier/bezier.h"

@@ -26,13 +26,14 @@ namespace srm {
      */
     struct robot_file_t {
       std::pair<bool, srm::vec3_t>
-        p1,           ///< main board point
-        p2,           ///< ort i board point
-        p3;           ///< ort j board point
+        p1,                                      ///< main board point
+        p2,                                      ///< ort i board point
+        p3;                                      ///< ort j board point
       std::pair<bool, double>
-        dist,         ///< distance of departure
-        accuracy,     ///< robot accuracy
-        pouringStep;  ///< step for pouring
+        dist,                                    ///< distance of departure
+        accuracy,                                ///< robot accuracy
+        pouringStep;                             ///< step for pouring
+      std::pair<bool, std::string> programName;  ///< name of program
     };
 
     /**
@@ -137,6 +138,15 @@ void srm::robot_conf_t::LoadConf(const std::string &confFileName) {
     std::istream_iterator<std::string> iter(strStream), eos;
     std::copy(iter, eos, std::back_inserter(splitedLine));
 
+    if (splitedLine.size() > 0 && splitedLine[0] == "name") {
+      if (splitedLine.size() != 2)
+        throw std::exception((std::string("Incorrect number of parameters in '") + splitedLine[0] + "' in line #" + std::to_string(lineNum)).c_str());
+
+      roboFile.programName.first = true;
+      roboFile.programName.second = splitedLine[1];
+      continue;
+    }
+
     auto lineStruct = s_Lines.find(splitedLine[0]);
     if (lineStruct == s_Lines.end())
       continue;
@@ -154,19 +164,21 @@ void srm::robot_conf_t::LoadConf(const std::string &confFileName) {
     lineStruct->second.func(&roboFile, args);
   }
   if (!roboFile.p1.first || !roboFile.p2.first || !roboFile.p3.first ||
-    !roboFile.dist.first || !roboFile.accuracy.first || !roboFile.pouringStep.first)
+    !roboFile.dist.first || !roboFile.accuracy.first || !roboFile.pouringStep.first ||
+    !roboFile.programName.first)
     throw std::exception("Not enough lines");
   SetPlane(roboFile.p1.second, roboFile.p2.second, roboFile.p3.second);
   dist = roboFile.dist.second;
   accuracy = roboFile.accuracy.second;
   pouringStep = roboFile.pouringStep.second;
+  programName = roboFile.programName.second;
 }
 
 /**
  * Get departure distance function.
  * @return distance of departure
  */
-double srm::robot_conf_t::GetDepDist(void) {
+double srm::robot_conf_t::GetDepDist(void) const noexcept {
   return dist;
 }
 
@@ -174,7 +186,7 @@ double srm::robot_conf_t::GetDepDist(void) {
  * Get robot accuracy function.
  * @return robot accuracy
  */
-double srm::robot_conf_t::GetRoboAcc(void) {
+double srm::robot_conf_t::GetRoboAcc(void) const noexcept {
   return accuracy;
 }
 
@@ -182,7 +194,7 @@ double srm::robot_conf_t::GetRoboAcc(void) {
  * Get accuracy in svg cs function.
  * @return svg accuracy
  */
-double srm::robot_conf_t::GetSvgAcc(void) {
+double srm::robot_conf_t::GetSvgAcc(void) const noexcept {
   return SvgToRobotAcc(accuracy);
 }
 
@@ -190,6 +202,14 @@ double srm::robot_conf_t::GetSvgAcc(void) {
  * Get pouring step value function.
  * @return pouring step
  */
-double srm::robot_conf_t::GetPouringStep(void) {
+double srm::robot_conf_t::GetPouringStep(void) const noexcept {
   return pouringStep;
+}
+
+/**
+ * Get program name function.
+ * @return string wirh program name
+ */
+std::string srm::robot_conf_t::GetProgramName(void) const noexcept {
+  return programName;
 }

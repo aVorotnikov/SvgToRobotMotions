@@ -4,3 +4,4 @@ p3 0 0 0.1
 dist 5
 accu 1
 step 1
+name TestProgram

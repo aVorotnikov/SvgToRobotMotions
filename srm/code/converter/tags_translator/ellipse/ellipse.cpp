@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief ellipse and arcs sampling functions source file
- * @authors Vorotnikov Andrey
- * @date 13.03.2021
+ * @authors Vorotnikov Andrey, Chevykalov Grigory
+ * @date 14.03.2021
  *
  * Contains ellipse and arcs sampling functions realisation
  */
@@ -66,6 +66,9 @@ std::vector<srm::vec_t> srm::EllipseArcSampling(vec_t p1, vec_t p2, vec_t radius
   vec_t delta2 = (p1 - p2) / 2;
   double si = sin(phi), co = cos(phi);
   vec_t p1s = vec_t(co * delta2.x + si * delta2.y, -si * delta2.x + co * delta2.y);
+  double lambda = p1s.x * p1s.x / (radiuses.x * radiuses.x) + p1s.y * p1s.y / (radiuses.y * radiuses.y);
+  if (lambda > 1)
+    radiuses *= sqrt(lambda);
   double
     tmp = radiuses.x * radiuses.x * p1s.y * p1s.y + radiuses.y * radiuses.y * p1s.x * p1s.x,
     muler = sqrt((radiuses.x * radiuses.x * radiuses.y * radiuses.y - tmp) / tmp);
