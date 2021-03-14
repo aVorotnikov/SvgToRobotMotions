@@ -96,33 +96,28 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
   std::list<srm::primitive_t *> primitives;
   try {
     TagsToPrimitives(tags, &primitives);
+    SplitPrimitives(&primitives);
   }
   catch (std::exception e) {
     throw e;
   }
   
-  vec3_t p1(0, 0, 1), p2(1, 0, 1), p3(0, 0, 0); // ! only for check base_t.GenCode !
-  cs_t cs(100, 100, p1, p2, p3); // ! only for check base_t.GenCode !
-
   std::ofstream fout(codeFileName);
   if (!fout.is_open()) {
-    for (auto primitive : primitives) {
+    for (auto primitive : primitives)
       delete primitive;
-    }
     throw std::exception("Failed to open or create output file");
   }
 
   // NOT REAL PROGRAM, JUST TEST
   fout << ".PROGRAM " << roboConf.GetProgramName() << "()" <<std::endl;
   
-  for (auto primitive : primitives) {
+  for (auto primitive : primitives)
     fout << *primitive << ";\n";
-  }
   fout << ".END";
 
-  for (auto primitive : primitives) {
+  for (auto primitive : primitives)
     delete primitive;
-  }
 }
 
 /**
