@@ -73,9 +73,10 @@ void srm::translator_t::SetSvg(const std::string &svgFileName) {
  * @param[out] tags pointer to list of pointers to tags
  * @see GenCode
  */
-static void _getTags(rapidxml::xml_node<> *node, std::list<rapidxml::xml_node<> *> *tags) noexcept {
+static void _getTags(rapidxml::xml_node<> *node, std::list<srm::tag_t *> *tags) noexcept {
   while (node) {
-    tags->push_back(node);
+    srm::tag_t *tag = new srm::tag_t(node);
+    tags->push_back(tag);
     _getTags(node->first_node(), tags);
     node = node->next_sibling();
   }
@@ -90,34 +91,34 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
   if (!xmlTree.first_node()) {
     throw std::exception("Svg file is not set or empty");
   }
-  std::list<rapidxml::xml_node<> *> tags;
+  std::list<srm::tag_t *> tags;
   _getTags(xmlTree.first_node(), &tags);
   
   std::list<srm::primitive_t *> primitives;
-  try {
-    TagsToPrimitives(tags, &primitives);
-    SplitPrimitives(&primitives);
+  srm::TagsToPrimitives(tags, &primitives);
+
+  for (auto tag : tags) {
+    delete tag;
   }
-  catch (std::exception e) {
-    throw e;
-  }
-  
+
   std::ofstream fout(codeFileName);
   if (!fout.is_open()) {
-    for (auto primitive : primitives)
+    for (auto primitive : primitives) {
       delete primitive;
+    }
     throw std::exception("Failed to open or create output file");
   }
 
-  // NOT REAL PROGRAM, JUST TEST
-  fout << ".PROGRAM " << roboConf.GetProgramName() << "()" <<std::endl;
+  fout << ".PROGRAM " << codeFileName  << "()" <<std::endl;
   
-  for (auto primitive : primitives)
+  for (auto primitive : primitives) {
     fout << *primitive << ";\n";
+  }
   fout << ".END";
 
-  for (auto primitive : primitives)
+  for (auto primitive : primitives) {
     delete primitive;
+  }
 }
 
 /**
