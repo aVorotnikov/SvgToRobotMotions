@@ -10,6 +10,7 @@
 #include <srm.h>
 
 #include <cmath>
+#include <sstream>
 
 /**
  * Transform primitive by attribute transform
@@ -24,8 +25,43 @@ static void _transformPrimitive(srm::primitive_t *primitive) {
  * @param[in] tag pointer to polyline node in xml DOM
  * @param[out] polylinePrimitive the primitive representations of polyline
  */
-static void _polylineToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *polylinePrimitive) {
-  // TODO: realise _polylineToPrimitive
+static void _polylineToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *polylinePrimitive) noexcept {
+  srm::translator_t *trans = srm::translator_t::GetPtr();
+  
+  if (!tag->last_attribute("points")) {
+    trans->WriteLog("Warning: attribute points in polyline is not set");
+    return;
+  }
+
+  std::string points(tag->last_attribute("points")->value());
+  for (auto &sym : points) {
+    if (!isdigit(sym) && sym != ',' && sym != ' ') {
+      trans->WriteLog("Warning: invalid symbol in attribute points in polyline");
+      return;
+    }
+    if (sym == ',') {
+      sym = ' ';
+    }
+  }
+  std::istringstream iss(points);
+  double x, y;
+  iss >> x >> y;
+  if (iss.fail()) {
+    trans->WriteLog("Warning: wrong start point in attribute points in polyline");
+    return;
+  }
+  polylinePrimitive->start.x = x;
+  polylinePrimitive->start.y = y;
+  while (!iss.eof()) {
+    iss >> x >> y;
+    if (!iss.fail()) {
+      polylinePrimitive->push_back(srm::segment_t(x, y));
+    }
+    else {
+      trans->WriteLog("Warning: wrong number of points in attribute points in polyline");
+      return;
+    }
+  }
 }
 
 /**
@@ -33,8 +69,44 @@ static void _polylineToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive
  * @param[in] tag pointer to polygon node in xml DOM
  * @param[out] polygonPrimitive the primitive representations of polygon
  */
-static void _polygonToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *polygonPrimitive) {
-  // TODO: realise _polygonToPrimitive
+static void _polygonToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *polygonPrimitive) noexcept {
+  srm::translator_t* trans = srm::translator_t::GetPtr();
+
+  if (!tag->last_attribute("points")) {
+    trans->WriteLog("Warning: attribute points in polygon is not set");
+    return;
+  }
+
+  std::string points(tag->last_attribute("points")->value());
+  for (auto& sym : points) {
+    if (!isdigit(sym) && sym != ',' && sym != ' ') {
+      trans->WriteLog("Warning: invalid symbol in attribute points in polygon");
+      return;
+    }
+    if (sym == ',') {
+      sym = ' ';
+    }
+  }
+  std::istringstream iss(points);
+  double x, y;
+  iss >> x >> y;
+  if (iss.fail()) {
+    trans->WriteLog("Warning: wrong start point in attribute points in polygon");
+    return;
+  }
+  polygonPrimitive->start.x = x;
+  polygonPrimitive->start.y = y;
+  while (!iss.eof()) {
+    iss >> x >> y;
+    if (!iss.fail()) {
+      polygonPrimitive->push_back(srm::segment_t(x, y));
+    }
+    else {
+      trans->WriteLog("Warning: wrong number of points in attribute points in polygon");
+      return;
+    }
+  }
+  polygonPrimitive->push_back(srm::segment_t(polygonPrimitive->start.x, polygonPrimitive->start.y));
 }
 
  /**
