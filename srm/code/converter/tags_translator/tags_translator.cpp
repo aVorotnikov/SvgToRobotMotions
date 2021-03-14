@@ -540,40 +540,40 @@ static void _processSvgParams(const rapidxml::xml_node<> *tag) noexcept {
  * @param[in] tags the list of tags in DOM
  * @param[out] primitives the list of primitive representations of tags
  */
-void srm::TagsToPrimitives(const std::list<rapidxml::xml_node<>*> &tags, std::list<srm::primitive_t*> *primitives) noexcept {
+void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::primitive_t*> *primitives) noexcept {
   std::string tagName;
   for (auto tag : tags) {
-    tagName.assign(tag->name(), tag->name_size());
+    tagName.assign(tag->node->name(), tag->node->name_size());
 
     if (tagName == "svg") {
-      _processSvgParams(tag);
+      _processSvgParams(tag->node);
     }
     else if (tagName == "g") {
       // TODO: realise group processing
     }
     else if (tagName == "path") {
       srm::path_t path(primitives);
-      path.ParsePath(tag);
+      path.ParsePath(tag->node);
     }
     else {
       srm::primitive_t *primitive = new srm::primitive_t();
       if (tagName == "rect") {
-        _rectToPrimitive(tag, primitive);
+        _rectToPrimitive(tag->node, primitive);
       }
       else if (tagName == "circle") {
-        _circleToPrimitive(tag, primitive);
+        _circleToPrimitive(tag->node, primitive);
       }
       else if (tagName == "ellipse") {
-        _ellipseToPrimitive(tag, primitive);
+        _ellipseToPrimitive(tag->node, primitive);
       }
       else if (tagName == "line") {
-        _lineToPrimitive(tag, primitive);
+        _lineToPrimitive(tag->node, primitive);
       }
       else if (tagName == "polyline") {
-        _polylineToPrimitive(tag, primitive);
+        _polylineToPrimitive(tag->node, primitive);
       }
       else if (tagName == "polygon") {
-        _polygonToPrimitive(tag, primitive);
+        _polygonToPrimitive(tag->node, primitive);
       }
       else if (tagName == "text") {
         // TODO: realise text processing

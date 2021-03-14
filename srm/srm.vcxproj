@@ -26,6 +26,7 @@
     <ClCompile Include="code\converter\tags_translator\path\path.cpp" />
     <ClCompile Include="code\converter\tags_translator\tags_translator.cpp" />
     <ClCompile Include="code\converter\primitive\primitive.cpp" />
+    <ClCompile Include="code\converter\tags_translator\tag\tag.cpp" />
     <ClCompile Include="code\converter\translator.cpp" />
     <ClCompile Include="code\main.cpp" />
   </ItemGroup>
@@ -35,11 +36,11 @@
     <ClInclude Include="code\converter\tags_translator\ellipse\ellipse.h" />
     <ClInclude Include="code\converter\tags_translator\path\bezier\bezier.h" />
     <ClInclude Include="code\converter\defs.h" />
-    <ClInclude Include="code\converter\tags_translator\tag\tag.h" />
     <ClInclude Include="code\converter\tags_translator\path\path.h" />
     <ClInclude Include="code\converter\tags_translator\tags_translator.h" />
     <ClInclude Include="code\converter\primitive\primitive.h" />
     <ClInclude Include="code\converter\rapidxml.hpp" />
+    <ClInclude Include="code\converter\tags_translator\tag\tag.h" />
     <ClInclude Include="code\converter\translator.h" />
     <ClInclude Include="code\math\matr2.h" />
     <ClInclude Include="code\math\vector2.h" />

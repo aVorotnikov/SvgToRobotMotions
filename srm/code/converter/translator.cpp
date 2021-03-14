@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class source file
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 13.03.2021
+ * @date 14.03.2021
  *
  * Contains main converter class realisatiion
  */
@@ -73,9 +73,10 @@ void srm::translator_t::SetSvg(const std::string &svgFileName) {
  * @param[out] tags pointer to list of pointers to tags
  * @see GenCode
  */
-static void _getTags(rapidxml::xml_node<> *node, std::list<rapidxml::xml_node<> *> *tags) noexcept {
+static void _getTags(rapidxml::xml_node<> *node, std::list<srm::tag_t *> *tags) noexcept {
   while (node) {
-    tags->push_back(node);
+    srm::tag_t *tag = new srm::tag_t(node);
+    tags->push_back(tag);
     _getTags(node->first_node(), tags);
     node = node->next_sibling();
   }
@@ -90,19 +91,15 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
   if (!xmlTree.first_node()) {
     throw std::exception("Svg file is not set or empty");
   }
-  std::list<rapidxml::xml_node<> *> tags;
+  std::list<srm::tag_t *> tags;
   _getTags(xmlTree.first_node(), &tags);
   
   std::list<srm::primitive_t *> primitives;
-  try {
-    TagsToPrimitives(tags, &primitives);
+  srm::TagsToPrimitives(tags, &primitives);
+
+  for (auto tag : tags) {
+    delete tag;
   }
-  catch (std::exception e) {
-    throw e;
-  }
-  
-  vec3_t p1(0, 0, 1), p2(1, 0, 1), p3(0, 0, 0); // ! only for check base_t.GenCode !
-  cs_t cs(100, 100, p1, p2, p3); // ! only for check base_t.GenCode !
 
   std::ofstream fout(codeFileName);
   if (!fout.is_open()) {
@@ -112,7 +109,6 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
     throw std::exception("Failed to open or create output file");
   }
 
-  // NOT REAL PROGRAM, JUST TEST
   fout << ".PROGRAM " << codeFileName  << "()" <<std::endl;
   
   for (auto primitive : primitives) {

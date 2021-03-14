@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief Precompiled header
- * @authors Vorotnikov Andrey
- * @date 13.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya
+ * @date 14.03.2021
  *
  * Contains includes of header file to accelerate compilation
  */
