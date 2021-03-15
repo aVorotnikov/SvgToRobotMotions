@@ -120,11 +120,15 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
   }
 
   fout << ".PROGRAM " << codeFileName  << "()" <<std::endl;
-  
-  for (auto primitive : primitives) {
+  fout << "\tHERE .#start" << std::endl;
+  fout << "\tACCURACY " << roboConf.GetRoboAcc() << std::endl;
+
+  for (auto primitive : primitives)
     fout << *primitive << ";\n";
-  }
+
+  fout << "\tJMOVE .#start" << std::endl;
   fout << ".END";
+
 
   for (auto primitive : primitives) {
     delete primitive;
