@@ -2,7 +2,7 @@
  * @file
  * @brief Precompiled header
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 14.03.2021
+ * @date 15.03.2021
  *
  * Contains includes of header file to accelerate compilation
  */
@@ -25,7 +25,9 @@
 #include "converter/tags_translator/path/path.h"
 #include "converter/tags_translator/path/bezier/bezier.h"
 #include "converter/tags_translator/ellipse/ellipse.h"
+#include "converter/tags_translator/transform/transform.h"
 #include "converter/robot_conf/robot_conf.h"
 #include "converter/robot_conf/cs/cs.h"
+#include "converter/split_primitives/split_prims.h"
 
 #endif /* __SRM_H_INCLUDED */
