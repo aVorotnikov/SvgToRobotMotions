@@ -98,37 +98,37 @@ static void _getTags(rapidxml::xml_node<> *node, std::list<srm::tag_t *> *tags, 
  * @see SetSvg
  */
 void srm::translator_t::GenCode(const std::string &codeFileName) const {
-  if (!xmlTree.first_node()) {
+  if (!xmlTree.first_node())
     throw std::exception("Svg file is not set or empty");
-  }
   std::list<srm::tag_t *> tags;
   _getTags(xmlTree.first_node(), &tags, 0);
   
   std::list<srm::primitive_t *> primitives;
   srm::TagsToPrimitives(tags, &primitives);
 
-  for (auto tag : tags) {
+  for (auto tag : tags)
     delete tag;
-  }
 
   std::ofstream fout(codeFileName);
   if (!fout.is_open()) {
-    for (auto primitive : primitives) {
+    for (auto primitive : primitives)
       delete primitive;
-    }
     throw std::exception("Failed to open or create output file");
   }
 
-  fout << ".PROGRAM " << codeFileName  << "()" <<std::endl;
-  
-  for (auto primitive : primitives) {
+  fout << ".PROGRAM " << roboConf.GetProgramName()  << "()" <<std::endl;
+  fout << "\tHERE .#start" << std::endl;
+  fout << "\tACCURACY " << roboConf.GetRoboAcc() << std::endl;
+
+  for (auto primitive : primitives)
     fout << *primitive << ";\n";
-  }
+
+  fout << "\tJMOVE .#start" << std::endl;
   fout << ".END";
 
-  for (auto primitive : primitives) {
+
+  for (auto primitive : primitives)
     delete primitive;
-  }
 }
 
 /**
