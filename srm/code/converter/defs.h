@@ -14,6 +14,7 @@
 
 #include "../math/vector2.h"
 #include "../math/vector3.h"
+#include "../math/matr2.h"
 
 /** Project namespace */
 namespace srm {

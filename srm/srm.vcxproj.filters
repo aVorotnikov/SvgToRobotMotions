@@ -49,6 +49,9 @@
     <Filter Include="Исходные файлы\Converter\Tags translator\Transform">
       <UniqueIdentifier>{c8254ca6-b23c-4db0-9b9f-f667a6e25b90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Converter\Split primitives">
+      <UniqueIdentifier>{212afd96-8eab-46cc-926f-09fe6c133f45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -81,11 +84,11 @@
     <ClCompile Include="code\converter\tags_translator\tag\tag.cpp">
       <Filter>Исходные файлы\Converter\Tags translator\Tag</Filter>
     </ClCompile>
-    <ClCompile Include="code\converter\split_primitives\split_prims.cpp">
-      <Filter>Исходные файлы\Converter</Filter>
-    </ClCompile>
     <ClCompile Include="code\converter\tags_translator\transform\transform.cpp">
       <Filter>Исходные файлы\Converter\Tags translator\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\split_primitives\split_prims.cpp">
+      <Filter>Исходные файлы\Converter\Split primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,11 +137,11 @@
     <ClInclude Include="code\converter\tags_translator\tag\tag.h">
       <Filter>Исходные файлы\Converter\Tags translator\Tag</Filter>
     </ClInclude>
-    <ClInclude Include="code\converter\split_primitives\split_prims.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="code\converter\tags_translator\transform\transform.h">
       <Filter>Исходные файлы\Converter\Tags translator\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\split_primitives\split_prims.h">
+      <Filter>Исходные файлы\Converter\Split primitives</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
