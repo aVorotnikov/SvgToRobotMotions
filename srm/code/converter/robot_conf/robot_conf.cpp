@@ -30,6 +30,7 @@ namespace srm {
         p2,                                      ///< ort i board point
         p3;                                      ///< ort j board point
       std::pair<bool, double>
+        speed,                                   ///< speed of robot moving
         dist,                                    ///< distance of departure
         accuracy,                                ///< robot accuracy
         pouringStep;                             ///< step for pouring
@@ -99,6 +100,16 @@ static void _accuFunc(srm::rcf::robot_file_t *rConf, const std::vector<double> &
 }
 
 /**
+ * speed command parser function
+ * @param[out] rConf robot configuration file variable
+ * @param[in] params line param
+ */
+static void _speedFunc(srm::rcf::robot_file_t* rConf, const std::vector<double>& params) {
+  rConf->speed.first = true;
+  rConf->speed.second = params[0];
+}
+
+/**
  * step command parser function
  * @param[out] rConf robot configuration file variable
  * @param[in] params line param
@@ -112,6 +123,7 @@ static std::map<const std::string, srm::rcf::line_t> s_Lines = {
   {"p1", {_p1Func, 3}},
   {"p2", {_p2Func, 3}},
   {"p3", {_p3Func, 3}},
+  {"speed", {_speedFunc, 1}},
   {"dist", {_distFunc, 1}},
   {"accu", {_accuFunc, 1}},
   {"step", {_stepFunc, 1}}
@@ -168,10 +180,19 @@ void srm::robot_conf_t::LoadConf(const std::string &confFileName) {
     !roboFile.programName.first)
     throw std::exception("Not enough lines");
   SetPlane(roboFile.p1.second, roboFile.p2.second, roboFile.p3.second);
+  speed = roboFile.speed.second;
   dist = roboFile.dist.second;
   accuracy = roboFile.accuracy.second;
   pouringStep = roboFile.pouringStep.second;
   programName = roboFile.programName.second;
+}
+
+/**
+ * Get robot speed function.
+ * @return distance of departure
+ */
+double srm::robot_conf_t::GetRobotSpeed(void) const noexcept {
+  return speed;
 }
 
 /**
