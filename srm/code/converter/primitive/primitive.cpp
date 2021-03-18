@@ -45,15 +45,18 @@ std::ostream & srm::operator<<(std::ostream &out, const primitive_t &primitive) 
     std::to_string(delta.x) + ", " +
     std::to_string(delta.y) + ", " +
     std::to_string(delta.z) + "), " << std::to_string(translator_t::GetPtr()->roboConf.GetDepDist()) << "\n";
+  out << "BREAK\n";
   out << "\tLMOVE SHIFT (p1 BY " +
     std::to_string(delta.x) + ", " +
     std::to_string(delta.y) + ", " +
     std::to_string(delta.z) + ")\n";;
-
-  for (auto base : primitive)
+  out << "BREAK\n";
+  for (auto base : primitive) {
     out << "\t" << base.GenCode(translator_t::GetPtr()->roboConf);
+    out << "BREAK\n";
+  }
 
   out << "\tLDEPART " << std::to_string(translator_t::GetPtr()->roboConf.GetDepDist()) << "\n";
-
+  out << "BREAK\n";
   return out;
 }

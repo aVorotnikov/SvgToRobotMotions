@@ -330,7 +330,7 @@ static void _circleToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t
 
   if (tag->last_attribute("r")) {
     try {
-      r = std::stod(tag->last_attribute("rx")->value(), NULL);
+      r = std::stod(tag->last_attribute("r")->value(), NULL);
       if (r <= 0) {
         trans->WriteLog("Warning: attribute r in circle must be more than 0");
         return;
