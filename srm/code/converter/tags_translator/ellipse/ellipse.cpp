@@ -43,10 +43,11 @@ std::vector<srm::vec_t> srm::EllipseSampling(vec_t center, vec_t radiuses, doubl
   } while (dist2 > accuracy2);
 
   std::vector<vec_t> res(numOfPoints + 1);
-  for (unsigned i = 0; i <= numOfPoints; i++) {
+  for (unsigned i = 0; i < numOfPoints; i++) {
     double angle = 2 * pi * i / numOfPoints;
     res[i] = vec_t(center.x + radiuses.x * cos(angle), center.y + radiuses.y * sin(angle));
   }
+  res[numOfPoints] = res[0];
   return res;
 }
 
