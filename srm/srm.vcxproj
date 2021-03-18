@@ -25,10 +25,10 @@
     <ClCompile Include="code\converter\tags_translator\ellipse\ellipse.cpp" />
     <ClCompile Include="code\converter\tags_translator\path\bezier\bezier.cpp" />
     <ClCompile Include="code\converter\tags_translator\path\path.cpp" />
-    <ClCompile Include="code\converter\tags_translator\tags_translator.cpp" />
     <ClCompile Include="code\converter\primitive\primitive.cpp" />
-    <ClCompile Include="code\converter\tags_translator\tag\tag.cpp" />
     <ClCompile Include="code\converter\tags_translator\transform\transform.cpp" />
+    <ClCompile Include="code\converter\tags_translator\tag\tag.cpp" />
+    <ClCompile Include="code\converter\tags_translator\tags_translator.cpp" />
     <ClCompile Include="code\converter\translator.cpp" />
     <ClCompile Include="code\main.cpp" />
   </ItemGroup>

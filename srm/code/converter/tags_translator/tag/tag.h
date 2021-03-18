@@ -29,7 +29,7 @@ namespace srm {
      * Constructor create tag from node
      * @param[in] node pointer to node
      */
-    tag_t(rapidxml::xml_node<>* node);
+    tag_t(rapidxml::xml_node<>* node) noexcept;
   };
 }
 

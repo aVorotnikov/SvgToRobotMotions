@@ -2,7 +2,7 @@
  * @file
  * @brief source file for tagsToPrimitives functions
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 15.03.2021
+ * @date 18.03.2021
  *
  * Contains tagsToPrimitives realisation and support static functions for each of tags
  */
@@ -481,6 +481,8 @@ static void _rectToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *
     trans->WriteLog("attribute ry in rect is more than half of height");
   }
 
+  // TODO: realise processing rx and ry attributes in rect
+
   // Transform to primitive
   rectanglePrimitive->start.x = x;
   rectanglePrimitive->start.y = y;
@@ -534,14 +536,34 @@ static void _processSvgParams(const rapidxml::xml_node<> *tag) noexcept {
  */
 void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::primitive_t*> *primitives) noexcept {
   std::string tagName;
+  std::list<transform_t> transformations;
+  transform_t transformCompos; ///< composition of all transformations
+  int curLevel = 0; ///< current level in svg tree
+
   for (auto tag : tags) {
     tagName.assign(tag->node->name(), tag->node->name_size());
 
     if (tagName == "svg") {
       _processSvgParams(tag->node);
+      if (tag->node->last_attribute("transform")) {
+        transform_t transform(tag->node->last_attribute("transform")->value());
+        transformations.push_back(transform);
+      }
     }
-    else if (tagName == "g") {
-      // TODO: realise group processing
+    else if (tagName == "g" && tag->node->last_attribute("transform")) {
+      if (tag->level > curLevel) {
+        ++curLevel;
+        transform_t transform(tag->node->last_attribute("transform")->value());
+        transformations.push_back(transform);
+      }
+      else {
+        --curLevel;
+        transformations.pop_back();
+      }
+      transformCompos.Clear();
+      for (const auto &transform : transformations) {
+        transformCompos *= transform;
+      }
     }
     else if (tagName == "path") {
       srm::path_t path(primitives);
@@ -570,9 +592,14 @@ void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::p
       else if (tagName == "text") {
         // TODO: realise text processing
       }
-    
-      if (primitive->size() > 0)
+
+      if (primitive->size() > 0) {
+        transformCompos.Apply(primitive);
+        if (tag->node->last_attribute("transform")) {
+          transform_t(tag->node->last_attribute("transform")->value()).Apply(primitive);
+        }
         primitives->push_back(primitive);
+      }
       else
         delete primitive;
     }
