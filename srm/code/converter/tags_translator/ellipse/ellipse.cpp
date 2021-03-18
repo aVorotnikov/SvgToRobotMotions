@@ -2,7 +2,7 @@
  * @file
  * @brief ellipse and arcs sampling functions source file
  * @authors Vorotnikov Andrey, Chevykalov Grigory
- * @date 14.03.2021
+ * @date 18.03.2021
  *
  * Contains ellipse and arcs sampling functions realisation
  */
@@ -42,8 +42,8 @@ std::vector<srm::vec_t> srm::EllipseSampling(vec_t center, vec_t radiuses, doubl
     dist2 = (vec_t(radiuses.x * cos(angle), radiuses.y * sin(angle)) - p0).Len2();
   } while (dist2 > accuracy2);
 
-  std::vector<vec_t> res(numOfPoints);
-  for (unsigned i = 0; i < numOfPoints; i++) {
+  std::vector<vec_t> res(numOfPoints + 1);
+  for (unsigned i = 0; i <= numOfPoints; i++) {
     double angle = 2 * pi * i / numOfPoints;
     res[i] = vec_t(center.x + radiuses.x * cos(angle), center.y + radiuses.y * sin(angle));
   }

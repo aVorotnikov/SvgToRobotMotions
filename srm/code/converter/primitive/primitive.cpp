@@ -2,7 +2,7 @@
  * @file
  * @brief Primitives and support classes source file
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 14.03.2021
+ * @date 19.03.2021
  *
  * Contains definition motions class (motion_t, segment_t, arc_t) and primitive class
  */
@@ -53,10 +53,7 @@ std::ostream & srm::operator<<(std::ostream &out, const primitive_t &primitive) 
   for (auto base : primitive)
     out << "\t" << base.GenCode(translator_t::GetPtr()->roboConf);
 
-  out << "\tLDERAPT SHIFT (p1 BY " +
-    std::to_string(delta.x) + ", " +
-    std::to_string(delta.y) + ", " +
-    std::to_string(delta.z) + "), " << std::to_string(translator_t::GetPtr()->roboConf.GetDepDist()) << "\n";
+  out << "\tLDEPART " << std::to_string(translator_t::GetPtr()->roboConf.GetDepDist()) << "\n";
 
   return out;
 }
