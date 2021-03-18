@@ -15,11 +15,14 @@
 #include <srm.h>
 #include <list>
 
-/**
- * Transform svg tags to primitives
- * @param[in] tags the list of tags in DOM
- * @param[out] primitives the list of primitive representations of tags
- */
-void TagsToPrimitives(const std::list<rapidxml::xml_node<>*>& tags, std::list<srm::primitive_t*>* primitives) noexcept;
+/** \brief Project namespace */
+namespace srm {
+  /**
+   * Transform svg tags to primitives
+   * @param[in] tags the list of tags in DOM
+   * @param[out] primitives the list of primitive representations of tags
+   */
+  void TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::primitive_t *> *primitives) noexcept;
+}
 
 #endif /* __TAGS_TRANSLATOR_H_INCLUDED */

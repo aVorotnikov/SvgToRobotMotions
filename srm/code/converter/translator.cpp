@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class source file
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 14.03.2021
+ * @date 15.03.2021
  *
  * Contains main converter class realisatiion
  */
@@ -73,10 +73,21 @@ void srm::translator_t::SetSvg(const std::string &svgFileName) {
  * @param[out] tags pointer to list of pointers to tags
  * @see GenCode
  */
-static void _getTags(rapidxml::xml_node<> *node, std::list<rapidxml::xml_node<> *> *tags) noexcept {
+static void _getTags(rapidxml::xml_node<> *node, std::list<srm::tag_t *> *tags, unsigned int lvl) noexcept {
+  std::string nodeName;
   while (node) {
-    tags->push_back(node);
-    _getTags(node->first_node(), tags);
+    srm::tag_t *tag = new srm::tag_t(node);
+    nodeName.assign(node->name());
+    if ((nodeName == "g" || nodeName == "svg") && node->last_attribute("transform")) {
+      tag->level = lvl + 1;
+      tags->push_back(tag);
+      _getTags(node->first_node(), tags, lvl + 1);
+    }
+    else {
+      tag->level = lvl;
+      tags->push_back(tag);
+      _getTags(node->first_node(), tags, lvl);
+    }
     node = node->next_sibling();
   }
 }
@@ -87,42 +98,37 @@ static void _getTags(rapidxml::xml_node<> *node, std::list<rapidxml::xml_node<> 
  * @see SetSvg
  */
 void srm::translator_t::GenCode(const std::string &codeFileName) const {
-  if (!xmlTree.first_node()) {
+  if (!xmlTree.first_node())
     throw std::exception("Svg file is not set or empty");
-  }
-  std::list<rapidxml::xml_node<> *> tags;
-  _getTags(xmlTree.first_node(), &tags);
+  std::list<srm::tag_t *> tags;
+  _getTags(xmlTree.first_node(), &tags, 0);
   
   std::list<srm::primitive_t *> primitives;
-  try {
-    TagsToPrimitives(tags, &primitives);
-  }
-  catch (std::exception e) {
-    throw e;
-  }
-  
-  vec3_t p1(0, 0, 1), p2(1, 0, 1), p3(0, 0, 0); // ! only for check base_t.GenCode !
-  cs_t cs(100, 100, p1, p2, p3); // ! only for check base_t.GenCode !
+  srm::TagsToPrimitives(tags, &primitives);
+
+  for (auto tag : tags)
+    delete tag;
 
   std::ofstream fout(codeFileName);
   if (!fout.is_open()) {
-    for (auto primitive : primitives) {
+    for (auto primitive : primitives)
       delete primitive;
-    }
     throw std::exception("Failed to open or create output file");
   }
 
-  // NOT REAL PROGRAM, JUST TEST
-  fout << ".PROGRAM " << roboConf.GetProgramName() << "()" <<std::endl;
-  
-  for (auto primitive : primitives) {
+  fout << ".PROGRAM " << roboConf.GetProgramName()  << "()" <<std::endl;
+  fout << "\tHERE .#start" << std::endl;
+  fout << "\tACCURACY " << roboConf.GetRoboAcc() << std::endl;
+
+  for (auto primitive : primitives)
     fout << *primitive << ";\n";
-  }
+
+  fout << "\tJMOVE .#start" << std::endl;
   fout << ".END";
 
-  for (auto primitive : primitives) {
+
+  for (auto primitive : primitives)
     delete primitive;
-  }
 }
 
 /**

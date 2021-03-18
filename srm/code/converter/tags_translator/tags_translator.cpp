@@ -2,7 +2,7 @@
  * @file
  * @brief source file for tagsToPrimitives functions
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 14.03.2021
+ * @date 18.03.2021
  *
  * Contains tagsToPrimitives realisation and support static functions for each of tags
  */
@@ -11,14 +11,6 @@
 
 #include <cmath>
 #include <sstream>
-
-/**
- * Transform primitive by attribute transform
- *
- */
-static void _transformPrimitive(srm::primitive_t *primitive) {
-  // TODO: add required parametres and realise _transformPrimitive
-}
 
 /**
  * Transform svg polyline to primitive
@@ -338,7 +330,7 @@ static void _circleToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t
 
   if (tag->last_attribute("r")) {
     try {
-      r = std::stod(tag->last_attribute("rx")->value(), NULL);
+      r = std::stod(tag->last_attribute("r")->value(), NULL);
       if (r <= 0) {
         trans->WriteLog("Warning: attribute r in circle must be more than 0");
         return;
@@ -489,6 +481,8 @@ static void _rectToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_t *
     trans->WriteLog("attribute ry in rect is more than half of height");
   }
 
+  // TODO: realise processing rx and ry attributes in rect
+
   // Transform to primitive
   rectanglePrimitive->start.x = x;
   rectanglePrimitive->start.y = y;
@@ -540,47 +534,72 @@ static void _processSvgParams(const rapidxml::xml_node<> *tag) noexcept {
  * @param[in] tags the list of tags in DOM
  * @param[out] primitives the list of primitive representations of tags
  */
-void TagsToPrimitives(const std::list<rapidxml::xml_node<>*> &tags, std::list<srm::primitive_t*> *primitives) noexcept {
+void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::primitive_t*> *primitives) noexcept {
   std::string tagName;
+  std::list<transform_t> transformations;
+  transform_t transformCompos; ///< composition of all transformations
+  int curLevel = 0; ///< current level in svg tree
+
   for (auto tag : tags) {
-    tagName.assign(tag->name(), tag->name_size());
+    tagName.assign(tag->node->name(), tag->node->name_size());
 
     if (tagName == "svg") {
-      _processSvgParams(tag);
+      _processSvgParams(tag->node);
+      if (tag->node->last_attribute("transform")) {
+        transform_t transform(tag->node->last_attribute("transform")->value());
+        transformations.push_back(transform);
+      }
     }
-    else if (tagName == "g") {
-      // TODO: realise group processing
+    else if (tagName == "g" && tag->node->last_attribute("transform")) {
+      if (tag->level > curLevel) {
+        ++curLevel;
+        transform_t transform(tag->node->last_attribute("transform")->value());
+        transformations.push_back(transform);
+      }
+      else {
+        --curLevel;
+        transformations.pop_back();
+      }
+      transformCompos.Clear();
+      for (const auto &transform : transformations) {
+        transformCompos *= transform;
+      }
     }
     else if (tagName == "path") {
       srm::path_t path(primitives);
-      path.ParsePath(tag);
+      path.ParsePath(tag->node);
     }
     else {
       srm::primitive_t *primitive = new srm::primitive_t();
       if (tagName == "rect") {
-        _rectToPrimitive(tag, primitive);
+        _rectToPrimitive(tag->node, primitive);
       }
       else if (tagName == "circle") {
-        _circleToPrimitive(tag, primitive);
+        _circleToPrimitive(tag->node, primitive);
       }
       else if (tagName == "ellipse") {
-        _ellipseToPrimitive(tag, primitive);
+        _ellipseToPrimitive(tag->node, primitive);
       }
       else if (tagName == "line") {
-        _lineToPrimitive(tag, primitive);
+        _lineToPrimitive(tag->node, primitive);
       }
       else if (tagName == "polyline") {
-        _polylineToPrimitive(tag, primitive);
+        _polylineToPrimitive(tag->node, primitive);
       }
       else if (tagName == "polygon") {
-        _polygonToPrimitive(tag, primitive);
+        _polygonToPrimitive(tag->node, primitive);
       }
       else if (tagName == "text") {
         // TODO: realise text processing
       }
-    
-      if (primitive->size() > 0)
+
+      if (primitive->size() > 0) {
+        transformCompos.Apply(primitive);
+        if (tag->node->last_attribute("transform")) {
+          transform_t(tag->node->last_attribute("transform")->value()).Apply(primitive);
+        }
         primitives->push_back(primitive);
+      }
       else
         delete primitive;
     }

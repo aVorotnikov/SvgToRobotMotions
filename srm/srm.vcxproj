@@ -21,17 +21,21 @@
   <ItemGroup>
     <ClCompile Include="code\converter\robot_conf\cs\cs.cpp" />
     <ClCompile Include="code\converter\robot_conf\robot_conf.cpp" />
+    <ClCompile Include="code\converter\split_primitives\split_prims.cpp" />
     <ClCompile Include="code\converter\tags_translator\ellipse\ellipse.cpp" />
     <ClCompile Include="code\converter\tags_translator\path\bezier\bezier.cpp" />
     <ClCompile Include="code\converter\tags_translator\path\path.cpp" />
-    <ClCompile Include="code\converter\tags_translator\tags_translator.cpp" />
     <ClCompile Include="code\converter\primitive\primitive.cpp" />
+    <ClCompile Include="code\converter\tags_translator\transform\transform.cpp" />
+    <ClCompile Include="code\converter\tags_translator\tag\tag.cpp" />
+    <ClCompile Include="code\converter\tags_translator\tags_translator.cpp" />
     <ClCompile Include="code\converter\translator.cpp" />
     <ClCompile Include="code\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\converter\robot_conf\cs\cs.h" />
     <ClInclude Include="code\converter\robot_conf\robot_conf.h" />
+    <ClInclude Include="code\converter\split_primitives\split_prims.h" />
     <ClInclude Include="code\converter\tags_translator\ellipse\ellipse.h" />
     <ClInclude Include="code\converter\tags_translator\path\bezier\bezier.h" />
     <ClInclude Include="code\converter\defs.h" />
@@ -39,6 +43,8 @@
     <ClInclude Include="code\converter\tags_translator\tags_translator.h" />
     <ClInclude Include="code\converter\primitive\primitive.h" />
     <ClInclude Include="code\converter\rapidxml.hpp" />
+    <ClInclude Include="code\converter\tags_translator\tag\tag.h" />
+    <ClInclude Include="code\converter\tags_translator\transform\transform.h" />
     <ClInclude Include="code\converter\translator.h" />
     <ClInclude Include="code\math\matr2.h" />
     <ClInclude Include="code\math\vector2.h" />
@@ -119,6 +125,7 @@
       <PrecompiledHeaderFile>srm.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
       <AdditionalIncludeDirectories>code</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,6 +144,7 @@
       <PrecompiledHeaderFile>srm.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
       <AdditionalIncludeDirectories>code</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,6 +163,7 @@
       <PrecompiledHeaderFile>srm.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
       <AdditionalIncludeDirectories>code</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -173,6 +182,7 @@
       <PrecompiledHeaderFile>srm.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
       <AdditionalIncludeDirectories>code</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

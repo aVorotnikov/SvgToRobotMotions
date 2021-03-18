@@ -43,6 +43,15 @@
     <Filter Include="Исходные файлы\Converter\Tags translator\Ellipse sampling">
       <UniqueIdentifier>{83935534-3601-4563-a1ad-9728b2b68e96}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Converter\Tags translator\Tag">
+      <UniqueIdentifier>{ba281d20-7f85-47b2-abcf-1a7825f8f5b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Converter\Tags translator\Transform">
+      <UniqueIdentifier>{c8254ca6-b23c-4db0-9b9f-f667a6e25b90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Converter\Split primitives">
+      <UniqueIdentifier>{212afd96-8eab-46cc-926f-09fe6c133f45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -71,6 +80,15 @@
     </ClCompile>
     <ClCompile Include="code\converter\tags_translator\ellipse\ellipse.cpp">
       <Filter>Исходные файлы\Converter\Tags translator\Ellipse sampling</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\tags_translator\tag\tag.cpp">
+      <Filter>Исходные файлы\Converter\Tags translator\Tag</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\tags_translator\transform\transform.cpp">
+      <Filter>Исходные файлы\Converter\Tags translator\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\split_primitives\split_prims.cpp">
+      <Filter>Исходные файлы\Converter\Split primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +133,15 @@
     </ClInclude>
     <ClInclude Include="code\converter\tags_translator\ellipse\ellipse.h">
       <Filter>Исходные файлы\Converter\Tags translator\Ellipse sampling</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\tags_translator\tag\tag.h">
+      <Filter>Исходные файлы\Converter\Tags translator\Tag</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\tags_translator\transform\transform.h">
+      <Filter>Исходные файлы\Converter\Tags translator\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\split_primitives\split_prims.h">
+      <Filter>Исходные файлы\Converter\Split primitives</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

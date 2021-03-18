@@ -54,7 +54,7 @@ namespace math {
   template <typename scalar_t = double>
     vector2_t<scalar_t> eigVec(scalar_t a, scalar_t b, scalar_t lambda) {
       double deltaLA = lambda - a;
-      if (abs(b) < abs(aLambda))
+      if (abs(b) < abs(deltaLA))
         return vector2_t<scalar_t>(b / deltaLA, 1).Norm();
       return vector2_t<scalar_t>(1, deltaLA / b).Norm();
     }
