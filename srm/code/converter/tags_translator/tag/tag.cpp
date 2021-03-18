@@ -14,7 +14,7 @@
  * @param[in] tags the list of tags in DOM
  * @param[out] primitives the list of primitive representations of tags
  */
-srm::tag_t::tag_t(rapidxml::xml_node<> *node) {
+srm::tag_t::tag_t(rapidxml::xml_node<> *node) noexcept {
   this->node = node;
   level = 0;
 }
