@@ -2,7 +2,7 @@
  * @file
  * @brief Split primitive header file
  * @authors Vorotnikov Andrey
- * @date 14.03.2021
+ * @date 17.03.2021
  *
  * Contains function definition to split primitives by points out of svg cs
  */
@@ -15,7 +15,7 @@
 #include <list>
 #include "../primitive/primitive.h"
 
- /** \brief Project namespace */
+/** \brief Project namespace */
 namespace srm {
   /**
    * Split primitives in list function
