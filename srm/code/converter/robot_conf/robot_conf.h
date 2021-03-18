@@ -25,6 +25,7 @@ namespace srm {
   class robot_conf_t : public cs_t {
   private:
     double
+      speed,                  ///< robot speed
       dist,                   ///< distance of departure
       accuracy,               ///< robot accuracy
       pouringStep;            ///< step for pouring
@@ -36,6 +37,12 @@ namespace srm {
      * @param[in] confFileName robot configuration file name
      */
     void LoadConf(const std::string &confFileName);
+
+    /**
+    * Get robot speed function.
+    * @return distance of departure
+    */
+    double GetRobotSpeed(void) const noexcept;
 
     /**
      * Get departure distance function.
