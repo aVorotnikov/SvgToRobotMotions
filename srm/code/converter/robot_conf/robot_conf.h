@@ -2,7 +2,7 @@
  * @file
  * @brief Robot configuration header file
  * @authors Vorotnikov Andrey
- * @date 14.03.2021
+ * @date 19.03.2021
  *
  * Contains robot_conf_t class definition to load and save robot configuration
  */
@@ -25,7 +25,7 @@ namespace srm {
   class robot_conf_t : public cs_t {
   private:
     double
-      speed,                  ///< robot speed
+      vel,                    ///< robot velocity
       dist,                   ///< distance of departure
       accuracy,               ///< robot accuracy
       pouringStep;            ///< step for pouring
@@ -39,10 +39,10 @@ namespace srm {
     void LoadConf(const std::string &confFileName);
 
     /**
-    * Get robot speed function.
+    * Get robot velocity function.
     * @return distance of departure
     */
-    double GetRobotSpeed(void) const noexcept;
+    double GetVelocity(void) const noexcept;
 
     /**
      * Get departure distance function.

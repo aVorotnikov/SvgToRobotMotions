@@ -2,7 +2,7 @@
  * @file
  * @brief Robot configuration source file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 14.03.2021
+ * @date 19.03.2021
  *
  * Contains robot_conf_t class realisation to load and save robot configuration
  */
@@ -30,7 +30,7 @@ namespace srm {
         p2,                                      ///< ort i board point
         p3;                                      ///< ort j board point
       std::pair<bool, double>
-        speed,                                   ///< speed of robot moving
+        vel,                                     ///< velocity of robot moving
         dist,                                    ///< distance of departure
         accuracy,                                ///< robot accuracy
         pouringStep;                             ///< step for pouring
@@ -100,13 +100,13 @@ static void _accuFunc(srm::rcf::robot_file_t *rConf, const std::vector<double> &
 }
 
 /**
- * speed command parser function
+ * vel command parser function
  * @param[out] rConf robot configuration file variable
  * @param[in] params line param
  */
-static void _speedFunc(srm::rcf::robot_file_t* rConf, const std::vector<double>& params) {
-  rConf->speed.first = true;
-  rConf->speed.second = params[0];
+static void _velFunc(srm::rcf::robot_file_t* rConf, const std::vector<double>& params) {
+  rConf->vel.first = true;
+  rConf->vel.second = params[0];
 }
 
 /**
@@ -123,7 +123,7 @@ static std::map<const std::string, srm::rcf::line_t> s_Lines = {
   {"p1", {_p1Func, 3}},
   {"p2", {_p2Func, 3}},
   {"p3", {_p3Func, 3}},
-  {"speed", {_speedFunc, 1}},
+  {"vel", {_velFunc, 1}},
   {"dist", {_distFunc, 1}},
   {"accu", {_accuFunc, 1}},
   {"step", {_stepFunc, 1}}
@@ -176,11 +176,11 @@ void srm::robot_conf_t::LoadConf(const std::string &confFileName) {
     lineStruct->second.func(&roboFile, args);
   }
   if (!roboFile.p1.first || !roboFile.p2.first || !roboFile.p3.first ||
-    !roboFile.dist.first || !roboFile.accuracy.first || !roboFile.pouringStep.first ||
+    !roboFile.vel.first || !roboFile.dist.first || !roboFile.accuracy.first || !roboFile.pouringStep.first ||
     !roboFile.programName.first)
     throw std::exception("Not enough lines");
   SetPlane(roboFile.p1.second, roboFile.p2.second, roboFile.p3.second);
-  speed = roboFile.speed.second;
+  vel = roboFile.vel.second;
   dist = roboFile.dist.second;
   accuracy = roboFile.accuracy.second;
   pouringStep = roboFile.pouringStep.second;
@@ -191,8 +191,8 @@ void srm::robot_conf_t::LoadConf(const std::string &confFileName) {
  * Get robot speed function.
  * @return distance of departure
  */
-double srm::robot_conf_t::GetRobotSpeed(void) const noexcept {
-  return speed;
+double srm::robot_conf_t::GetVelocity(void) const noexcept {
+  return vel;
 }
 
 /**

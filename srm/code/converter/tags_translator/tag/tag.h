@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief tag_t class header file
- * @authors Pasvlov Ilya
- * @date 14.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya
+ * @date 19.03.2021
  *
  * Contains description of tag_t class
  */
@@ -23,13 +23,13 @@ namespace srm {
   class tag_t {
   public:
     unsigned int level = 0;           ///< level by g tags in svg DOM
-    rapidxml::xml_node<> *node;  ///< pointer to node in svg DOM
+    rapidxml::xml_node<> *node;       ///< pointer to node in svg DOM
 
     /**
      * Constructor create tag from node
      * @param[in] node pointer to node
      */
-    tag_t(rapidxml::xml_node<>* node) noexcept;
+    tag_t(rapidxml::xml_node<> *node) noexcept;
   };
 }
 
