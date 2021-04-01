@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief transform_t class source file
- * @authors Pavlov Ilya
- * @date 18.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya
+ * @date 19.03.2021
  *
  * Contains transform_t class realisation to process tags with attribute "transform"
  */
@@ -17,7 +17,7 @@ srm::transform_t::transform_t() noexcept {
 
 /**
  * Constuctor from svg attribute
- * @param[in] string with svg transform attibute value
+ * @param[in] trnsAttr string with svg transform attibute value
  */
 srm::transform_t::transform_t(std::string trnsAttr) noexcept {
   // TODO: transform attribute parser

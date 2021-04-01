@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief transform_t class header file
- * @authors Pavlov Ilya
- * @date 18.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya
+ * @date 19.03.2021
  *
  * Contains transform_t class description
  */
@@ -31,7 +31,7 @@ namespace srm {
 
     /**
      * Constuctor from svg attribute
-     * @param[in] string with svg transform attibute value
+     * @param[in] trnsAttr string with svg transform attibute value
      */
     transform_t(std::string trnsAttr) noexcept;
 
