@@ -2,7 +2,7 @@
  * @file
  * @brief source file for tagsToPrimitives functions
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 03.03.2021
+ * @date 03.04.2021
  *
  * Contains tagsToPrimitives realisation and support static functions for each of tags
  */
