@@ -2,7 +2,7 @@
  * @file
  * @brief Coordinate system header file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 12.03.2021
+ * @date 03.04.2021
  *
  * Contains cs_t class definition to morph svg coordinate system to robor coordinate system
  */
@@ -12,7 +12,7 @@
 #ifndef __CS_H_INCLUDED
 #define __CS_H_INCLUDED
 
-#include "../defs.h"
+#include "../../defs.h"
 
 /** \brief Project namespace */
 namespace srm {
