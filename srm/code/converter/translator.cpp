@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class source file
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 19.03.2021
+ * @date 03.04.2021
  *
  * Contains main converter class realisatiion
  */
@@ -78,7 +78,7 @@ static void _getTags(rapidxml::xml_node<> *node, std::list<srm::tag_t *> *tags, 
   while (node) {
     srm::tag_t *tag = new srm::tag_t(node);
     nodeName.assign(node->name());
-    if ((nodeName == "g" || nodeName == "svg") && node->last_attribute("transform")) {
+    if (nodeName == "g" || nodeName == "svg") {
       tag->level = lvl + 1;
       tags->push_back(tag);
       _getTags(node->first_node(), tags, lvl + 1);
