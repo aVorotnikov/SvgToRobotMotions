@@ -538,10 +538,28 @@ void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::p
   std::string tagName;
   std::list<transform_t> transformations;
   transform_t transformCompos; ///< composition of all transformations
-  int curLevel = 0; ///< current level in svg tree
+  unsigned prevLevel = 0; ///< previoust level in svg tree
 
   for (auto tag : tags) {
     tagName.assign(tag->node->name(), tag->node->name_size());
+
+    if (tag->level < prevLevel) {
+      for (unsigned i = prevLevel; i > tag->level; --i)
+        transformations.pop_back();
+      
+      transformCompos.Clear();
+      for (const auto& transform : transformations)
+        transformCompos *= transform;
+
+      prevLevel = tag->level;
+    }
+
+    if (tagName == "g" && tag->level == prevLevel) {
+      transformations.pop_back();
+      transformCompos.Clear();
+      for (const auto& transform : transformations)
+        transformCompos *= transform;
+    }
 
     if (tagName == "svg") {
       _processSvgParams(tag->node);
@@ -549,28 +567,25 @@ void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::p
         transform_t transform(tag->node->last_attribute("transform")->value());
         transformations.push_back(transform);
       }
+      else {
+        transform_t transform;
+        transformations.push_back(transform);
+      }
+      prevLevel = tag->level;
     }
     else if (tagName == "g") {
-      // TODO: fix nested transformations
-      if ((int)tag->level > curLevel) {
-        ++curLevel;
-        if (tag->node->last_attribute("transform")) {
-          transform_t transform(tag->node->last_attribute("transform")->value());
-          transformations.push_back(transform);
-        }
-        else {
-          transform_t transform;
-          transformations.push_back(transform);
-        }
+      if (tag->node->last_attribute("transform")) {
+        transform_t transform(tag->node->last_attribute("transform")->value());
+        transformations.push_back(transform);
+        transformCompos.Clear();
+        for (const auto &transform : transformations)
+          transformCompos *= transform;
       }
       else {
-        --curLevel;
-        transformations.pop_back();
+        transform_t transform;
+        transformations.push_back(transform);
       }
-      transformCompos.Clear();
-      for (const auto &transform : transformations) {
-        transformCompos *= transform;
-      }
+      prevLevel = tag->level;
     }
     else if (tagName == "path") {
       srm::path_t path(primitives);
