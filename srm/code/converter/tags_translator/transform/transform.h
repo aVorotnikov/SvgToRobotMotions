@@ -2,7 +2,7 @@
  * @file
  * @brief transform_t class header file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 19.03.2021
+ * @date 03.04.2021
  *
  * Contains transform_t class description
  */
@@ -33,7 +33,13 @@ namespace srm {
      * Constuctor from svg attribute
      * @param[in] trnsAttr string with svg transform attibute value
      */
-    transform_t(std::string trnsAttr) noexcept;
+    transform_t(std::string transAttr) noexcept;
+
+    /**
+     * Set transformation matrix;
+     * @param[in] m00,..m12 values is matrix [[m00 m01 m02] [m10 m11 m12]] 
+     */
+    void SetMatrix(double m00, double m01, double m02, double m10, double m11, double m12) noexcept;
 
     /**
      * Composition of transformations ~ *this = *this * transform

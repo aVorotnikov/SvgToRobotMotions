@@ -1,8 +1,8 @@
 p1 -200 600 -250
 p2 -200 200 -250
-p3 -380 600 -250
+p3 -480 600 -250
 vel 50
 dist 50
-accu 1
+accu 10
 step 1
 name TestProgram

@@ -2,7 +2,7 @@
  * @file
  * @brief source file for tagsToPrimitives functions
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 19.03.2021
+ * @date 03.04.2021
  *
  * Contains tagsToPrimitives realisation and support static functions for each of tags
  */
@@ -550,11 +550,18 @@ void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::p
         transformations.push_back(transform);
       }
     }
-    else if (tagName == "g" && tag->node->last_attribute("transform")) {
+    else if (tagName == "g") {
+      // TODO: fix nested transformations
       if ((int)tag->level > curLevel) {
         ++curLevel;
-        transform_t transform(tag->node->last_attribute("transform")->value());
-        transformations.push_back(transform);
+        if (tag->node->last_attribute("transform")) {
+          transform_t transform(tag->node->last_attribute("transform")->value());
+          transformations.push_back(transform);
+        }
+        else {
+          transform_t transform;
+          transformations.push_back(transform);
+        }
       }
       else {
         --curLevel;
@@ -594,10 +601,10 @@ void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::p
       }
 
       if (primitive->size() > 0) {
-        transformCompos.Apply(primitive);
         if (tag->node->last_attribute("transform")) {
           transform_t(tag->node->last_attribute("transform")->value()).Apply(primitive);
         }
+        transformCompos.Apply(primitive);
         primitives->push_back(primitive);
       }
       else

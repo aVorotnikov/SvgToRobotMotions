@@ -1,12 +1,12 @@
 <svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
+ <g transform="rotate(20, 200, 200) scale(0.8)">
+  <rect id="svg_1" height="356" width="537" y="20.453125" x="28.5" stroke-width="1.5" stroke="#000" fill="#fff"/>
+  <ellipse transform="skewX(-50)" ry="90" rx="125" id="svg_3" cy="204.5" cx="300.5" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" stroke="#000" fill="#fff"/>
+  <circle cx = "540" cy = "50" r = "20"/>
+ </g>
+ <g transform="scale(0.5)" fill="none">
  <g>
-  <title>Layer 1</title>
-  <rect id="svg_1" height="43" width="94" y="32.453125" x="30.5" stroke-width="1.5" stroke="#000" fill="#fff"/>
-  <ellipse ry="40" rx="60" id="svg_2" cy="64.953125" cx="243" stroke-width="1.5" stroke="#000" fill="#fff"/>
-  <path id="svg_3" d="m346.5,60.453125c-81,123 143,23 142.5,22.546875c0.5,0.453125 -64.5,-57.546875 -64.5,-57.546875c0,0 -52,-9 -78,35z" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" stroke="#000" fill="#fff"/>
-  <line stroke="#000" fill="none" x1="0" x2="100%" y1="35%" y2="35%"></line>
-  <polyline stroke="#000" fill="none" points="100,180 200,180 130,270 50,150"></polyline>
-  <circle stroke="#000" fill="none" cx="300" cy="200" r = "50"></circle>
-  <polygon stroke="#000" fill="none" points="370,180 470,180 400, 270"></polygon>
+  <rect id="svg_1" height="356" width="537" y="20.453125" x="28.5" stroke-width="1.5" stroke="#000" fill="#fff"/>
+ </g>
  </g>
 </svg>
