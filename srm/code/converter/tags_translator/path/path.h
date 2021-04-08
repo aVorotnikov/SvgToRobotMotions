@@ -2,7 +2,7 @@
  * @file
  * @brief Path parsing class header file
  * @authors Chevykalov Grigory
- * @date 14.03.2021
+ * @date 08.04.2021
  *
  * Contains path parsing class description
  */
@@ -45,6 +45,7 @@ namespace srm {
     srm::vec_t checkPoint;                      ///< last control point of the last Bezier curve
     char lastCommand;                           ///< previous command
     state_t state;                              ///< the current state of the analyzer
+    srm::transform_t transformCompos;           ///< composition of all transformations
 
     /**
      * Selecting a set of numbers from a string of command
@@ -65,13 +66,13 @@ namespace srm {
      * Processes the moveto command with absolute coordinates as arguments ("M")
      * @param[in] nums vector of numeric command arguments
      */
-    void PathMAbs(const std::vector<double> &nums) noexcept;
+    void PathMAbs(const std::vector<double> &nums, const rapidxml::xml_node<>* tag) noexcept;
 
     /**
      * Processes the moveto command with relative coordinates as arguments ("m")
      * @param[in] nums vector of numeric command arguments
      */
-    void PathMRel(const std::vector<double> &nums) noexcept;
+    void PathMRel(const std::vector<double> &nums, const rapidxml::xml_node<>* tag) noexcept;
 
     /**
      * Processes the lineto command with absolute coordinates as arguments ("L")
@@ -184,7 +185,7 @@ namespace srm {
      * @param[in] ps pointer to a list of primitives
      * @warning pointer mustn't be nullptr
      */
-    path_t(std::list<srm::primitive_t *> *ps);
+    path_t(std::list<srm::primitive_t *> *ps, srm::transform_t transform);
 
     /**
      * Main path parsing function

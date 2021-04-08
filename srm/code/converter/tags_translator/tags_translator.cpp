@@ -2,7 +2,7 @@
  * @file
  * @brief source file for tagsToPrimitives functions
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 03.04.2021
+ * @date 08.04.2021
  *
  * Contains tagsToPrimitives realisation and support static functions for each of tags
  */
@@ -588,7 +588,7 @@ void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::p
       prevLevel = tag->level;
     }
     else if (tagName == "path") {
-      srm::path_t path(primitives);
+      srm::path_t path(primitives, transformCompos);
       path.ParsePath(tag->node);
     }
     else {
