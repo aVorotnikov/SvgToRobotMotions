@@ -2,7 +2,7 @@
  * @file
  * @brief source file for tagsToPrimitives functions
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 08.04.2021
+ * @date 17.04.2021
  *
  * Contains tagsToPrimitives realisation and support static functions for each of tags
  */
@@ -563,28 +563,38 @@ void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::p
 
     if (tagName == "svg") {
       _processSvgParams(tag->node);
-      if (tag->node->last_attribute("transform")) {
-        transform_t transform(tag->node->last_attribute("transform")->value());
-        transformations.push_back(transform);
+      transform_t transform;
+      auto attr = tag->node->first_attribute("transform");      
+      while (attr) {
+        transform *= transform_t(attr->value());
+        attr = attr->next_attribute("transform");
       }
-      else {
-        transform_t transform;
-        transformations.push_back(transform);
+      transformations.push_back(transform);
+
+      if (tag->node->first_attribute("transform")) {
+        transformCompos.Clear();
+        for (const auto& transform : transformations)
+          transformCompos *= transform;
       }
+
       prevLevel = tag->level;
     }
     else if (tagName == "g") {
-      if (tag->node->last_attribute("transform")) {
-        transform_t transform(tag->node->last_attribute("transform")->value());
-        transformations.push_back(transform);
+      transform_t transform;
+      auto attr = tag->node->first_attribute("transform");
+      while (attr) {
+        transform *= transform_t(attr->value());
+        attr = attr->next_attribute("transform");
+      }
+
+      transformations.push_back(transform);
+
+      if (tag->node->first_attribute("transform")) {
         transformCompos.Clear();
-        for (const auto &transform : transformations)
+        for (const auto& transform : transformations)
           transformCompos *= transform;
       }
-      else {
-        transform_t transform;
-        transformations.push_back(transform);
-      }
+      
       prevLevel = tag->level;
     }
     else if (tagName == "path") {
@@ -616,8 +626,14 @@ void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::p
       }
 
       if (primitive->size() > 0) {
-        if (tag->node->last_attribute("transform")) {
-          transform_t(tag->node->last_attribute("transform")->value()).Apply(primitive);
+        transform_t transform;
+        auto attr = tag->node->first_attribute("transform");
+        while(attr) {
+          transform *= transform_t(attr->value());
+          attr = attr->next_attribute("transform");
+        }
+        if (tag->node->first_attribute("transform")) {
+          transform.Apply(primitive);
         }
         transformCompos.Apply(primitive);
         primitives->push_back(primitive);
