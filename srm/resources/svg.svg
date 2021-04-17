@@ -1,6 +1,6 @@
 <svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
   <g transform="translate(80,-5) rotate(-27 264.0000000000001,172.45312499999997)">
-    <rect transform="rotate(-27 264.0000000000001,172.45312499999997) translate(60,-50)" id="svg_1" height="122" width="215" y="111.453125" x="156.5" stroke-width="1.5" stroke="#000" fill="#fff"/>
+    <rect transform="rotate(-27 264.0000000000001,172.45312499999997) translate(60,-50)" id="svg_1" height="122" width="215" y="111.453125" x="156.5" stroke-width="1.5" stroke="#000" fill="white  "/>
   </g>
-  <polyline transform="translate(60,-50)" points="0,0 300,300 100,120" stroke="black" fill="#ffa"/>
+  <polyline transform="translate(60,-50)" points="0,0 300,300 100,120" stroke="black" fill="ffa"/>
 </svg>
