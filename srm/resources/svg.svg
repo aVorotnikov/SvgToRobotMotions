@@ -3,4 +3,5 @@
     <rect transform="rotate(-27 264.0000000000001,172.45312499999997) translate(60,-50)" id="svg_1" height="122" width="215" y="111.453125" x="156.5" stroke-width="1.5" stroke="#000" fill="white  "/>
   </g>
   <polyline transform="translate(60,-50)" points="0,0 300,300 100,120" stroke="black" fill="ffa"/>
+  <line x1="0" y1="0" x2="362" y2="344" stroke="black"/>
 </svg>
