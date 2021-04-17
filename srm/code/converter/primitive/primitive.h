@@ -2,7 +2,7 @@
  * @file
  * @brief Primitives and support classes header file
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 11.03.2021
+ * @date 17.03.2021
  *
  * Contains declaration motions class (motion_t, segment_t, arc_t) and primitive class
  */
@@ -59,6 +59,8 @@ namespace srm {
      * @return ostream variable
      */
     friend std::ostream & operator<<(std::ostream &out, const primitive_t &primitive);
+
+    bool fill = false;
   };
 
   /**
