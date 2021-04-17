@@ -29,5 +29,6 @@
 #include "converter/robot_conf/robot_conf.h"
 #include "converter/robot_conf/cs/cs.h"
 #include "converter/split_primitives/split_prims.h"
+#include "converter/fill/fill.h"
 
 #endif /* __SRM_H_INCLUDED */

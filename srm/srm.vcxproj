@@ -29,6 +29,7 @@
     <ClCompile Include="code\converter\tags_translator\transform\transform.cpp" />
     <ClCompile Include="code\converter\tags_translator\tag\tag.cpp" />
     <ClCompile Include="code\converter\tags_translator\tags_translator.cpp" />
+    <ClCompile Include="code\converter\fill\fill.cpp" />
     <ClCompile Include="code\converter\translator.cpp" />
     <ClCompile Include="code\main.cpp" />
   </ItemGroup>
@@ -45,6 +46,7 @@
     <ClInclude Include="code\converter\rapidxml.hpp" />
     <ClInclude Include="code\converter\tags_translator\tag\tag.h" />
     <ClInclude Include="code\converter\tags_translator\transform\transform.h" />
+    <ClInclude Include="code\converter\fill\fill.h" />
     <ClInclude Include="code\converter\translator.h" />
     <ClInclude Include="code\math\matr2.h" />
     <ClInclude Include="code\math\vector2.h" />

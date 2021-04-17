@@ -52,6 +52,9 @@
     <Filter Include="Исходные файлы\Converter\Split primitives">
       <UniqueIdentifier>{212afd96-8eab-46cc-926f-09fe6c133f45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Converter\Fill">
+      <UniqueIdentifier>{4ea5a4a9-328d-468b-a745-5a6c77b8c749}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -89,6 +92,9 @@
     </ClCompile>
     <ClCompile Include="code\converter\split_primitives\split_prims.cpp">
       <Filter>Исходные файлы\Converter\Split primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="code\converter\fill\fill.cpp">
+      <Filter>Исходные файлы\Converter\Fill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="code\converter\split_primitives\split_prims.h">
       <Filter>Исходные файлы\Converter\Split primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="code\converter\fill\fill.h">
+      <Filter>Исходные файлы\Converter\Fill</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

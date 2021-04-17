@@ -19,26 +19,26 @@
 /** \brief Project namespace */
 namespace srm {
   /**
-    * @brief Line segment motion class
-    *
-    * Line segment representation type to build code
-    */
+   * @brief Line segment motion class
+   *
+   * Line segment representation type to build code
+   */
   class segment_t {
   public:
     vec_t point;  ///< point to which robot moves in a straight line
 
     /**
-      * Constructor for segment_t
-      * @param[in] x x coordinate of point to which robot moves in a straight line
-      * @param[in] y y coordinate of point to which robot moves in a straight line
-      */
+     * Constructor for segment_t
+     * @param[in] x x coordinate of point to which robot moves in a straight line
+     * @param[in] y y coordinate of point to which robot moves in a straight line
+     */
     segment_t(const double x, const double y);
 
     /**
-      * Generate code for motion type
-      * @param[in] coordSys class to morph cs
-      * @return string with code
-      */
+     * Generate code for motion type
+     * @param[in] coordSys class to morph cs
+     * @return string with code
+     */
     std::string GenCode(cs_t coordSys) const;
   };
 
