@@ -75,7 +75,7 @@ namespace srm {
         barSegms[0] = {{0, 0}, {0, h}};
         barSegms[1] = {{0, h}, {w, 0}};
         barSegms[2] = {{w, h}, {0, -h}};
-        barSegms[3] = {{w, 0}, {w, 0}};
+        barSegms[3] = {{w, 0}, {-w, 0}};
       }
 
       /**
@@ -210,7 +210,7 @@ static void _splitPrimitive(srm::primitive_t *prim, std::list<srm::primitive_t *
       segm.point = prevP;
       segm.dir = point.point - prevP;
       auto intersec = svgBar.Intersec(segm);
-      splitted->back()->push_back(srm::segment_t(intersec[0].x, intersec[0].y));
+      splitted->back()->push_back(srm::segment_t(intersec.back().x, intersec.back().y));
     }
     else {
       srm::spf::line_segm_t segm;
@@ -228,6 +228,7 @@ static void _splitPrimitive(srm::primitive_t *prim, std::list<srm::primitive_t *
     prevP = point.point;
   }
   if (prim->fill && firstState == point_place::in) {
+    srm::vec_t start = splitted->front()->start;
     for (auto point : *splitted->front())
       splitted->back()->push_back(point);
     delete splitted->front();
@@ -249,6 +250,9 @@ static void _unitePrimitives(std::list<srm::primitive_t *> *splitted) {
       (*first)->push_back(point);
   }
   splitted->erase(++first, splitted->end());
+  splitted->front()->fill = true;
+  srm::vec_t start = splitted->front()->start;
+  splitted->back()->push_back(srm::segment_t(start.x, start.y));
 }
 
 /**
@@ -258,12 +262,11 @@ static void _unitePrimitives(std::list<srm::primitive_t *> *splitted) {
 void srm::SplitPrimitives(std::list<primitive_t *> *prims) {
   auto prim = prims->begin();
   while (prim != prims->end()) {
-    std::list<primitive_t *> splitedPrim;
-    _splitPrimitive(*prim, &splitedPrim);
+    std::list<primitive_t *> splittedPrim;
+    _splitPrimitive(*prim, &splittedPrim);
     if ((*prim)->fill)
-      _unitePrimitives(&splitedPrim);
-    splitedPrim.front()->fill = true;
-    for (auto &sPrim : splitedPrim)
+      _unitePrimitives(&splittedPrim);
+    for (auto &sPrim : splittedPrim)
       prims->insert(prim, sPrim);
     prim = prims->erase(prim);
   }

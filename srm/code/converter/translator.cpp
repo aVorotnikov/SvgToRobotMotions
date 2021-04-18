@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class source file
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 03.04.2021
+ * @date 18.04.2021
  *
  * Contains main converter class realisatiion
  */
@@ -105,6 +105,7 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
   
   std::list<srm::primitive_t *> primitives;
   srm::TagsToPrimitives(tags, &primitives);
+  srm::SplitPrimitives(&primitives);
 
   for (auto tag : tags)
     delete tag;
