@@ -50,8 +50,12 @@ static void _polylineToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive
       polylinePrimitive->push_back(srm::segment_t(x, y));
     }
     else {
-      trans->WriteLog("Warning: wrong number of points in attribute points in polyline");
-      return;
+      std::string check;
+      iss >> check;
+      if (check != "") {
+        trans->WriteLog("Warning: wrong number of points in attribute points in polyline");
+        return;
+      }
     }
   }
 }
@@ -94,8 +98,12 @@ static void _polygonToPrimitive(const rapidxml::xml_node<> *tag, srm::primitive_
       polygonPrimitive->push_back(srm::segment_t(x, y));
     }
     else {
-      trans->WriteLog("Warning: wrong number of points in attribute points in polygon");
-      return;
+      std::string check;
+      iss >> check;
+      if (check != "") {
+        trans->WriteLog("Warning: wrong number of points in attribute points in polygon");
+        return;
+      }
     }
   }
   polygonPrimitive->push_back(srm::segment_t(polygonPrimitive->start.x, polygonPrimitive->start.y));
