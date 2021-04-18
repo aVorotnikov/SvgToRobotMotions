@@ -121,11 +121,10 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
   fout << "\tSPEED " << roboConf.GetVelocity() << " MM/S ALWAYS" << std::endl;
   fout << "\tACCURACY " << roboConf.GetRoboAcc() << std::endl;
 
-  fill_t fill;
   for (auto primitive : primitives) {
     fout << *primitive << ";\n";
     if (primitive->fill)
-      fill.FillPrim(fout, primitive);
+      FillPrimitive(fout, *primitive);
   }
 
   fout << "\tJMOVE .#start" << std::endl;
