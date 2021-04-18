@@ -14,7 +14,7 @@
   * @param[in] primitive for filling
   * @return pair of the first and second principal components vectors
   */
-std::pair<srm::vec_t, srm::vec_t> _PCA(srm::primitive_t* primitive) {
+static std::pair<srm::vec_t, srm::vec_t> _PCA(srm::primitive_t* primitive)  noexcept {
   double ex , ey; // expected value of x and y
 
   ex = primitive->start.x;
@@ -67,7 +67,6 @@ std::pair<srm::vec_t, srm::vec_t> _PCA(srm::primitive_t* primitive) {
   * Gen and print code for filling primitive
   * @param[in] out output stream
   * @param[in] primitive for filling
-  * @warning primitive can be changed
   */
 void srm::fill_t::FillPrim(std::ostream &out, srm::primitive_t *primitive) {
   auto basis =_PCA(primitive);
