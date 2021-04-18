@@ -9,6 +9,8 @@
 
 #include <srm.h>
 
+#include <algorithm>
+
  /**
   * Principal component analysis
   * @param[in] primitive for filling
@@ -88,14 +90,94 @@ static std::pair<srm::vec_t, srm::vec_t> _PCA(const srm::primitive_t &primitive)
 
 static void _getSegmentsList(const srm::primitive_t &primitive, 
   std::list<std::pair<srm::vec_t, srm::vec_t>> *segments) {
+
+  const double eps = 1e-4; // defines when primitive is considered closed
   
   segments->push_back(std::pair{primitive.start, primitive[0].point});
   for (int i = 0; i < primitive.size() - 1; ++i) 
     segments->push_back(std::pair{ primitive[i].point, primitive[i + 1].point });
 
-  if ((primitive[primitive.size() - 1].point - primitive.start).Len() > 1e-4) 
+  if ((primitive[primitive.size() - 1].point - primitive.start).Len() > eps) // is not closed
     segments->push_back(std::pair{ primitive[primitive.size() - 1].point, primitive.start });
 
+}
+
+static void _getIntersectionPoints(double h, srm::vec_t e1, srm::vec_t e2, 
+  std::list<std::pair<srm::vec_t, srm::vec_t>> *segments, 
+  std::list<srm::vec_t> *interPoints) noexcept {
+
+  auto it = segments->begin();
+  double A1, B1, C1; // line equation coefs Ax + By + C = 0 for painting line
+  double A2, B2, C2; // line equation coefs Ax + By + C = 0 for line includes segment
+  double x, y; // intersection coords
+  double det; // determinant
+  const double eps = 1e-8; // 0 with error
+  A1 = e2.x;
+  B1 = e2.y;
+  while (it != segments->end() && std::min(it->first.Dot(e2), it->second.Dot(e2)) < h) {
+    if (std::max(it->first.Dot(e2), it->second.Dot(e2)) < h) {
+      auto tmp = ++it;
+      --it;
+      segments->erase(it);
+      it = tmp;
+      continue;
+    }
+    C1 = -h;
+    A2 = it->second.y - it->first.y;
+    B2 = it->first.x - it->second.x;
+    C2 = it->first.y * it->second.x - it->first.x * it->second.y;
+    det = A1 * B2 - A2 * B1;
+    if (fabs(det) > eps) {
+      x = (-C1 * B2 + C2 * B1) / det;
+      y = (-A1 * C2 + A2 * C1) / det;
+      if (x >= std::min(it->first.x, it->second.x) && x <= std::max(it->first.x, it->second.x)
+        && y >= std::min(it->first.y, it->second.y) && y <= std::max(it->first.y, it->second.y)) {
+        interPoints->push_back(srm::vec_t(x, y));
+      }
+    }
+    ++it;
+  }
+}
+
+static void _writeCode(std::ostream &out, const std::list<srm::vec_t> &interPoints) noexcept {
+  auto it1 = interPoints.begin();
+  auto tmp = it1;
+  auto it2 = it1;
+
+  srm::vec3_t delta, delta2;
+  srm::translator_t* trans = srm::translator_t::GetPtr();
+  while (it1 != interPoints.end()) {
+    tmp = it1;
+    it2 = ++it1;
+    it1 = tmp;
+
+    delta = trans->roboConf.SvgToRobotDelta(*it1);
+    delta2 = trans->roboConf.SvgToRobotDelta(*it2);
+    out << "\tLAPPRO SHIFT (p1 BY " +
+      std::to_string(delta.x) + ", " +
+      std::to_string(delta.y) + ", " +
+      std::to_string(delta.z) + "), " << std::to_string(trans->roboConf.GetDepDist()) << "\n";
+    out << "BREAK\n";
+
+    out << "\tLMOVE SHIFT (p1 BY " +
+      std::to_string(delta.x) + ", " +
+      std::to_string(delta.y) + ", " +
+      std::to_string(delta.z) + ")\n";;
+    out << "BREAK\n";
+
+    out << "\tLMOVE SHIFT (p1 BY " +
+      std::to_string(delta2.x) + ", " +
+      std::to_string(delta2.y) + ", " +
+      std::to_string(delta2.z) + ")\n";;
+    out << "BREAK\n";
+
+
+    out << "\tLDEPART " << std::to_string(trans->roboConf.GetDepDist()) << "\n";
+    out << "BREAK\n";
+
+    ++it1;
+    ++it1;
+  }
 }
 
  /**
@@ -110,5 +192,43 @@ void srm::FillPrimitive(std::ostream &out, const srm::primitive_t &primitive) {
 
   std::list<std::pair<vec_t, vec_t>> segments;
   _getSegmentsList(primitive, &segments);
+  segments.sort([e2](const std::pair<vec_t, vec_t>& lhs, const std::pair<vec_t, vec_t>& rhs) -> bool {
+    return std::min(lhs.first.Dot(e2), lhs.second.Dot(e2)) < std::min(rhs.first.Dot(e2), rhs.second.Dot(e2));
+    });
+
+  double y = std::min(segments.front().first.Dot(e2), segments.front().second.Dot(e2));
+  double finish = -1e60;
+  double tmp;
+  for (const auto &segment : segments) {
+    tmp = std::max(segment.first.Dot(e2), segment.second.Dot(e2));
+    if (tmp > finish)
+      finish = tmp;
+  }
+
+  translator_t *trans = translator_t::GetPtr();
+  // TODO: step from robot to svg
+  std::list<vec_t> interPoints;
+  double step = trans->roboConf.GetPouringStep();
+  bool directionFlag = false;
+  while (y < finish) {
+    _getIntersectionPoints(y, e1, e2, &segments, &interPoints);
+    if (directionFlag) {
+      interPoints.sort([e1](const vec_t& lhs, const vec_t& rhs) {
+        return lhs.Dot(e1) < rhs.Dot(e1);
+        });
+    }
+    else {
+      interPoints.sort([e1](const vec_t& lhs, const vec_t& rhs) {
+        return lhs.Dot(e1) > rhs.Dot(e1);
+        });
+    }
+
+    _writeCode(out, interPoints);
+    interPoints.clear();
+
+    directionFlag = directionFlag ? false : true;
+
+    y += step;
+  }
 
 }
