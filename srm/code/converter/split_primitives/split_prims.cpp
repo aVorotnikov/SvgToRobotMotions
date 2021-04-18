@@ -2,7 +2,7 @@
  * @file
  * @brief Split primitive source file
  * @authors Vorotnikov Andrey
- * @date 18.03.2021
+ * @date 18.04.2021
  *
  * Contains function realisation to split primitives by points out of svg cs
  */
@@ -90,7 +90,7 @@ namespace srm {
         // ort j
         try {
           auto [t1, t2] = ls.Intersec(barSegms[0]);
-          if (t1 > 0 && t1 < 1 && t2 > 0 && t2 < 1) {
+          if (t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1) {
             isFirstPoint = 1;
             firstPoint = {t1, ls.point + ls.dir * t1};
           }
@@ -100,12 +100,12 @@ namespace srm {
         }
         if (!isParallelY) {
           auto [t1, t2] = ls.Intersec(barSegms[2]);
-          if (isFirstPoint && t1 > 0 && t1 < 1 && t2 > 0 && t2 < 1) {
+          if (isFirstPoint && t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1) {
             if (t1 > firstPoint.first)
               return {firstPoint.second, ls.point + ls.dir * t1};
             return {ls.point + ls.dir * t1, firstPoint.second};
           }
-          else if (!isFirstPoint && t1 > 0 && t1 < 1 && t2 > 0 && t2 < 1) {
+          else if (!isFirstPoint && t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1) {
             isFirstPoint = 1;
             firstPoint = {t1, ls.point + ls.dir * t1};
           }
@@ -114,12 +114,12 @@ namespace srm {
         bool isParallelX = 0;
         try {
           auto [t1, t2] = ls.Intersec(barSegms[1]);
-          if (isFirstPoint && t1 > 0 && t1 < 1 && t2 > 0 && t2 < 1) {
+          if (isFirstPoint && t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1) {
             if (t1 > firstPoint.first)
               return {firstPoint.second, ls.point + ls.dir * t1};
             return {ls.point + ls.dir * t1, firstPoint.second};
           }
-          else if (!isFirstPoint && t1 > 0 && t1 < 1 && t2 > 0 && t2 < 1) {
+          else if (!isFirstPoint && t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1) {
             isFirstPoint = 1;
             firstPoint = {t1, ls.point + ls.dir * t1};
           }
@@ -129,7 +129,7 @@ namespace srm {
         }
         if (!isParallelX) {
           auto [t1, t2] = ls.Intersec(barSegms[3]);
-          if (isFirstPoint && t1 > 0 && t1 < 1 && t2 > 0 && t2 < 1) {
+          if (isFirstPoint && t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1) {
             if (t1 > firstPoint.first) {
               std::vector<vec_t> res(2);
               res[0] = firstPoint.second;
@@ -138,7 +138,7 @@ namespace srm {
             }
             return {ls.point + ls.dir * t1, firstPoint.second};
           }
-          else if (!isFirstPoint && t1 > 0 && t1 < 1 && t2 > 0 && t2 < 1) {
+          else if (!isFirstPoint && t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1) {
             isFirstPoint = 1;
             firstPoint = {t1, ls.point + ls.dir * t1};
           }
@@ -153,13 +153,93 @@ namespace srm {
 }
 
 /**
+ * Define is point in borders function
+ * @param[in] point point to define
+ * @param[in] w width of svg
+ * @param[in] h height of svg
+ * @return true if in, false - otherwise
+ */
+static bool _isInBorders(srm::vec_t point, double w, double h) {
+  return point.x <= w && point.x >= 0 && point.y <= h && point.y >= 0;
+}
+
+/**
  * Split primitive to list function
  * @param[in] prim primitive to split
  * @param[out] splitted splitted primitive
  */
 static void _splitPrimitive(srm::primitive_t *prim, std::list<srm::primitive_t *> *splitted) {
+  auto *trans = srm::translator_t::GetPtr();
+  double w = trans->roboConf.GetW(), h = trans->roboConf.GetH();
+  srm::spf::svg_cs_t svgBar(w, h);
   splitted->clear();
-  splitted->push_back(prim);
+
+  enum class point_place {
+    not_defined,
+    in,
+    out
+  } firstState = point_place::not_defined, prev = point_place::not_defined, cur = point_place::not_defined;
+  srm::vec_t prevP = prim->start;
+  if (_isInBorders(prevP, w, h)) {
+    prev = point_place::in;
+    splitted->push_back(new srm::primitive_t);
+    splitted->back()->start = prevP;
+  }
+  else
+    prev = point_place::out;
+  firstState = prev;
+  for (auto &point : *prim) {
+    if (_isInBorders(point.point, w, h))
+      cur = point_place::in;
+    else
+      cur = point_place::out;
+
+    if (cur == point_place::in && prev == point_place::in)
+      splitted->back()->push_back(srm::segment_t(point.point.x, point.point.y));
+    else if (cur == point_place::in && prev == point_place::out) {
+      splitted->push_back(new srm::primitive_t);
+      srm::spf::line_segm_t segm;
+      segm.point = prevP;
+      segm.dir = point.point - prevP;
+      auto intersec = svgBar.Intersec(segm);
+      splitted->back()->start = intersec[0];
+      splitted->back()->push_back(srm::segment_t(point.point.x, point.point.y));
+    }
+    else if (cur == point_place::out && prev == point_place::in) {
+      srm::spf::line_segm_t segm;
+      segm.point = prevP;
+      segm.dir = point.point - prevP;
+      auto intersec = svgBar.Intersec(segm);
+      splitted->back()->push_back(srm::segment_t(intersec[0].x, intersec[0].y));
+    }
+    else {
+      srm::spf::line_segm_t segm;
+      segm.point = prevP;
+      segm.dir = point.point - prevP;
+      auto intersec = svgBar.Intersec(segm);
+
+      if (intersec.size() == 2) {
+        splitted->push_back(new srm::primitive_t);
+        splitted->back()->start = intersec[0];
+        splitted->back()->push_back(srm::segment_t(intersec[1].x, intersec[1].y));
+      }
+    }
+    prev = cur;
+    prevP = point.point;
+  }
+  if (prim->fill && firstState == point_place::in) {
+    for (auto point : *splitted->front())
+      splitted->back()->push_back(point);
+    delete splitted->front();
+    splitted->pop_front();
+  }
+}
+
+/**
+ * Unite splitted fill primitive function
+ * @param[out] splitted splitted primitive
+ */
+static void _unitePrimitives(std::list<srm::primitive_t *> *splitted) {
 }
 
 /**
@@ -167,10 +247,14 @@ static void _splitPrimitive(srm::primitive_t *prim, std::list<srm::primitive_t *
  * @param[out] prims primitive to split
  */
 void srm::SplitPrimitives(std::list<primitive_t *> *prims) {
-  auto *trans = srm::translator_t::GetPtr();
-  spf::svg_cs_t svgBar(trans->roboConf.GetW(), trans->roboConf.GetH());
-  for (auto prim = prims->begin(); prim != prims->end(); prim++) {
+  auto prim = prims->begin();
+  while (prim != prims->end()) {
     std::list<primitive_t *> splitedPrim;
     _splitPrimitive(*prim, &splitedPrim);
+    if ((*prim)->fill)
+      _unitePrimitives(&splitedPrim);
+    for (auto &sPrim : splitedPrim)
+      prims->insert(prim, sPrim);
+    prim = prims->erase(prim);
   }
 }
