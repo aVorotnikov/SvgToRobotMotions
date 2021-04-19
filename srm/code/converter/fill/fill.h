@@ -2,7 +2,7 @@
  * @file
  * @brief Fill primitive header file
  * @authors Pavlov Ilya
- * @date 18.04.2021
+ * @date 19.04.2021
  *
  * Contains declaration of function for filling primitives
  */
@@ -18,12 +18,19 @@
 
  /** \brief Project namespace */
 namespace srm {
-    /**
-     * Gen and print code for filling primitive
-     * @param[in] out output stream
-     * @param[in] primitive for filling
-     */
-    void FillPrimitive(std::ostream &out, const srm::primitive_t &primitive) noexcept;
+  /**
+   * Check if tag must be filled
+   * @param[in] tag tag for checking
+   * @return true if must, false if not
+   */
+  bool IsFill(const rapidxml::xml_node<>* tag) noexcept;
+
+  /**
+   * Gen and print code for filling primitive
+   * @param[in] out output stream
+   * @param[in] primitive for filling
+   */
+  void FillPrimitive(std::ostream &out, const srm::primitive_t &primitive) noexcept;
 }
 
 #endif /* __FILL_H_INCLUDED */

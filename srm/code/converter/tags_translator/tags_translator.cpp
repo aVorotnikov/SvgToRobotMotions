@@ -645,21 +645,7 @@ void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::p
         }
         transformCompos.Apply(primitive);
 
-        if (tagName != "line" && tagName != "text") {
-          attr = tag->node->last_attribute("fill");
-          if (attr && attr->value() != "") {
-            std::string fillAttr(attr->value());
-            std::istringstream iss(fillAttr);
-            std::string fillVal;
-            std::string check;
-            iss >> fillVal;
-            iss >> check;
-            if (check != "")
-              primitive->fill = true;
-            else if (fillVal != "none" && fillVal !="white" && fillVal != "#fff")
-              primitive->fill = true;
-          }
-        }
+        primitive->fill = IsFill(tag->node);
 
         primitives->push_back(primitive);
       }
