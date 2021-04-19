@@ -653,7 +653,7 @@ void srm::TagsToPrimitives(const std::list<srm::tag_t *> &tags, std::list<srm::p
             std::string fillVal;
             std::string check;
             iss >> fillVal;
-            iss >>check;
+            iss >> check;
             if (check != "")
               primitive->fill = true;
             else if (fillVal != "none" && fillVal !="white" && fillVal != "#fff")
