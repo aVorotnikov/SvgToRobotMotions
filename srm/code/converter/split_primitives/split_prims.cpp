@@ -247,7 +247,11 @@ static void _unitePrimitives(std::list<srm::primitive_t *> *splitted) {
     (*first)->push_back(srm::segment_t((*prim)->start.x, (*prim)->start.y));
     for (auto point : **prim)
       (*first)->push_back(point);
+    prim++;
   }
+  prim = first;
+  for (prim++; prim != splitted->end(); prim++)
+    delete *prim;
   splitted->erase(++first, splitted->end());
   splitted->front()->fill = true;
   srm::vec_t start = splitted->front()->start;
@@ -267,6 +271,7 @@ void srm::SplitPrimitives(std::list<primitive_t *> *prims) {
       _unitePrimitives(&splittedPrim);
     for (auto &sPrim : splittedPrim)
       prims->insert(prim, sPrim);
+    delete *prim;
     prim = prims->erase(prim);
   }
 }
