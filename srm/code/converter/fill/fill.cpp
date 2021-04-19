@@ -2,7 +2,7 @@
  * @file
  * @brief Fill primitive source file
  * @authors Pavlov Ilya
- * @date 18.04.2021
+ * @date 19.04.2021
  *
  * Contains realisation of function for filling primitives
  */
@@ -88,8 +88,15 @@ static std::pair<srm::vec_t, srm::vec_t> _PCA(const srm::primitive_t &primitive)
   return fabs(lambda1) > fabs(lambda2) ? std::pair(e1, e2) : std::pair(e2, e1);
 }
 
+/**
+ * Get list of primitive's segments
+ * @param[out] primitive primitive
+ * @param[out] segments list of primitive's segments
+ */
 static void _getSegmentsList(const srm::primitive_t &primitive, 
   std::list<std::pair<srm::vec_t, srm::vec_t>> *segments) {
+
+  segments->clear();
 
   const double eps = 1e-4; // defines when primitive is considered closed
   
@@ -102,9 +109,19 @@ static void _getSegmentsList(const srm::primitive_t &primitive,
 
 }
 
+/**
+ * Find intersection points of line with primitive's segments
+ * @param[in] h height of line along the axis e2
+ * @param[in] e1 the first basis vector
+ * @param[in] e2 the second basis vector
+ * @param[in] segments list of primitive's segments
+ * @param[out] interPoints intersection points of line with primitive's segments
+ */
 static void _getIntersectionPoints(double h, srm::vec_t e1, srm::vec_t e2, 
   std::list<std::pair<srm::vec_t, srm::vec_t>> *segments, 
   std::list<srm::vec_t> *interPoints) noexcept {
+
+  interPoints->clear();
 
   auto it = segments->begin();
   double A1, B1, C1; // line equation coefs Ax + By + C = 0 for painting line
@@ -139,6 +156,11 @@ static void _getIntersectionPoints(double h, srm::vec_t e1, srm::vec_t e2,
   }
 }
 
+/**
+ * Print code for filling primitive in one line
+ * @param[in] out output stream
+ * @param[in] interPoints intersection points of line with primitive's segments
+ */
 static void _writeCode(std::ostream &out, const std::list<srm::vec_t> &interPoints) noexcept {
   auto it1 = interPoints.begin();
   auto tmp = it1;
@@ -185,7 +207,7 @@ static void _writeCode(std::ostream &out, const std::list<srm::vec_t> &interPoin
   * @param[in] out output stream
   * @param[in] primitive for filling
   */
-void srm::FillPrimitive(std::ostream &out, const srm::primitive_t &primitive) {
+void srm::FillPrimitive(std::ostream &out, const srm::primitive_t &primitive) noexcept {
   auto basis =_PCA(primitive);
   vec_t e1 = basis.first;
   vec_t e2 = basis.second;
@@ -224,7 +246,6 @@ void srm::FillPrimitive(std::ostream &out, const srm::primitive_t &primitive) {
     }
 
     _writeCode(out, interPoints);
-    interPoints.clear();
 
     directionFlag = directionFlag ? false : true;
 

@@ -22,9 +22,8 @@ namespace srm {
      * Gen and print code for filling primitive
      * @param[in] out output stream
      * @param[in] primitive for filling
-     * @warning primitive can be changed
      */
-    void FillPrimitive(std::ostream &out, const srm::primitive_t &primitive);
+    void FillPrimitive(std::ostream &out, const srm::primitive_t &primitive) noexcept;
 }
 
 #endif /* __FILL_H_INCLUDED */
