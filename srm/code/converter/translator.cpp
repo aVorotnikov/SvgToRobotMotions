@@ -39,8 +39,8 @@ void srm::translator_t::WriteLog(const std::string &str) noexcept {
 }
 
 /**
- * Set svg image to convert function function. Check file abd create tag tree
- * @param[in] svgFileName svg image file name
+ * Set svg image for converting. Check file and create tag tree.
+ * @param[in] svgFileName path to file with svg image
  */
 void srm::translator_t::SetSvg(const std::string &svgFileName) {
   std::ifstream fin(svgFileName);
