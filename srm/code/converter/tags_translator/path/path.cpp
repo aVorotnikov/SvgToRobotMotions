@@ -2,7 +2,7 @@
  * @file
  * @brief Path parsing class source file
  * @authors Chevykalov Grigory
- * @date 08.04.2021
+ * @date 19.04.2021
  *
  * Contains path parsing class realisation
  */
@@ -10,6 +10,7 @@
 #include <srm.h>
 
 #include <cctype>
+#include <sstream>
 
 /**
  * Constructor for path_t
@@ -94,10 +95,31 @@ void srm::path_t::PathMAbs(const std::vector<double> &nums, const rapidxml::xml_
   // add the previous primitive to the list
   if (primitive != nullptr)
     if (primitive->size() > 0) {
-      if (tag->last_attribute("transform")) {
-        transform_t(tag->last_attribute("transform")->value()).Apply(primitive);
+      transform_t transform;
+      auto attr = tag->first_attribute("transform");
+      while (attr) {
+        transform *= transform_t(attr->value());
+        attr = attr->next_attribute("transform");
+      }
+      if (tag->first_attribute("transform")) {
+        transform.Apply(primitive);
       }
       transformCompos.Apply(primitive);
+
+      attr = tag->last_attribute("fill");
+      if (attr && attr->value() != "") {
+        std::string fillAttr(attr->value());
+        std::istringstream iss(fillAttr);
+        std::string fillVal;
+        std::string check;
+        iss >> fillVal;
+        iss >> check;
+        if (check != "")
+          primitive->fill = true;
+        else if (fillVal != "none" && fillVal != "white" && fillVal != "#fff")
+          primitive->fill = true;
+      }
+
       primitives->push_back(primitive);
     }
     else
@@ -145,10 +167,31 @@ void srm::path_t::PathMRel(const std::vector<double> &nums, const rapidxml::xml_
   // add the previous primitive to the list
   if (primitive != nullptr)
     if (primitive->size() > 0) {
-      if (tag->last_attribute("transform")) {
-        transform_t(tag->last_attribute("transform")->value()).Apply(primitive);
+      transform_t transform;
+      auto attr = tag->first_attribute("transform");
+      while (attr) {
+        transform *= transform_t(attr->value());
+        attr = attr->next_attribute("transform");
+      }
+      if (tag->first_attribute("transform")) {
+        transform.Apply(primitive);
       }
       transformCompos.Apply(primitive);
+
+      attr = tag->last_attribute("fill");
+      if (attr && attr->value() != "") {
+        std::string fillAttr(attr->value());
+        std::istringstream iss(fillAttr);
+        std::string fillVal;
+        std::string check;
+        iss >> fillVal;
+        iss >> check;
+        if (check != "")
+          primitive->fill = true;
+        else if (fillVal != "none" && fillVal != "white" && fillVal != "#fff")
+          primitive->fill = true;
+      }
+
       primitives->push_back(primitive);
     }
     else
@@ -880,12 +923,33 @@ void srm::path_t::ParsePath(const rapidxml::xml_node<> *tag) noexcept {
     }
   }
   // add the last primitive
-  if(primitive != nullptr)
+  if (primitive != nullptr)
     if (primitive->size() > 0) {
-      if (tag->last_attribute("transform")) {
-        transform_t(tag->last_attribute("transform")->value()).Apply(primitive);
+      transform_t transform;
+      auto attr = tag->first_attribute("transform");
+      while (attr) {
+        transform *= transform_t(attr->value());
+        attr = attr->next_attribute("transform");
+      }
+      if (tag->first_attribute("transform")) {
+        transform.Apply(primitive);
       }
       transformCompos.Apply(primitive);
+
+      attr = tag->last_attribute("fill");
+      if (attr && attr->value() != "") {
+        std::string fillAttr(attr->value());
+        std::istringstream iss(fillAttr);
+        std::string fillVal;
+        std::string check;
+        iss >> fillVal;
+        iss >> check;
+        if (check != "")
+          primitive->fill = true;
+        else if (fillVal != "none" && fillVal != "white" && fillVal != "#fff")
+          primitive->fill = true;
+      }
+
       primitives->push_back(primitive);
     }
     else
