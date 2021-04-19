@@ -148,8 +148,8 @@ static void _getIntersectionPoints(double h, srm::vec_t e1, srm::vec_t e2,
     if (fabs(det) > eps) {
       x = (-C1 * B2 + C2 * B1) / det;
       y = (-A1 * C2 + A2 * C1) / det;
-      if (x >= std::min(it->first.x, it->second.x) && x <= std::max(it->first.x, it->second.x)
-        && y >= std::min(it->first.y, it->second.y) && y <= std::max(it->first.y, it->second.y)) {
+      if (x >= std::min(it->first.x, it->second.x) - eps && x <= std::max(it->first.x, it->second.x + eps)
+        && y >= std::min(it->first.y, it->second.y) - eps && y <= std::max(it->first.y, it->second.y) + eps) {
         interPoints->push_back(srm::vec_t(x, y));
       }
     }
