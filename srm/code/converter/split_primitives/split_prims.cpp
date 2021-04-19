@@ -2,7 +2,7 @@
  * @file
  * @brief Split primitive source file
  * @authors Vorotnikov Andrey
- * @date 18.04.2021
+ * @date 19.04.2021
  *
  * Contains function realisation to split primitives by points out of svg cs
  */
@@ -227,8 +227,7 @@ static void _splitPrimitive(srm::primitive_t *prim, std::list<srm::primitive_t *
     prev = cur;
     prevP = point.point;
   }
-  if (prim->fill && firstState == point_place::in) {
-    srm::vec_t start = splitted->front()->start;
+  if (prim->fill && firstState == point_place::in && splitted->size() > 1) {
     for (auto point : *splitted->front())
       splitted->back()->push_back(point);
     delete splitted->front();
