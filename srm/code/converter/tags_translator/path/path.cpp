@@ -106,19 +106,7 @@ void srm::path_t::PathMAbs(const std::vector<double> &nums, const rapidxml::xml_
       }
       transformCompos.Apply(primitive);
 
-      attr = tag->last_attribute("fill");
-      if (attr && attr->value() != "") {
-        std::string fillAttr(attr->value());
-        std::istringstream iss(fillAttr);
-        std::string fillVal;
-        std::string check;
-        iss >> fillVal;
-        iss >> check;
-        if (check != "")
-          primitive->fill = true;
-        else if (fillVal != "none" && fillVal != "white" && fillVal != "#fff")
-          primitive->fill = true;
-      }
+      primitive->fill = IsFill(tag);
 
       primitives->push_back(primitive);
     }
@@ -178,19 +166,7 @@ void srm::path_t::PathMRel(const std::vector<double> &nums, const rapidxml::xml_
       }
       transformCompos.Apply(primitive);
 
-      attr = tag->last_attribute("fill");
-      if (attr && attr->value() != "") {
-        std::string fillAttr(attr->value());
-        std::istringstream iss(fillAttr);
-        std::string fillVal;
-        std::string check;
-        iss >> fillVal;
-        iss >> check;
-        if (check != "")
-          primitive->fill = true;
-        else if (fillVal != "none" && fillVal != "white" && fillVal != "#fff")
-          primitive->fill = true;
-      }
+      primitive->fill = IsFill(tag);
 
       primitives->push_back(primitive);
     }
@@ -936,19 +912,7 @@ void srm::path_t::ParsePath(const rapidxml::xml_node<> *tag) noexcept {
       }
       transformCompos.Apply(primitive);
 
-      attr = tag->last_attribute("fill");
-      if (attr && attr->value() != "") {
-        std::string fillAttr(attr->value());
-        std::istringstream iss(fillAttr);
-        std::string fillVal;
-        std::string check;
-        iss >> fillVal;
-        iss >> check;
-        if (check != "")
-          primitive->fill = true;
-        else if (fillVal != "none" && fillVal != "white" && fillVal != "#fff")
-          primitive->fill = true;
-      }
+      primitive->fill = IsFill(tag);
 
       primitives->push_back(primitive);
     }

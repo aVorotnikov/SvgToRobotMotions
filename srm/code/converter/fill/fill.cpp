@@ -10,6 +10,7 @@
 #include <srm.h>
 
 #include <algorithm>
+#include <sstream>
 
  /**
   * Principal component analysis
@@ -202,7 +203,7 @@ static void _writeCode(std::ostream &out, const std::list<srm::vec_t> &interPoin
   }
 }
 
- /**
+/**
   * Gen and print code for filling primitive
   * @param[in] out output stream
   * @param[in] primitive for filling
@@ -251,5 +252,29 @@ void srm::FillPrimitive(std::ostream &out, const srm::primitive_t &primitive) no
 
     y += step;
   }
+}
 
+/**
+ *Check if tag must be filled
+ * @param[in] tag tag for checking
+ * @return true if must, false if not
+ */
+bool srm::IsFill(const rapidxml::xml_node<>* tag) noexcept {
+  std::string tagName;
+  tagName.assign(tag->name(), tag->name_size());
+  if (tagName == "line" || tagName == "text")
+    return false;
+
+  auto attr = tag->last_attribute("fill");
+  if (!attr || attr->value() == "")
+    return true;
+   
+  std::string fillAttr(attr->value());
+  std::istringstream iss(fillAttr);
+  std::string fillVal;
+  std::string check;
+  iss >> fillVal;
+  iss >> check;
+
+  return check != "" || (fillVal != "none" && fillVal != "white" && fillVal != "#fff");
 }
