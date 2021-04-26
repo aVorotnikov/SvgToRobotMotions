@@ -2,7 +2,7 @@
  * @file
  * @brief Fill primitive source file
  * @authors Pavlov Ilya
- * @date 19.04.2021
+ * @date 26.04.2021
  *
  * Contains realisation of function for filling primitives
  */
@@ -180,23 +180,19 @@ static void _writeCode(std::ostream &out, const std::list<srm::vec_t> &interPoin
       std::to_string(delta.x) + ", " +
       std::to_string(delta.y) + ", " +
       std::to_string(delta.z) + "), " << std::to_string(trans->roboConf.GetDepDist()) << "\n";
-    out << "BREAK\n";
 
     out << "\tLMOVE SHIFT (p1 BY " +
       std::to_string(delta.x) + ", " +
       std::to_string(delta.y) + ", " +
       std::to_string(delta.z) + ")\n";;
-    out << "BREAK\n";
 
     out << "\tLMOVE SHIFT (p1 BY " +
       std::to_string(delta2.x) + ", " +
       std::to_string(delta2.y) + ", " +
       std::to_string(delta2.z) + ")\n";;
-    out << "BREAK\n";
 
 
     out << "\tLDEPART " << std::to_string(trans->roboConf.GetDepDist()) << "\n";
-    out << "BREAK\n";
 
     ++it1;
     ++it1;
