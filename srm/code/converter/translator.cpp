@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class source file
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 18.04.2021
+ * @date 26.04.2021
  *
  * Contains main converter class realisatiion
  */
@@ -121,6 +121,7 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
   fout << "\tHERE .#start" << std::endl;
   fout << "\tSPEED " << roboConf.GetVelocity() << " MM/S ALWAYS" << std::endl;
   fout << "\tACCURACY " << roboConf.GetRoboAcc() << std::endl;
+  fout << "\tCP off" << std::endl;
 
   for (auto primitive : primitives) {
     fout << *primitive << ";\n";
