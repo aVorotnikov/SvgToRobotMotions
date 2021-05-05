@@ -1,8 +1,8 @@
 /**
  * @file
  * @brief Coordinate system source file
- * @authors Vorotnikov Andrey
- * @date 11.03.2021
+ * @authors Vorotnikov Andrey, Pavlov Ilya
+ * @date 05.05.2021
  *
  * Contains cs_t class realisation to morph svg coordinate system to robor coordinate system
  */
@@ -103,4 +103,20 @@ srm::vec3_t srm::cs_t::SvgToRobotDelta(vec_t point) const noexcept {
  */
 srm::vec3_t srm::cs_t::SvgToRobot(vec_t point) const noexcept {
   return boardStart + SvgToRobotDelta(point);
+}
+
+/**
+ * Get ratio of canvas width to svg image width
+ * @return ratio of canvas width to svg image width
+ */
+double srm::cs_t::GetXScale() {
+  return boardI.Len() / width;
+}
+
+/**
+ * Get ratio of canvas height to svg image height
+ * @return ratio of canvas height to svg image height
+ */
+double srm::cs_t::GetYScale() {
+  return boardJ.Len() / height;
 }

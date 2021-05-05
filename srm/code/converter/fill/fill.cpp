@@ -2,7 +2,7 @@
  * @file
  * @brief Fill primitive source file
  * @authors Pavlov Ilya
- * @date 26.04.2021
+ * @date 05.05.2021
  *
  * Contains realisation of function for filling primitives
  */
@@ -102,7 +102,7 @@ static void _getSegmentsList(const srm::primitive_t &primitive,
   const double eps = 1e-4; // defines when primitive is considered closed
   
   segments->push_back(std::pair{primitive.start, primitive[0].point});
-  for (int i = 0; i < primitive.size() - 1; ++i) 
+  for (int i = 0; i < (int)primitive.size() - 1; ++i) 
     segments->push_back(std::pair{ primitive[i].point, primitive[i + 1].point });
 
   if ((primitive[primitive.size() - 1].point - primitive.start).Len() > eps) // is not closed
@@ -167,29 +167,25 @@ static void _writeCode(std::ostream &out, const std::list<srm::vec_t> &interPoin
   auto tmp = it1;
   auto it2 = it1;
 
-  srm::vec3_t delta, delta2;
   srm::translator_t* trans = srm::translator_t::GetPtr();
   while (it1 != interPoints.end()) {
     tmp = it1;
     it2 = ++it1;
     it1 = tmp;
 
-    delta = trans->roboConf.SvgToRobotDelta(*it1);
-    delta2 = trans->roboConf.SvgToRobotDelta(*it2);
-    out << "\tLAPPRO SHIFT (p1 BY " +
-      std::to_string(delta.x) + ", " +
-      std::to_string(delta.y) + ", " +
-      std::to_string(delta.z) + "), " << std::to_string(trans->roboConf.GetDepDist()) << "\n";
+    double scaleX = trans->roboConf.GetXScale();
+    double scaleY = trans->roboConf.GetYScale();
+    out << "\tLAPPRO frm + SHIFT (P BY " +
+      std::to_string(it1->x * scaleX) + ", " +
+      std::to_string(it1->y * scaleY) + ", 0), " << std::to_string(trans->roboConf.GetDepDist()) << "\n";
 
-    out << "\tLMOVE SHIFT (p1 BY " +
-      std::to_string(delta.x) + ", " +
-      std::to_string(delta.y) + ", " +
-      std::to_string(delta.z) + ")\n";;
+    out << "\tLMOVE frm + SHIFT (P BY " +
+      std::to_string(it1->x * scaleX) + ", " +
+      std::to_string(it1->y * scaleY) + ", 0)\n";
 
-    out << "\tLMOVE SHIFT (p1 BY " +
-      std::to_string(delta2.x) + ", " +
-      std::to_string(delta2.y) + ", " +
-      std::to_string(delta2.z) + ")\n";;
+    out << "\tLMOVE frm + SHIFT (P BY " +
+      std::to_string(it2->x * scaleX) + ", " +
+      std::to_string(it2->y * scaleY) + ", 0)\n";
 
 
     out << "\tLDEPART " << std::to_string(trans->roboConf.GetDepDist()) << "\n";
