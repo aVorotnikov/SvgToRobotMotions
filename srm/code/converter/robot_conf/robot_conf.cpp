@@ -2,7 +2,7 @@
  * @file
  * @brief Robot configuration source file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 19.03.2021
+ * @date 05.05.2021
  *
  * Contains robot_conf_t class realisation to load and save robot configuration
  */
@@ -166,7 +166,7 @@ void srm::robot_conf_t::LoadConf(const std::string &confFileName) {
       throw std::exception((std::string("Incorrect number of parameters in '") + splitedLine[0] + "' in line #" + std::to_string(lineNum)).c_str());
     std::vector<double> args(lineStruct->second.numOfParams);
     try {
-      for (size_t i = 0; i < lineStruct->second.numOfParams; i++)
+      for (size_t i = 0; i < (size_t)lineStruct->second.numOfParams; i++)
         args[i] = std::atof(splitedLine[i + 1].c_str());
     }
     catch (std::exception &) {
