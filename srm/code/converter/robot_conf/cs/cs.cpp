@@ -2,7 +2,7 @@
  * @file
  * @brief Coordinate system source file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 05.05.2021
+ * @date 25.05.2021
  *
  * Contains cs_t class realisation to morph svg coordinate system to robor coordinate system
  */
@@ -119,4 +119,28 @@ double srm::cs_t::GetXScale() {
  */
 double srm::cs_t::GetYScale() {
   return boardJ.Len() / height;
+}
+
+/**
+ * Get board angle point p1
+ * @return p1
+ */
+srm::vec3_t srm::cs_t::GetP1(void) const noexcept {
+  return boardStart;
+}
+
+/**
+ * Get board point p2
+ * @return p2
+ */
+srm::vec3_t srm::cs_t::GetP2(void) const noexcept {
+  return boardStart + boardI;
+}
+
+/**
+ * Get board point p3
+ * @return p3
+ */
+srm::vec3_t srm::cs_t::GetP3(void) const noexcept {
+  return boardStart + boardJ;
 }

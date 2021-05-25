@@ -2,7 +2,7 @@
  * @file
  * @brief Coordinate system header file
  * @authors Vorotnikov Andrey, Pavlov Ilya
- * @date 05.05.2021
+ * @date 25.05.2021
  *
  * Contains cs_t class definition to morph svg coordinate system to robor coordinate system
  */
@@ -115,6 +115,24 @@ namespace srm {
      * @return ratio of canvas height to svg image height
      */
     double GetYScale();
+
+    /**
+     * Get board angle point p1
+     * @return p1
+     */
+    vec3_t GetP1(void) const noexcept;
+
+    /**
+     * Get board point p2
+     * @return p2
+     */
+    vec3_t GetP2(void) const noexcept;
+
+    /**
+     * Get board point p3
+     * @return p3
+     */
+    vec3_t GetP3(void) const noexcept;
   };
 }
 

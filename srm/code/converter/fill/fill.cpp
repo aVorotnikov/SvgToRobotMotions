@@ -2,7 +2,7 @@
  * @file
  * @brief Fill primitive source file
  * @authors Pavlov Ilya
- * @date 05.05.2021
+ * @date 25.05.2021
  *
  * Contains realisation of function for filling primitives
  */
@@ -21,7 +21,7 @@ static std::pair<srm::vec_t, srm::vec_t> _PCA(const srm::primitive_t &primitive)
   const double eps = 1e-4; // defines when primitive is considered closed
   bool isClosed = true;
 
-  double size = primitive.size();
+  size_t size = primitive.size();
   if ((primitive[primitive.size() - 1].point - primitive.start).Len() > eps) {
     isClosed = false;
     ++size;

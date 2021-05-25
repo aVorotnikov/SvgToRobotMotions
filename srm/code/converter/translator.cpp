@@ -2,7 +2,7 @@
  * @file
  * @brief Translator class source file
  * @authors Vorotnikov Andrey, Pavlov Ilya, Chevykalov Grigory
- * @date 05.05.2021
+ * @date 25.05.2021
  *
  * Contains main converter class realisatiion
  */
@@ -117,6 +117,17 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
     throw std::exception("Failed to open or create output file");
   }
 
+  vec3_t p;
+  fout << ".TRANS" << std::endl;
+  fout << "\tP 0 0 0 0 0 0" << std::endl;
+  p = roboConf.GetP1();
+  fout << "p1 " << p.x << " " << p.y << " " << p.z << " 0 0 0" << std::endl;
+  p = roboConf.GetP2();
+  fout << "p2 " << p.x << " " << p.y << " " << p.z << " 0 0 0" << std::endl;
+  p = roboConf.GetP3();
+  fout << "p3 " << p.x << " " << p.y << " " << p.z << " 0 0 0" << std::endl;
+  fout << ".END" << std::endl;
+
   fout << ".PROGRAM " << roboConf.GetProgramName()  << "()" << std::endl;
   fout << "\tHERE .#start" << std::endl;
   fout << "\tSPEED " << roboConf.GetVelocity() << " MM/S ALWAYS" << std::endl;
@@ -132,7 +143,6 @@ void srm::translator_t::GenCode(const std::string &codeFileName) const {
 
   fout << "\tJMOVE .#start" << std::endl;
   fout << ".END";
-
 
   for (auto primitive : primitives)
     delete primitive;
